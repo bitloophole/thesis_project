@@ -58,7 +58,12 @@ class TabTransformerClassifier(nn.Module):
             activation="gelu",
             norm_first=True,
         )
-        self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=config.n_layers)
+        # Nested tensor fast-path is not used with norm_first=True; disable to avoid runtime warning noise.
+        self.transformer = nn.TransformerEncoder(
+            encoder_layer,
+            num_layers=config.n_layers,
+            enable_nested_tensor=False,
+        )
         self.head = nn.Sequential(
             nn.LayerNorm(config.d_token),
             nn.Linear(config.d_token, config.mlp_hidden_dim),

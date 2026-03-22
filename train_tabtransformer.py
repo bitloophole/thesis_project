@@ -42,7 +42,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--mlp-hidden-dim", type=int, default=128)
     parser.add_argument("--dropout", type=float, default=0.1)
     parser.add_argument("--eval-every", type=int, default=1)
-    parser.add_argument("--device", choices=["auto", "cpu", "cuda"], default="auto")
+    parser.add_argument("--device", choices=["auto", "cpu", "cuda", "mps"], default="auto")
+    parser.add_argument("--num-workers", type=int, default=0)
     parser.add_argument("--disable-class-weighted", action="store_true")
     parser.add_argument("--disable-standardize", action="store_true")
     parser.add_argument("--sequential-sample", action="store_true")
@@ -66,13 +67,25 @@ def resolve_torch():
 
 
 def choose_device(torch_module, requested: str) -> str:
+    mps_available = bool(
+        hasattr(torch_module.backends, "mps")
+        and torch_module.backends.mps.is_available()
+    )
     if requested == "cpu":
         return "cpu"
     if requested == "cuda":
         if not torch_module.cuda.is_available():
             raise RuntimeError("CUDA was requested but is not available.")
         return "cuda"
-    return "cuda" if torch_module.cuda.is_available() else "cpu"
+    if requested == "mps":
+        if not mps_available:
+            raise RuntimeError("MPS was requested but is not available.")
+        return "mps"
+    if torch_module.cuda.is_available():
+        return "cuda"
+    if mps_available:
+        return "mps"
+    return "cpu"
 
 
 def build_dataloader(torch_module, tensor_dataset_cls, x: np.ndarray, y: np.ndarray, batch_size: int, shuffle: bool):
@@ -82,10 +95,19 @@ def build_dataloader(torch_module, tensor_dataset_cls, x: np.ndarray, y: np.ndar
     return dataset, batch_size, shuffle
 
 
-def make_loader(torch_module, dataloader_cls, built_loader, device: str):
+def make_loader(torch_module, dataloader_cls, built_loader, device: str, num_workers: int):
     dataset, batch_size, shuffle = built_loader
     pin_memory = device == "cuda"
-    return dataloader_cls(dataset, batch_size=batch_size, shuffle=shuffle, pin_memory=pin_memory)
+    loader_kwargs: dict[str, object] = {
+        "batch_size": batch_size,
+        "shuffle": shuffle,
+        "pin_memory": pin_memory,
+        "num_workers": max(num_workers, 0),
+    }
+    if num_workers > 0:
+        loader_kwargs["persistent_workers"] = True
+        loader_kwargs["prefetch_factor"] = 4
+    return dataloader_cls(dataset, **loader_kwargs)
 
 
 def compute_loss(logits, labels, criterion):
@@ -173,6 +195,7 @@ def run_tabtransformer_experiment(args: argparse.Namespace) -> dict[str, object]
         DataLoader,
         build_dataloader(torch, TensorDataset, dataset.x_train, dataset.y_train, args.batch_size, True),
         device,
+        args.num_workers,
     )
 
     history: list[dict[str, float]] = []
@@ -186,8 +209,8 @@ def run_tabtransformer_experiment(args: argparse.Namespace) -> dict[str, object]
         running_loss = 0.0
         seen_samples = 0
         for batch_x, batch_y in train_loader:
-            batch_x = batch_x.to(device, non_blocking=device == "cuda")
-            batch_y = batch_y.to(device, non_blocking=device == "cuda")
+            batch_x = batch_x.to(device, non_blocking=device != "cpu")
+            batch_y = batch_y.to(device, non_blocking=device != "cpu")
             optimizer.zero_grad(set_to_none=True)
             logits = model(batch_x)
             loss = compute_loss(logits, batch_y, criterion)
@@ -249,6 +272,7 @@ def run_tabtransformer_experiment(args: argparse.Namespace) -> dict[str, object]
             "eval_every": args.eval_every,
             "seed": args.seed,
             "device": device,
+            "num_workers": args.num_workers,
         },
         "preprocessing": {
             "random_sample": not args.sequential_sample,
