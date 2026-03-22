@@ -1,0 +1,9 @@
+1. Preprocess CICIoT2023 and define the classification setup.
+2. Train centralized baselines for TabTransformer and one lightweight model such as MLP.
+3. Build federated versions of the same models.
+4. Start federated experiments with 5 clients.
+5. Compare centralized vs federated global models on accuracy, precision, recall, F1, AUC-ROC, training time, and communication overhead.
+6. Add differential privacy to federated training and study the privacy/performance trade-off.
+7. Run scalability experiments with increasing client counts, for example 5, 10, 20.
+8. Run zero-day experiments by excluding selected attack classes from training and testing them later.
+9. Conclude which model gives the best balance of accuracy, privacy, efficiency, and scalability.

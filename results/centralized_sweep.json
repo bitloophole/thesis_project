@@ -1,0 +1,3750 @@
+{
+  "sort_metric": "f1_macro",
+  "num_trials": 12,
+  "best_trial": {
+    "mode": "centralized",
+    "task": {
+      "name": "thesis_multiclass_category_ids",
+      "problem_type": "multiclass_classification",
+      "label_space": "8 encoded classes already present in the prepared CICIoT2023 CSV files",
+      "expected_num_classes": 8,
+      "class_names": [
+        "label_0",
+        "label_1",
+        "label_2",
+        "label_3",
+        "label_4",
+        "label_5",
+        "label_6",
+        "label_7"
+      ],
+      "notes": [
+        "This project is locked to multiclass IDS rather than binary benign-vs-attack classification.",
+        "The proposal describes a category-level setting aligned with benign plus seven attack super-categories.",
+        "Numeric label IDs are already encoded in the provided CSV files.",
+        "Exact semantic mapping from numeric IDs to attack-category names should be verified against the upstream preprocessing source before thesis write-up tables use human-readable class names."
+      ]
+    },
+    "data_path": "C:\\Users\\kk199\\Downloads\\thesis\\thesisProject\\data\\global.csv",
+    "max_rows": 20000,
+    "training_config": {
+      "input_dim": 39,
+      "output_dim": 8,
+      "hidden_dims": [
+        512,
+        256,
+        128
+      ],
+      "learning_rate": 0.001,
+      "batch_size": 256,
+      "epochs": 10,
+      "weight_decay": 0.0001,
+      "focal_gamma": 0.0,
+      "gradient_clip_norm": 5.0,
+      "seed": 42
+    },
+    "preprocessing": {
+      "random_sample": true,
+      "stratified_split": true,
+      "standardize": true,
+      "class_weighted": true,
+      "patience": 5
+    },
+    "split_summary": {
+      "train_samples": 13997,
+      "val_samples": 2996,
+      "test_samples": 3007,
+      "train_distribution": {
+        "0": 700,
+        "1": 10,
+        "2": 8187,
+        "3": 2803,
+        "4": 1575,
+        "5": 424,
+        "6": 287,
+        "7": 11
+      },
+      "val_distribution": {
+        "0": 150,
+        "1": 2,
+        "2": 1754,
+        "3": 600,
+        "4": 337,
+        "5": 90,
+        "6": 61,
+        "7": 2
+      },
+      "test_distribution": {
+        "0": 150,
+        "1": 3,
+        "2": 1755,
+        "3": 602,
+        "4": 338,
+        "5": 92,
+        "6": 63,
+        "7": 4
+      }
+    },
+    "class_weights": [
+      0.057345200330019,
+      4.014163970947266,
+      0.004903095308691263,
+      0.014320955611765385,
+      0.02548675611615181,
+      0.09467367827892303,
+      0.13986633718013763,
+      3.649240016937256
+    ],
+    "training_time_seconds": 7.95066499710083,
+    "history": [
+      {
+        "epoch": 1.0,
+        "train_loss": 0.17638236284255981,
+        "val_loss": 0.1714683175086975
+      },
+      {
+        "epoch": 2.0,
+        "train_loss": 0.17225876450538635,
+        "val_loss": 0.16751879453659058
+      },
+      {
+        "epoch": 3.0,
+        "train_loss": 0.1687794029712677,
+        "val_loss": 0.16405855119228363
+      },
+      {
+        "epoch": 4.0,
+        "train_loss": 0.16583514213562012,
+        "val_loss": 0.16112826764583588
+      },
+      {
+        "epoch": 5.0,
+        "train_loss": 0.1632746458053589,
+        "val_loss": 0.1585949957370758
+      },
+      {
+        "epoch": 6.0,
+        "train_loss": 0.16101303696632385,
+        "val_loss": 0.15636858344078064
+      },
+      {
+        "epoch": 7.0,
+        "train_loss": 0.15882667899131775,
+        "val_loss": 0.154446542263031
+      },
+      {
+        "epoch": 8.0,
+        "train_loss": 0.1562318652868271,
+        "val_loss": 0.15273375809192657
+      },
+      {
+        "epoch": 9.0,
+        "train_loss": 0.1539231389760971,
+        "val_loss": 0.151239275932312
+      },
+      {
+        "epoch": 10.0,
+        "train_loss": 0.15174449980258942,
+        "val_loss": 0.14990144968032837
+      }
+    ],
+    "test_metrics": {
+      "accuracy": 0.1300299301629531,
+      "precision_macro": 0.1521730903608921,
+      "recall_macro": 0.12535563923961296,
+      "f1_macro": 0.0945598303364245,
+      "auc_macro_ovr": 0.484839879947889,
+      "confusion_matrix": [
+        [
+          45,
+          6,
+          52,
+          2,
+          0,
+          39,
+          6,
+          0
+        ],
+        [
+          1,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          486,
+          257,
+          164,
+          319,
+          0,
+          374,
+          0,
+          155
+        ],
+        [
+          61,
+          227,
+          20,
+          153,
+          0,
+          139,
+          1,
+          1
+        ],
+        [
+          142,
+          50,
+          6,
+          0,
+          0,
+          140,
+          0,
+          0
+        ],
+        [
+          25,
+          8,
+          16,
+          4,
+          0,
+          21,
+          18,
+          0
+        ],
+        [
+          10,
+          6,
+          22,
+          0,
+          0,
+          17,
+          8,
+          0
+        ],
+        [
+          0,
+          1,
+          1,
+          0,
+          0,
+          0,
+          2,
+          0
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.05844155844155844,
+          "recall": 0.3,
+          "f1": 0.09782608695652173,
+          "support": 150
+        },
+        "1": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 3
+        },
+        "2": {
+          "precision": 0.5815602836879432,
+          "recall": 0.09344729344729345,
+          "f1": 0.16102110947471773,
+          "support": 1755
+        },
+        "3": {
+          "precision": 0.3200836820083682,
+          "recall": 0.2541528239202658,
+          "f1": 0.2833333333333333,
+          "support": 602
+        },
+        "4": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 338
+        },
+        "5": {
+          "precision": 0.028727770177838577,
+          "recall": 0.22826086956521738,
+          "f1": 0.05103280680437424,
+          "support": 92
+        },
+        "6": {
+          "precision": 0.22857142857142856,
+          "recall": 0.12698412698412698,
+          "f1": 0.163265306122449,
+          "support": 63
+        },
+        "7": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 4
+        }
+      }
+    },
+    "trial_index": 9
+  },
+  "results": [
+    {
+      "mode": "centralized",
+      "task": {
+        "name": "thesis_multiclass_category_ids",
+        "problem_type": "multiclass_classification",
+        "label_space": "8 encoded classes already present in the prepared CICIoT2023 CSV files",
+        "expected_num_classes": 8,
+        "class_names": [
+          "label_0",
+          "label_1",
+          "label_2",
+          "label_3",
+          "label_4",
+          "label_5",
+          "label_6",
+          "label_7"
+        ],
+        "notes": [
+          "This project is locked to multiclass IDS rather than binary benign-vs-attack classification.",
+          "The proposal describes a category-level setting aligned with benign plus seven attack super-categories.",
+          "Numeric label IDs are already encoded in the provided CSV files.",
+          "Exact semantic mapping from numeric IDs to attack-category names should be verified against the upstream preprocessing source before thesis write-up tables use human-readable class names."
+        ]
+      },
+      "data_path": "C:\\Users\\kk199\\Downloads\\thesis\\thesisProject\\data\\global.csv",
+      "max_rows": 20000,
+      "training_config": {
+        "input_dim": 39,
+        "output_dim": 8,
+        "hidden_dims": [
+          512,
+          256,
+          128
+        ],
+        "learning_rate": 0.001,
+        "batch_size": 256,
+        "epochs": 10,
+        "weight_decay": 0.0001,
+        "focal_gamma": 0.0,
+        "gradient_clip_norm": 5.0,
+        "seed": 42
+      },
+      "preprocessing": {
+        "random_sample": true,
+        "stratified_split": true,
+        "standardize": true,
+        "class_weighted": true,
+        "patience": 5
+      },
+      "split_summary": {
+        "train_samples": 13997,
+        "val_samples": 2996,
+        "test_samples": 3007,
+        "train_distribution": {
+          "0": 700,
+          "1": 10,
+          "2": 8187,
+          "3": 2803,
+          "4": 1575,
+          "5": 424,
+          "6": 287,
+          "7": 11
+        },
+        "val_distribution": {
+          "0": 150,
+          "1": 2,
+          "2": 1754,
+          "3": 600,
+          "4": 337,
+          "5": 90,
+          "6": 61,
+          "7": 2
+        },
+        "test_distribution": {
+          "0": 150,
+          "1": 3,
+          "2": 1755,
+          "3": 602,
+          "4": 338,
+          "5": 92,
+          "6": 63,
+          "7": 4
+        }
+      },
+      "class_weights": [
+        0.057345200330019,
+        4.014163970947266,
+        0.004903095308691263,
+        0.014320955611765385,
+        0.02548675611615181,
+        0.09467367827892303,
+        0.13986633718013763,
+        3.649240016937256
+      ],
+      "training_time_seconds": 7.95066499710083,
+      "history": [
+        {
+          "epoch": 1.0,
+          "train_loss": 0.17638236284255981,
+          "val_loss": 0.1714683175086975
+        },
+        {
+          "epoch": 2.0,
+          "train_loss": 0.17225876450538635,
+          "val_loss": 0.16751879453659058
+        },
+        {
+          "epoch": 3.0,
+          "train_loss": 0.1687794029712677,
+          "val_loss": 0.16405855119228363
+        },
+        {
+          "epoch": 4.0,
+          "train_loss": 0.16583514213562012,
+          "val_loss": 0.16112826764583588
+        },
+        {
+          "epoch": 5.0,
+          "train_loss": 0.1632746458053589,
+          "val_loss": 0.1585949957370758
+        },
+        {
+          "epoch": 6.0,
+          "train_loss": 0.16101303696632385,
+          "val_loss": 0.15636858344078064
+        },
+        {
+          "epoch": 7.0,
+          "train_loss": 0.15882667899131775,
+          "val_loss": 0.154446542263031
+        },
+        {
+          "epoch": 8.0,
+          "train_loss": 0.1562318652868271,
+          "val_loss": 0.15273375809192657
+        },
+        {
+          "epoch": 9.0,
+          "train_loss": 0.1539231389760971,
+          "val_loss": 0.151239275932312
+        },
+        {
+          "epoch": 10.0,
+          "train_loss": 0.15174449980258942,
+          "val_loss": 0.14990144968032837
+        }
+      ],
+      "test_metrics": {
+        "accuracy": 0.1300299301629531,
+        "precision_macro": 0.1521730903608921,
+        "recall_macro": 0.12535563923961296,
+        "f1_macro": 0.0945598303364245,
+        "auc_macro_ovr": 0.484839879947889,
+        "confusion_matrix": [
+          [
+            45,
+            6,
+            52,
+            2,
+            0,
+            39,
+            6,
+            0
+          ],
+          [
+            1,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            486,
+            257,
+            164,
+            319,
+            0,
+            374,
+            0,
+            155
+          ],
+          [
+            61,
+            227,
+            20,
+            153,
+            0,
+            139,
+            1,
+            1
+          ],
+          [
+            142,
+            50,
+            6,
+            0,
+            0,
+            140,
+            0,
+            0
+          ],
+          [
+            25,
+            8,
+            16,
+            4,
+            0,
+            21,
+            18,
+            0
+          ],
+          [
+            10,
+            6,
+            22,
+            0,
+            0,
+            17,
+            8,
+            0
+          ],
+          [
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            2,
+            0
+          ]
+        ],
+        "per_class": {
+          "0": {
+            "precision": 0.05844155844155844,
+            "recall": 0.3,
+            "f1": 0.09782608695652173,
+            "support": 150
+          },
+          "1": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 3
+          },
+          "2": {
+            "precision": 0.5815602836879432,
+            "recall": 0.09344729344729345,
+            "f1": 0.16102110947471773,
+            "support": 1755
+          },
+          "3": {
+            "precision": 0.3200836820083682,
+            "recall": 0.2541528239202658,
+            "f1": 0.2833333333333333,
+            "support": 602
+          },
+          "4": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 338
+          },
+          "5": {
+            "precision": 0.028727770177838577,
+            "recall": 0.22826086956521738,
+            "f1": 0.05103280680437424,
+            "support": 92
+          },
+          "6": {
+            "precision": 0.22857142857142856,
+            "recall": 0.12698412698412698,
+            "f1": 0.163265306122449,
+            "support": 63
+          },
+          "7": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 4
+          }
+        }
+      },
+      "trial_index": 9
+    },
+    {
+      "mode": "centralized",
+      "task": {
+        "name": "thesis_multiclass_category_ids",
+        "problem_type": "multiclass_classification",
+        "label_space": "8 encoded classes already present in the prepared CICIoT2023 CSV files",
+        "expected_num_classes": 8,
+        "class_names": [
+          "label_0",
+          "label_1",
+          "label_2",
+          "label_3",
+          "label_4",
+          "label_5",
+          "label_6",
+          "label_7"
+        ],
+        "notes": [
+          "This project is locked to multiclass IDS rather than binary benign-vs-attack classification.",
+          "The proposal describes a category-level setting aligned with benign plus seven attack super-categories.",
+          "Numeric label IDs are already encoded in the provided CSV files.",
+          "Exact semantic mapping from numeric IDs to attack-category names should be verified against the upstream preprocessing source before thesis write-up tables use human-readable class names."
+        ]
+      },
+      "data_path": "C:\\Users\\kk199\\Downloads\\thesis\\thesisProject\\data\\global.csv",
+      "max_rows": 20000,
+      "training_config": {
+        "input_dim": 39,
+        "output_dim": 8,
+        "hidden_dims": [
+          512,
+          256,
+          128
+        ],
+        "learning_rate": 0.001,
+        "batch_size": 256,
+        "epochs": 10,
+        "weight_decay": 0.0005,
+        "focal_gamma": 0.0,
+        "gradient_clip_norm": 5.0,
+        "seed": 42
+      },
+      "preprocessing": {
+        "random_sample": true,
+        "stratified_split": true,
+        "standardize": true,
+        "class_weighted": true,
+        "patience": 5
+      },
+      "split_summary": {
+        "train_samples": 13997,
+        "val_samples": 2996,
+        "test_samples": 3007,
+        "train_distribution": {
+          "0": 700,
+          "1": 10,
+          "2": 8187,
+          "3": 2803,
+          "4": 1575,
+          "5": 424,
+          "6": 287,
+          "7": 11
+        },
+        "val_distribution": {
+          "0": 150,
+          "1": 2,
+          "2": 1754,
+          "3": 600,
+          "4": 337,
+          "5": 90,
+          "6": 61,
+          "7": 2
+        },
+        "test_distribution": {
+          "0": 150,
+          "1": 3,
+          "2": 1755,
+          "3": 602,
+          "4": 338,
+          "5": 92,
+          "6": 63,
+          "7": 4
+        }
+      },
+      "class_weights": [
+        0.057345200330019,
+        4.014163970947266,
+        0.004903095308691263,
+        0.014320955611765385,
+        0.02548675611615181,
+        0.09467367827892303,
+        0.13986633718013763,
+        3.649240016937256
+      ],
+      "training_time_seconds": 7.426443099975586,
+      "history": [
+        {
+          "epoch": 1.0,
+          "train_loss": 0.5406389832496643,
+          "val_loss": 0.5357245802879333
+        },
+        {
+          "epoch": 2.0,
+          "train_loss": 0.5364845991134644,
+          "val_loss": 0.5317438840866089
+        },
+        {
+          "epoch": 3.0,
+          "train_loss": 0.5329756140708923,
+          "val_loss": 0.5282537341117859
+        },
+        {
+          "epoch": 4.0,
+          "train_loss": 0.5300026535987854,
+          "val_loss": 0.5252944827079773
+        },
+        {
+          "epoch": 5.0,
+          "train_loss": 0.5274142622947693,
+          "val_loss": 0.5227330327033997
+        },
+        {
+          "epoch": 6.0,
+          "train_loss": 0.5251253843307495,
+          "val_loss": 0.5204792022705078
+        },
+        {
+          "epoch": 7.0,
+          "train_loss": 0.5229088664054871,
+          "val_loss": 0.5185301899909973
+        },
+        {
+          "epoch": 8.0,
+          "train_loss": 0.520287811756134,
+          "val_loss": 0.5167908072471619
+        },
+        {
+          "epoch": 9.0,
+          "train_loss": 0.517953634262085,
+          "val_loss": 0.5152708292007446
+        },
+        {
+          "epoch": 10.0,
+          "train_loss": 0.5157496333122253,
+          "val_loss": 0.5139070153236389
+        }
+      ],
+      "test_metrics": {
+        "accuracy": 0.1300299301629531,
+        "precision_macro": 0.1521730903608921,
+        "recall_macro": 0.12535563923961296,
+        "f1_macro": 0.0945598303364245,
+        "auc_macro_ovr": 0.48483262525349613,
+        "confusion_matrix": [
+          [
+            45,
+            6,
+            52,
+            2,
+            0,
+            39,
+            6,
+            0
+          ],
+          [
+            1,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            486,
+            257,
+            164,
+            319,
+            0,
+            374,
+            0,
+            155
+          ],
+          [
+            61,
+            227,
+            20,
+            153,
+            0,
+            139,
+            1,
+            1
+          ],
+          [
+            142,
+            50,
+            6,
+            0,
+            0,
+            140,
+            0,
+            0
+          ],
+          [
+            25,
+            8,
+            16,
+            4,
+            0,
+            21,
+            18,
+            0
+          ],
+          [
+            10,
+            6,
+            22,
+            0,
+            0,
+            17,
+            8,
+            0
+          ],
+          [
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            2,
+            0
+          ]
+        ],
+        "per_class": {
+          "0": {
+            "precision": 0.05844155844155844,
+            "recall": 0.3,
+            "f1": 0.09782608695652173,
+            "support": 150
+          },
+          "1": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 3
+          },
+          "2": {
+            "precision": 0.5815602836879432,
+            "recall": 0.09344729344729345,
+            "f1": 0.16102110947471773,
+            "support": 1755
+          },
+          "3": {
+            "precision": 0.3200836820083682,
+            "recall": 0.2541528239202658,
+            "f1": 0.2833333333333333,
+            "support": 602
+          },
+          "4": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 338
+          },
+          "5": {
+            "precision": 0.028727770177838577,
+            "recall": 0.22826086956521738,
+            "f1": 0.05103280680437424,
+            "support": 92
+          },
+          "6": {
+            "precision": 0.22857142857142856,
+            "recall": 0.12698412698412698,
+            "f1": 0.163265306122449,
+            "support": 63
+          },
+          "7": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 4
+          }
+        }
+      },
+      "trial_index": 11
+    },
+    {
+      "mode": "centralized",
+      "task": {
+        "name": "thesis_multiclass_category_ids",
+        "problem_type": "multiclass_classification",
+        "label_space": "8 encoded classes already present in the prepared CICIoT2023 CSV files",
+        "expected_num_classes": 8,
+        "class_names": [
+          "label_0",
+          "label_1",
+          "label_2",
+          "label_3",
+          "label_4",
+          "label_5",
+          "label_6",
+          "label_7"
+        ],
+        "notes": [
+          "This project is locked to multiclass IDS rather than binary benign-vs-attack classification.",
+          "The proposal describes a category-level setting aligned with benign plus seven attack super-categories.",
+          "Numeric label IDs are already encoded in the provided CSV files.",
+          "Exact semantic mapping from numeric IDs to attack-category names should be verified against the upstream preprocessing source before thesis write-up tables use human-readable class names."
+        ]
+      },
+      "data_path": "C:\\Users\\kk199\\Downloads\\thesis\\thesisProject\\data\\global.csv",
+      "max_rows": 20000,
+      "training_config": {
+        "input_dim": 39,
+        "output_dim": 8,
+        "hidden_dims": [
+          512,
+          256,
+          128
+        ],
+        "learning_rate": 0.001,
+        "batch_size": 256,
+        "epochs": 10,
+        "weight_decay": 0.0001,
+        "focal_gamma": 1.5,
+        "gradient_clip_norm": 5.0,
+        "seed": 42
+      },
+      "preprocessing": {
+        "random_sample": true,
+        "stratified_split": true,
+        "standardize": true,
+        "class_weighted": true,
+        "patience": 5
+      },
+      "split_summary": {
+        "train_samples": 13997,
+        "val_samples": 2996,
+        "test_samples": 3007,
+        "train_distribution": {
+          "0": 700,
+          "1": 10,
+          "2": 8187,
+          "3": 2803,
+          "4": 1575,
+          "5": 424,
+          "6": 287,
+          "7": 11
+        },
+        "val_distribution": {
+          "0": 150,
+          "1": 2,
+          "2": 1754,
+          "3": 600,
+          "4": 337,
+          "5": 90,
+          "6": 61,
+          "7": 2
+        },
+        "test_distribution": {
+          "0": 150,
+          "1": 3,
+          "2": 1755,
+          "3": 602,
+          "4": 338,
+          "5": 92,
+          "6": 63,
+          "7": 4
+        }
+      },
+      "class_weights": [
+        0.057345200330019,
+        4.014163970947266,
+        0.004903095308691263,
+        0.014320955611765385,
+        0.02548675611615181,
+        0.09467367827892303,
+        0.13986633718013763,
+        3.649240016937256
+      ],
+      "training_time_seconds": 7.4460320472717285,
+      "history": [
+        {
+          "epoch": 1.0,
+          "train_loss": 0.1711428165435791,
+          "val_loss": 0.1664642095565796
+        },
+        {
+          "epoch": 2.0,
+          "train_loss": 0.16689831018447876,
+          "val_loss": 0.1624026596546173
+        },
+        {
+          "epoch": 3.0,
+          "train_loss": 0.16328802704811096,
+          "val_loss": 0.15882207453250885
+        },
+        {
+          "epoch": 4.0,
+          "train_loss": 0.1601947546005249,
+          "val_loss": 0.15574145317077637
+        },
+        {
+          "epoch": 5.0,
+          "train_loss": 0.15749067068099976,
+          "val_loss": 0.15306517481803894
+        },
+        {
+          "epoch": 6.0,
+          "train_loss": 0.15508748590946198,
+          "val_loss": 0.15069112181663513
+        },
+        {
+          "epoch": 7.0,
+          "train_loss": 0.1526840627193451,
+          "val_loss": 0.1486288607120514
+        },
+        {
+          "epoch": 8.0,
+          "train_loss": 0.1499563753604889,
+          "val_loss": 0.14676353335380554
+        },
+        {
+          "epoch": 9.0,
+          "train_loss": 0.14752334356307983,
+          "val_loss": 0.1451200544834137
+        },
+        {
+          "epoch": 10.0,
+          "train_loss": 0.14523372054100037,
+          "val_loss": 0.14363238215446472
+        }
+      ],
+      "test_metrics": {
+        "accuracy": 0.12637179913535085,
+        "precision_macro": 0.14683628184854047,
+        "recall_macro": 0.11638963220990522,
+        "f1_macro": 0.09161425682495497,
+        "auc_macro_ovr": 0.47229040774430514,
+        "confusion_matrix": [
+          [
+            38,
+            6,
+            58,
+            2,
+            0,
+            39,
+            7,
+            0
+          ],
+          [
+            1,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            482,
+            270,
+            164,
+            318,
+            0,
+            365,
+            0,
+            156
+          ],
+          [
+            61,
+            228,
+            20,
+            151,
+            0,
+            140,
+            1,
+            1
+          ],
+          [
+            140,
+            51,
+            6,
+            0,
+            0,
+            141,
+            0,
+            0
+          ],
+          [
+            22,
+            9,
+            20,
+            4,
+            0,
+            19,
+            18,
+            0
+          ],
+          [
+            10,
+            5,
+            24,
+            0,
+            0,
+            16,
+            8,
+            0
+          ],
+          [
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            2,
+            0
+          ]
+        ],
+        "per_class": {
+          "0": {
+            "precision": 0.050397877984084884,
+            "recall": 0.25333333333333335,
+            "f1": 0.084070796460177,
+            "support": 150
+          },
+          "1": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 3
+          },
+          "2": {
+            "precision": 0.5578231292517006,
+            "recall": 0.09344729344729345,
+            "f1": 0.1600780868716447,
+            "support": 1755
+          },
+          "3": {
+            "precision": 0.3178947368421053,
+            "recall": 0.25083056478405313,
+            "f1": 0.2804085422469823,
+            "support": 602
+          },
+          "4": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 338
+          },
+          "5": {
+            "precision": 0.026352288488210817,
+            "recall": 0.20652173913043478,
+            "f1": 0.046740467404674045,
+            "support": 92
+          },
+          "6": {
+            "precision": 0.2222222222222222,
+            "recall": 0.12698412698412698,
+            "f1": 0.16161616161616163,
+            "support": 63
+          },
+          "7": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 4
+          }
+        }
+      },
+      "trial_index": 10
+    },
+    {
+      "mode": "centralized",
+      "task": {
+        "name": "thesis_multiclass_category_ids",
+        "problem_type": "multiclass_classification",
+        "label_space": "8 encoded classes already present in the prepared CICIoT2023 CSV files",
+        "expected_num_classes": 8,
+        "class_names": [
+          "label_0",
+          "label_1",
+          "label_2",
+          "label_3",
+          "label_4",
+          "label_5",
+          "label_6",
+          "label_7"
+        ],
+        "notes": [
+          "This project is locked to multiclass IDS rather than binary benign-vs-attack classification.",
+          "The proposal describes a category-level setting aligned with benign plus seven attack super-categories.",
+          "Numeric label IDs are already encoded in the provided CSV files.",
+          "Exact semantic mapping from numeric IDs to attack-category names should be verified against the upstream preprocessing source before thesis write-up tables use human-readable class names."
+        ]
+      },
+      "data_path": "C:\\Users\\kk199\\Downloads\\thesis\\thesisProject\\data\\global.csv",
+      "max_rows": 20000,
+      "training_config": {
+        "input_dim": 39,
+        "output_dim": 8,
+        "hidden_dims": [
+          512,
+          256,
+          128
+        ],
+        "learning_rate": 0.001,
+        "batch_size": 256,
+        "epochs": 10,
+        "weight_decay": 0.0005,
+        "focal_gamma": 1.5,
+        "gradient_clip_norm": 5.0,
+        "seed": 42
+      },
+      "preprocessing": {
+        "random_sample": true,
+        "stratified_split": true,
+        "standardize": true,
+        "class_weighted": true,
+        "patience": 5
+      },
+      "split_summary": {
+        "train_samples": 13997,
+        "val_samples": 2996,
+        "test_samples": 3007,
+        "train_distribution": {
+          "0": 700,
+          "1": 10,
+          "2": 8187,
+          "3": 2803,
+          "4": 1575,
+          "5": 424,
+          "6": 287,
+          "7": 11
+        },
+        "val_distribution": {
+          "0": 150,
+          "1": 2,
+          "2": 1754,
+          "3": 600,
+          "4": 337,
+          "5": 90,
+          "6": 61,
+          "7": 2
+        },
+        "test_distribution": {
+          "0": 150,
+          "1": 3,
+          "2": 1755,
+          "3": 602,
+          "4": 338,
+          "5": 92,
+          "6": 63,
+          "7": 4
+        }
+      },
+      "class_weights": [
+        0.057345200330019,
+        4.014163970947266,
+        0.004903095308691263,
+        0.014320955611765385,
+        0.02548675611615181,
+        0.09467367827892303,
+        0.13986633718013763,
+        3.649240016937256
+      ],
+      "training_time_seconds": 7.485657215118408,
+      "history": [
+        {
+          "epoch": 1.0,
+          "train_loss": 0.535399317741394,
+          "val_loss": 0.5307202935218811
+        },
+        {
+          "epoch": 2.0,
+          "train_loss": 0.5311237573623657,
+          "val_loss": 0.5266273021697998
+        },
+        {
+          "epoch": 3.0,
+          "train_loss": 0.5274837017059326,
+          "val_loss": 0.523016631603241
+        },
+        {
+          "epoch": 4.0,
+          "train_loss": 0.5243615508079529,
+          "val_loss": 0.5199068784713745
+        },
+        {
+          "epoch": 5.0,
+          "train_loss": 0.5216294527053833,
+          "val_loss": 0.5172022581100464
+        },
+        {
+          "epoch": 6.0,
+          "train_loss": 0.5191988348960876,
+          "val_loss": 0.5148006081581116
+        },
+        {
+          "epoch": 7.0,
+          "train_loss": 0.5167651176452637,
+          "val_loss": 0.5127111673355103
+        },
+        {
+          "epoch": 8.0,
+          "train_loss": 0.5140110850334167,
+          "val_loss": 0.510819137096405
+        },
+        {
+          "epoch": 9.0,
+          "train_loss": 0.5115522146224976,
+          "val_loss": 0.509149432182312
+        },
+        {
+          "epoch": 10.0,
+          "train_loss": 0.5092372894287109,
+          "val_loss": 0.5076358914375305
+        }
+      ],
+      "test_metrics": {
+        "accuracy": 0.12637179913535085,
+        "precision_macro": 0.14683628184854047,
+        "recall_macro": 0.11638963220990522,
+        "f1_macro": 0.09161425682495497,
+        "auc_macro_ovr": 0.4722966247385172,
+        "confusion_matrix": [
+          [
+            38,
+            6,
+            58,
+            2,
+            0,
+            39,
+            7,
+            0
+          ],
+          [
+            1,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            482,
+            270,
+            164,
+            318,
+            0,
+            365,
+            0,
+            156
+          ],
+          [
+            61,
+            228,
+            20,
+            151,
+            0,
+            140,
+            1,
+            1
+          ],
+          [
+            140,
+            51,
+            6,
+            0,
+            0,
+            141,
+            0,
+            0
+          ],
+          [
+            22,
+            9,
+            20,
+            4,
+            0,
+            19,
+            18,
+            0
+          ],
+          [
+            10,
+            5,
+            24,
+            0,
+            0,
+            16,
+            8,
+            0
+          ],
+          [
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            2,
+            0
+          ]
+        ],
+        "per_class": {
+          "0": {
+            "precision": 0.050397877984084884,
+            "recall": 0.25333333333333335,
+            "f1": 0.084070796460177,
+            "support": 150
+          },
+          "1": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 3
+          },
+          "2": {
+            "precision": 0.5578231292517006,
+            "recall": 0.09344729344729345,
+            "f1": 0.1600780868716447,
+            "support": 1755
+          },
+          "3": {
+            "precision": 0.3178947368421053,
+            "recall": 0.25083056478405313,
+            "f1": 0.2804085422469823,
+            "support": 602
+          },
+          "4": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 338
+          },
+          "5": {
+            "precision": 0.026352288488210817,
+            "recall": 0.20652173913043478,
+            "f1": 0.046740467404674045,
+            "support": 92
+          },
+          "6": {
+            "precision": 0.2222222222222222,
+            "recall": 0.12698412698412698,
+            "f1": 0.16161616161616163,
+            "support": 63
+          },
+          "7": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 4
+          }
+        }
+      },
+      "trial_index": 12
+    },
+    {
+      "mode": "centralized",
+      "task": {
+        "name": "thesis_multiclass_category_ids",
+        "problem_type": "multiclass_classification",
+        "label_space": "8 encoded classes already present in the prepared CICIoT2023 CSV files",
+        "expected_num_classes": 8,
+        "class_names": [
+          "label_0",
+          "label_1",
+          "label_2",
+          "label_3",
+          "label_4",
+          "label_5",
+          "label_6",
+          "label_7"
+        ],
+        "notes": [
+          "This project is locked to multiclass IDS rather than binary benign-vs-attack classification.",
+          "The proposal describes a category-level setting aligned with benign plus seven attack super-categories.",
+          "Numeric label IDs are already encoded in the provided CSV files.",
+          "Exact semantic mapping from numeric IDs to attack-category names should be verified against the upstream preprocessing source before thesis write-up tables use human-readable class names."
+        ]
+      },
+      "data_path": "C:\\Users\\kk199\\Downloads\\thesis\\thesisProject\\data\\global.csv",
+      "max_rows": 20000,
+      "training_config": {
+        "input_dim": 39,
+        "output_dim": 8,
+        "hidden_dims": [
+          256,
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "batch_size": 256,
+        "epochs": 10,
+        "weight_decay": 0.0001,
+        "focal_gamma": 0.0,
+        "gradient_clip_norm": 5.0,
+        "seed": 42
+      },
+      "preprocessing": {
+        "random_sample": true,
+        "stratified_split": true,
+        "standardize": true,
+        "class_weighted": true,
+        "patience": 5
+      },
+      "split_summary": {
+        "train_samples": 13997,
+        "val_samples": 2996,
+        "test_samples": 3007,
+        "train_distribution": {
+          "0": 700,
+          "1": 10,
+          "2": 8187,
+          "3": 2803,
+          "4": 1575,
+          "5": 424,
+          "6": 287,
+          "7": 11
+        },
+        "val_distribution": {
+          "0": 150,
+          "1": 2,
+          "2": 1754,
+          "3": 600,
+          "4": 337,
+          "5": 90,
+          "6": 61,
+          "7": 2
+        },
+        "test_distribution": {
+          "0": 150,
+          "1": 3,
+          "2": 1755,
+          "3": 602,
+          "4": 338,
+          "5": 92,
+          "6": 63,
+          "7": 4
+        }
+      },
+      "class_weights": [
+        0.057345200330019,
+        4.014163970947266,
+        0.004903095308691263,
+        0.014320955611765385,
+        0.02548675611615181,
+        0.09467367827892303,
+        0.13986633718013763,
+        3.649240016937256
+      ],
+      "training_time_seconds": 4.316884994506836,
+      "history": [
+        {
+          "epoch": 1.0,
+          "train_loss": 0.12991586327552795,
+          "val_loss": 0.1279931664466858
+        },
+        {
+          "epoch": 2.0,
+          "train_loss": 0.12765327095985413,
+          "val_loss": 0.12615597248077393
+        },
+        {
+          "epoch": 3.0,
+          "train_loss": 0.1255008578300476,
+          "val_loss": 0.12446746230125427
+        },
+        {
+          "epoch": 4.0,
+          "train_loss": 0.12347660958766937,
+          "val_loss": 0.12289886176586151
+        },
+        {
+          "epoch": 5.0,
+          "train_loss": 0.12154938280582428,
+          "val_loss": 0.12146119028329849
+        },
+        {
+          "epoch": 6.0,
+          "train_loss": 0.11979740113019943,
+          "val_loss": 0.12016745656728745
+        },
+        {
+          "epoch": 7.0,
+          "train_loss": 0.11808329820632935,
+          "val_loss": 0.118925079703331
+        },
+        {
+          "epoch": 8.0,
+          "train_loss": 0.11653481423854828,
+          "val_loss": 0.11780509352684021
+        },
+        {
+          "epoch": 9.0,
+          "train_loss": 0.11502192169427872,
+          "val_loss": 0.11672448366880417
+        },
+        {
+          "epoch": 10.0,
+          "train_loss": 0.11360731720924377,
+          "val_loss": 0.115719735622406
+        }
+      ],
+      "test_metrics": {
+        "accuracy": 0.17426005986032592,
+        "precision_macro": 0.13241209661127973,
+        "recall_macro": 0.1770657405452653,
+        "f1_macro": 0.09140149213974368,
+        "auc_macro_ovr": 0.4184395274510166,
+        "confusion_matrix": [
+          [
+            90,
+            0,
+            18,
+            36,
+            0,
+            1,
+            3,
+            2
+          ],
+          [
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            622,
+            0,
+            12,
+            875,
+            1,
+            2,
+            0,
+            243
+          ],
+          [
+            158,
+            0,
+            6,
+            414,
+            1,
+            1,
+            1,
+            21
+          ],
+          [
+            19,
+            0,
+            0,
+            319,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            30,
+            0,
+            23,
+            31,
+            0,
+            1,
+            7,
+            0
+          ],
+          [
+            22,
+            0,
+            10,
+            21,
+            0,
+            1,
+            7,
+            2
+          ],
+          [
+            0,
+            0,
+            3,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "per_class": {
+          "0": {
+            "precision": 0.09554140127388536,
+            "recall": 0.6,
+            "f1": 0.16483516483516486,
+            "support": 150
+          },
+          "1": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 3
+          },
+          "2": {
+            "precision": 0.1643835616438356,
+            "recall": 0.006837606837606838,
+            "f1": 0.013129102844638947,
+            "support": 1755
+          },
+          "3": {
+            "precision": 0.24381625441696114,
+            "recall": 0.6877076411960132,
+            "f1": 0.36,
+            "support": 602
+          },
+          "4": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 338
+          },
+          "5": {
+            "precision": 0.16666666666666666,
+            "recall": 0.010869565217391304,
+            "f1": 0.02040816326530612,
+            "support": 92
+          },
+          "6": {
+            "precision": 0.3888888888888889,
+            "recall": 0.1111111111111111,
+            "f1": 0.1728395061728395,
+            "support": 63
+          },
+          "7": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 4
+          }
+        }
+      },
+      "trial_index": 1
+    },
+    {
+      "mode": "centralized",
+      "task": {
+        "name": "thesis_multiclass_category_ids",
+        "problem_type": "multiclass_classification",
+        "label_space": "8 encoded classes already present in the prepared CICIoT2023 CSV files",
+        "expected_num_classes": 8,
+        "class_names": [
+          "label_0",
+          "label_1",
+          "label_2",
+          "label_3",
+          "label_4",
+          "label_5",
+          "label_6",
+          "label_7"
+        ],
+        "notes": [
+          "This project is locked to multiclass IDS rather than binary benign-vs-attack classification.",
+          "The proposal describes a category-level setting aligned with benign plus seven attack super-categories.",
+          "Numeric label IDs are already encoded in the provided CSV files.",
+          "Exact semantic mapping from numeric IDs to attack-category names should be verified against the upstream preprocessing source before thesis write-up tables use human-readable class names."
+        ]
+      },
+      "data_path": "C:\\Users\\kk199\\Downloads\\thesis\\thesisProject\\data\\global.csv",
+      "max_rows": 20000,
+      "training_config": {
+        "input_dim": 39,
+        "output_dim": 8,
+        "hidden_dims": [
+          256,
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "batch_size": 256,
+        "epochs": 10,
+        "weight_decay": 0.0005,
+        "focal_gamma": 0.0,
+        "gradient_clip_norm": 5.0,
+        "seed": 42
+      },
+      "preprocessing": {
+        "random_sample": true,
+        "stratified_split": true,
+        "standardize": true,
+        "class_weighted": true,
+        "patience": 5
+      },
+      "split_summary": {
+        "train_samples": 13997,
+        "val_samples": 2996,
+        "test_samples": 3007,
+        "train_distribution": {
+          "0": 700,
+          "1": 10,
+          "2": 8187,
+          "3": 2803,
+          "4": 1575,
+          "5": 424,
+          "6": 287,
+          "7": 11
+        },
+        "val_distribution": {
+          "0": 150,
+          "1": 2,
+          "2": 1754,
+          "3": 600,
+          "4": 337,
+          "5": 90,
+          "6": 61,
+          "7": 2
+        },
+        "test_distribution": {
+          "0": 150,
+          "1": 3,
+          "2": 1755,
+          "3": 602,
+          "4": 338,
+          "5": 92,
+          "6": 63,
+          "7": 4
+        }
+      },
+      "class_weights": [
+        0.057345200330019,
+        4.014163970947266,
+        0.004903095308691263,
+        0.014320955611765385,
+        0.02548675611615181,
+        0.09467367827892303,
+        0.13986633718013763,
+        3.649240016937256
+      ],
+      "training_time_seconds": 4.593409061431885,
+      "history": [
+        {
+          "epoch": 1.0,
+          "train_loss": 0.31355664134025574,
+          "val_loss": 0.31163352727890015
+        },
+        {
+          "epoch": 2.0,
+          "train_loss": 0.31127333641052246,
+          "val_loss": 0.3097752332687378
+        },
+        {
+          "epoch": 3.0,
+          "train_loss": 0.3091011643409729,
+          "val_loss": 0.3080664277076721
+        },
+        {
+          "epoch": 4.0,
+          "train_loss": 0.3070579171180725,
+          "val_loss": 0.30647820234298706
+        },
+        {
+          "epoch": 5.0,
+          "train_loss": 0.3051123321056366,
+          "val_loss": 0.3050215244293213
+        },
+        {
+          "epoch": 6.0,
+          "train_loss": 0.3033427596092224,
+          "val_loss": 0.30370938777923584
+        },
+        {
+          "epoch": 7.0,
+          "train_loss": 0.30161160230636597,
+          "val_loss": 0.3024490177631378
+        },
+        {
+          "epoch": 8.0,
+          "train_loss": 0.3000466227531433,
+          "val_loss": 0.3013116121292114
+        },
+        {
+          "epoch": 9.0,
+          "train_loss": 0.29851776361465454,
+          "val_loss": 0.30021390318870544
+        },
+        {
+          "epoch": 10.0,
+          "train_loss": 0.29708755016326904,
+          "val_loss": 0.2991923391819
+        }
+      ],
+      "test_metrics": {
+        "accuracy": 0.17426005986032592,
+        "precision_macro": 0.13241209661127973,
+        "recall_macro": 0.1770657405452653,
+        "f1_macro": 0.09140149213974368,
+        "auc_macro_ovr": 0.4183975791428203,
+        "confusion_matrix": [
+          [
+            90,
+            0,
+            18,
+            36,
+            0,
+            1,
+            3,
+            2
+          ],
+          [
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            622,
+            0,
+            12,
+            875,
+            1,
+            2,
+            0,
+            243
+          ],
+          [
+            158,
+            0,
+            6,
+            414,
+            1,
+            1,
+            1,
+            21
+          ],
+          [
+            19,
+            0,
+            0,
+            319,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            30,
+            0,
+            23,
+            31,
+            0,
+            1,
+            7,
+            0
+          ],
+          [
+            22,
+            0,
+            10,
+            21,
+            0,
+            1,
+            7,
+            2
+          ],
+          [
+            0,
+            0,
+            3,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "per_class": {
+          "0": {
+            "precision": 0.09554140127388536,
+            "recall": 0.6,
+            "f1": 0.16483516483516486,
+            "support": 150
+          },
+          "1": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 3
+          },
+          "2": {
+            "precision": 0.1643835616438356,
+            "recall": 0.006837606837606838,
+            "f1": 0.013129102844638947,
+            "support": 1755
+          },
+          "3": {
+            "precision": 0.24381625441696114,
+            "recall": 0.6877076411960132,
+            "f1": 0.36,
+            "support": 602
+          },
+          "4": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 338
+          },
+          "5": {
+            "precision": 0.16666666666666666,
+            "recall": 0.010869565217391304,
+            "f1": 0.02040816326530612,
+            "support": 92
+          },
+          "6": {
+            "precision": 0.3888888888888889,
+            "recall": 0.1111111111111111,
+            "f1": 0.1728395061728395,
+            "support": 63
+          },
+          "7": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 4
+          }
+        }
+      },
+      "trial_index": 3
+    },
+    {
+      "mode": "centralized",
+      "task": {
+        "name": "thesis_multiclass_category_ids",
+        "problem_type": "multiclass_classification",
+        "label_space": "8 encoded classes already present in the prepared CICIoT2023 CSV files",
+        "expected_num_classes": 8,
+        "class_names": [
+          "label_0",
+          "label_1",
+          "label_2",
+          "label_3",
+          "label_4",
+          "label_5",
+          "label_6",
+          "label_7"
+        ],
+        "notes": [
+          "This project is locked to multiclass IDS rather than binary benign-vs-attack classification.",
+          "The proposal describes a category-level setting aligned with benign plus seven attack super-categories.",
+          "Numeric label IDs are already encoded in the provided CSV files.",
+          "Exact semantic mapping from numeric IDs to attack-category names should be verified against the upstream preprocessing source before thesis write-up tables use human-readable class names."
+        ]
+      },
+      "data_path": "C:\\Users\\kk199\\Downloads\\thesis\\thesisProject\\data\\global.csv",
+      "max_rows": 20000,
+      "training_config": {
+        "input_dim": 39,
+        "output_dim": 8,
+        "hidden_dims": [
+          256,
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "batch_size": 256,
+        "epochs": 10,
+        "weight_decay": 0.0001,
+        "focal_gamma": 1.5,
+        "gradient_clip_norm": 5.0,
+        "seed": 42
+      },
+      "preprocessing": {
+        "random_sample": true,
+        "stratified_split": true,
+        "standardize": true,
+        "class_weighted": true,
+        "patience": 5
+      },
+      "split_summary": {
+        "train_samples": 13997,
+        "val_samples": 2996,
+        "test_samples": 3007,
+        "train_distribution": {
+          "0": 700,
+          "1": 10,
+          "2": 8187,
+          "3": 2803,
+          "4": 1575,
+          "5": 424,
+          "6": 287,
+          "7": 11
+        },
+        "val_distribution": {
+          "0": 150,
+          "1": 2,
+          "2": 1754,
+          "3": 600,
+          "4": 337,
+          "5": 90,
+          "6": 61,
+          "7": 2
+        },
+        "test_distribution": {
+          "0": 150,
+          "1": 3,
+          "2": 1755,
+          "3": 602,
+          "4": 338,
+          "5": 92,
+          "6": 63,
+          "7": 4
+        }
+      },
+      "class_weights": [
+        0.057345200330019,
+        4.014163970947266,
+        0.004903095308691263,
+        0.014320955611765385,
+        0.02548675611615181,
+        0.09467367827892303,
+        0.13986633718013763,
+        3.649240016937256
+      ],
+      "training_time_seconds": 4.343932628631592,
+      "history": [
+        {
+          "epoch": 1.0,
+          "train_loss": 0.12422852218151093,
+          "val_loss": 0.1224006935954094
+        },
+        {
+          "epoch": 2.0,
+          "train_loss": 0.12189948558807373,
+          "val_loss": 0.12046652287244797
+        },
+        {
+          "epoch": 3.0,
+          "train_loss": 0.1196809709072113,
+          "val_loss": 0.11868342757225037
+        },
+        {
+          "epoch": 4.0,
+          "train_loss": 0.11759702861309052,
+          "val_loss": 0.11702366173267365
+        },
+        {
+          "epoch": 5.0,
+          "train_loss": 0.1156110167503357,
+          "val_loss": 0.11549201607704163
+        },
+        {
+          "epoch": 6.0,
+          "train_loss": 0.11379066109657288,
+          "val_loss": 0.11411291360855103
+        },
+        {
+          "epoch": 7.0,
+          "train_loss": 0.112010158598423,
+          "val_loss": 0.11278307437896729
+        },
+        {
+          "epoch": 8.0,
+          "train_loss": 0.11039447784423828,
+          "val_loss": 0.11158131062984467
+        },
+        {
+          "epoch": 9.0,
+          "train_loss": 0.10880795121192932,
+          "val_loss": 0.11041699349880219
+        },
+        {
+          "epoch": 10.0,
+          "train_loss": 0.10731968283653259,
+          "val_loss": 0.10933363437652588
+        }
+      ],
+      "test_metrics": {
+        "accuracy": 0.1725972730295976,
+        "precision_macro": 0.1291616192739766,
+        "recall_macro": 0.17289907387859865,
+        "f1_macro": 0.09000040174929894,
+        "auc_macro_ovr": 0.4136907952886541,
+        "confusion_matrix": [
+          [
+            85,
+            0,
+            18,
+            40,
+            0,
+            1,
+            4,
+            2
+          ],
+          [
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            620,
+            0,
+            12,
+            877,
+            1,
+            2,
+            0,
+            243
+          ],
+          [
+            158,
+            0,
+            6,
+            414,
+            1,
+            1,
+            1,
+            21
+          ],
+          [
+            18,
+            0,
+            0,
+            320,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            30,
+            0,
+            23,
+            31,
+            0,
+            1,
+            7,
+            0
+          ],
+          [
+            22,
+            0,
+            10,
+            21,
+            0,
+            1,
+            7,
+            2
+          ],
+          [
+            0,
+            0,
+            3,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "per_class": {
+          "0": {
+            "precision": 0.09100642398286937,
+            "recall": 0.5666666666666667,
+            "f1": 0.15682656826568264,
+            "support": 150
+          },
+          "1": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 3
+          },
+          "2": {
+            "precision": 0.1643835616438356,
+            "recall": 0.006837606837606838,
+            "f1": 0.013129102844638947,
+            "support": 1755
+          },
+          "3": {
+            "precision": 0.24281524926686218,
+            "recall": 0.6877076411960132,
+            "f1": 0.3589076723016906,
+            "support": 602
+          },
+          "4": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 338
+          },
+          "5": {
+            "precision": 0.16666666666666666,
+            "recall": 0.010869565217391304,
+            "f1": 0.02040816326530612,
+            "support": 92
+          },
+          "6": {
+            "precision": 0.3684210526315789,
+            "recall": 0.1111111111111111,
+            "f1": 0.17073170731707318,
+            "support": 63
+          },
+          "7": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 4
+          }
+        }
+      },
+      "trial_index": 2
+    },
+    {
+      "mode": "centralized",
+      "task": {
+        "name": "thesis_multiclass_category_ids",
+        "problem_type": "multiclass_classification",
+        "label_space": "8 encoded classes already present in the prepared CICIoT2023 CSV files",
+        "expected_num_classes": 8,
+        "class_names": [
+          "label_0",
+          "label_1",
+          "label_2",
+          "label_3",
+          "label_4",
+          "label_5",
+          "label_6",
+          "label_7"
+        ],
+        "notes": [
+          "This project is locked to multiclass IDS rather than binary benign-vs-attack classification.",
+          "The proposal describes a category-level setting aligned with benign plus seven attack super-categories.",
+          "Numeric label IDs are already encoded in the provided CSV files.",
+          "Exact semantic mapping from numeric IDs to attack-category names should be verified against the upstream preprocessing source before thesis write-up tables use human-readable class names."
+        ]
+      },
+      "data_path": "C:\\Users\\kk199\\Downloads\\thesis\\thesisProject\\data\\global.csv",
+      "max_rows": 20000,
+      "training_config": {
+        "input_dim": 39,
+        "output_dim": 8,
+        "hidden_dims": [
+          256,
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "batch_size": 256,
+        "epochs": 10,
+        "weight_decay": 0.0005,
+        "focal_gamma": 1.5,
+        "gradient_clip_norm": 5.0,
+        "seed": 42
+      },
+      "preprocessing": {
+        "random_sample": true,
+        "stratified_split": true,
+        "standardize": true,
+        "class_weighted": true,
+        "patience": 5
+      },
+      "split_summary": {
+        "train_samples": 13997,
+        "val_samples": 2996,
+        "test_samples": 3007,
+        "train_distribution": {
+          "0": 700,
+          "1": 10,
+          "2": 8187,
+          "3": 2803,
+          "4": 1575,
+          "5": 424,
+          "6": 287,
+          "7": 11
+        },
+        "val_distribution": {
+          "0": 150,
+          "1": 2,
+          "2": 1754,
+          "3": 600,
+          "4": 337,
+          "5": 90,
+          "6": 61,
+          "7": 2
+        },
+        "test_distribution": {
+          "0": 150,
+          "1": 3,
+          "2": 1755,
+          "3": 602,
+          "4": 338,
+          "5": 92,
+          "6": 63,
+          "7": 4
+        }
+      },
+      "class_weights": [
+        0.057345200330019,
+        4.014163970947266,
+        0.004903095308691263,
+        0.014320955611765385,
+        0.02548675611615181,
+        0.09467367827892303,
+        0.13986633718013763,
+        3.649240016937256
+      ],
+      "training_time_seconds": 4.4139933586120605,
+      "history": [
+        {
+          "epoch": 1.0,
+          "train_loss": 0.3078690767288208,
+          "val_loss": 0.30604085326194763
+        },
+        {
+          "epoch": 2.0,
+          "train_loss": 0.305519163608551,
+          "val_loss": 0.304085373878479
+        },
+        {
+          "epoch": 3.0,
+          "train_loss": 0.30328065156936646,
+          "val_loss": 0.30228179693222046
+        },
+        {
+          "epoch": 4.0,
+          "train_loss": 0.3011775016784668,
+          "val_loss": 0.3006022274494171
+        },
+        {
+          "epoch": 5.0,
+          "train_loss": 0.2991728186607361,
+          "val_loss": 0.2990512549877167
+        },
+        {
+          "epoch": 6.0,
+          "train_loss": 0.2973346710205078,
+          "val_loss": 0.29765358567237854
+        },
+        {
+          "epoch": 7.0,
+          "train_loss": 0.29553693532943726,
+          "val_loss": 0.29630565643310547
+        },
+        {
+          "epoch": 8.0,
+          "train_loss": 0.29390469193458557,
+          "val_loss": 0.2950863242149353
+        },
+        {
+          "epoch": 9.0,
+          "train_loss": 0.2923019528388977,
+          "val_loss": 0.29390472173690796
+        },
+        {
+          "epoch": 10.0,
+          "train_loss": 0.2907978892326355,
+          "val_loss": 0.29280444979667664
+        }
+      ],
+      "test_metrics": {
+        "accuracy": 0.1725972730295976,
+        "precision_macro": 0.12888394433876743,
+        "recall_macro": 0.17289907387859865,
+        "f1_macro": 0.08999950446233579,
+        "auc_macro_ovr": 0.4136742536159226,
+        "confusion_matrix": [
+          [
+            85,
+            0,
+            18,
+            40,
+            0,
+            1,
+            4,
+            2
+          ],
+          [
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            620,
+            0,
+            12,
+            877,
+            1,
+            2,
+            0,
+            243
+          ],
+          [
+            158,
+            0,
+            7,
+            414,
+            0,
+            1,
+            1,
+            21
+          ],
+          [
+            18,
+            0,
+            0,
+            320,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            30,
+            0,
+            23,
+            31,
+            0,
+            1,
+            7,
+            0
+          ],
+          [
+            22,
+            0,
+            10,
+            21,
+            0,
+            1,
+            7,
+            2
+          ],
+          [
+            0,
+            0,
+            3,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "per_class": {
+          "0": {
+            "precision": 0.09100642398286937,
+            "recall": 0.5666666666666667,
+            "f1": 0.15682656826568264,
+            "support": 150
+          },
+          "1": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 3
+          },
+          "2": {
+            "precision": 0.16216216216216217,
+            "recall": 0.006837606837606838,
+            "f1": 0.013121924548933845,
+            "support": 1755
+          },
+          "3": {
+            "precision": 0.24281524926686218,
+            "recall": 0.6877076411960132,
+            "f1": 0.3589076723016906,
+            "support": 602
+          },
+          "4": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 338
+          },
+          "5": {
+            "precision": 0.16666666666666666,
+            "recall": 0.010869565217391304,
+            "f1": 0.02040816326530612,
+            "support": 92
+          },
+          "6": {
+            "precision": 0.3684210526315789,
+            "recall": 0.1111111111111111,
+            "f1": 0.17073170731707318,
+            "support": 63
+          },
+          "7": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 4
+          }
+        }
+      },
+      "trial_index": 4
+    },
+    {
+      "mode": "centralized",
+      "task": {
+        "name": "thesis_multiclass_category_ids",
+        "problem_type": "multiclass_classification",
+        "label_space": "8 encoded classes already present in the prepared CICIoT2023 CSV files",
+        "expected_num_classes": 8,
+        "class_names": [
+          "label_0",
+          "label_1",
+          "label_2",
+          "label_3",
+          "label_4",
+          "label_5",
+          "label_6",
+          "label_7"
+        ],
+        "notes": [
+          "This project is locked to multiclass IDS rather than binary benign-vs-attack classification.",
+          "The proposal describes a category-level setting aligned with benign plus seven attack super-categories.",
+          "Numeric label IDs are already encoded in the provided CSV files.",
+          "Exact semantic mapping from numeric IDs to attack-category names should be verified against the upstream preprocessing source before thesis write-up tables use human-readable class names."
+        ]
+      },
+      "data_path": "C:\\Users\\kk199\\Downloads\\thesis\\thesisProject\\data\\global.csv",
+      "max_rows": 20000,
+      "training_config": {
+        "input_dim": 39,
+        "output_dim": 8,
+        "hidden_dims": [
+          256,
+          128,
+          64
+        ],
+        "learning_rate": 0.0005,
+        "batch_size": 256,
+        "epochs": 10,
+        "weight_decay": 0.0001,
+        "focal_gamma": 0.0,
+        "gradient_clip_norm": 5.0,
+        "seed": 42
+      },
+      "preprocessing": {
+        "random_sample": true,
+        "stratified_split": true,
+        "standardize": true,
+        "class_weighted": true,
+        "patience": 5
+      },
+      "split_summary": {
+        "train_samples": 13997,
+        "val_samples": 2996,
+        "test_samples": 3007,
+        "train_distribution": {
+          "0": 700,
+          "1": 10,
+          "2": 8187,
+          "3": 2803,
+          "4": 1575,
+          "5": 424,
+          "6": 287,
+          "7": 11
+        },
+        "val_distribution": {
+          "0": 150,
+          "1": 2,
+          "2": 1754,
+          "3": 600,
+          "4": 337,
+          "5": 90,
+          "6": 61,
+          "7": 2
+        },
+        "test_distribution": {
+          "0": 150,
+          "1": 3,
+          "2": 1755,
+          "3": 602,
+          "4": 338,
+          "5": 92,
+          "6": 63,
+          "7": 4
+        }
+      },
+      "class_weights": [
+        0.057345200330019,
+        4.014163970947266,
+        0.004903095308691263,
+        0.014320955611765385,
+        0.02548675611615181,
+        0.09467367827892303,
+        0.13986633718013763,
+        3.649240016937256
+      ],
+      "training_time_seconds": 4.416966915130615,
+      "history": [
+        {
+          "epoch": 1.0,
+          "train_loss": 0.1311163455247879,
+          "val_loss": 0.12898224592208862
+        },
+        {
+          "epoch": 2.0,
+          "train_loss": 0.1299348920583725,
+          "val_loss": 0.12800359725952148
+        },
+        {
+          "epoch": 3.0,
+          "train_loss": 0.12879875302314758,
+          "val_loss": 0.127069354057312
+        },
+        {
+          "epoch": 4.0,
+          "train_loss": 0.1276797354221344,
+          "val_loss": 0.12617391347885132
+        },
+        {
+          "epoch": 5.0,
+          "train_loss": 0.12658582627773285,
+          "val_loss": 0.12531521916389465
+        },
+        {
+          "epoch": 6.0,
+          "train_loss": 0.1255580633878708,
+          "val_loss": 0.12450569868087769
+        },
+        {
+          "epoch": 7.0,
+          "train_loss": 0.12453038990497589,
+          "val_loss": 0.12370403110980988
+        },
+        {
+          "epoch": 8.0,
+          "train_loss": 0.12356268614530563,
+          "val_loss": 0.12295618653297424
+        },
+        {
+          "epoch": 9.0,
+          "train_loss": 0.12258410453796387,
+          "val_loss": 0.12222050130367279
+        },
+        {
+          "epoch": 10.0,
+          "train_loss": 0.12163037806749344,
+          "val_loss": 0.121514692902565
+        }
+      ],
+      "test_metrics": {
+        "accuracy": 0.1676089125374127,
+        "precision_macro": 0.06400413312956124,
+        "recall_macro": 0.13655235161049115,
+        "f1_macro": 0.06097893573044681,
+        "auc_macro_ovr": 0.38365919350193023,
+        "confusion_matrix": [
+          [
+            56,
+            0,
+            31,
+            63,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            568,
+            0,
+            23,
+            944,
+            1,
+            1,
+            0,
+            218
+          ],
+          [
+            157,
+            0,
+            8,
+            425,
+            0,
+            0,
+            0,
+            12
+          ],
+          [
+            6,
+            0,
+            0,
+            332,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            23,
+            0,
+            28,
+            38,
+            0,
+            0,
+            3,
+            0
+          ],
+          [
+            16,
+            0,
+            14,
+            33,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            3,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "per_class": {
+          "0": {
+            "precision": 0.06771463119709795,
+            "recall": 0.37333333333333335,
+            "f1": 0.11463664278403277,
+            "support": 150
+          },
+          "1": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 3
+          },
+          "2": {
+            "precision": 0.21296296296296297,
+            "recall": 0.013105413105413105,
+            "f1": 0.024691358024691357,
+            "support": 1755
+          },
+          "3": {
+            "precision": 0.23135547087642896,
+            "recall": 0.7059800664451827,
+            "f1": 0.34850348503485035,
+            "support": 602
+          },
+          "4": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 338
+          },
+          "5": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 92
+          },
+          "6": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 63
+          },
+          "7": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 4
+          }
+        }
+      },
+      "trial_index": 5
+    },
+    {
+      "mode": "centralized",
+      "task": {
+        "name": "thesis_multiclass_category_ids",
+        "problem_type": "multiclass_classification",
+        "label_space": "8 encoded classes already present in the prepared CICIoT2023 CSV files",
+        "expected_num_classes": 8,
+        "class_names": [
+          "label_0",
+          "label_1",
+          "label_2",
+          "label_3",
+          "label_4",
+          "label_5",
+          "label_6",
+          "label_7"
+        ],
+        "notes": [
+          "This project is locked to multiclass IDS rather than binary benign-vs-attack classification.",
+          "The proposal describes a category-level setting aligned with benign plus seven attack super-categories.",
+          "Numeric label IDs are already encoded in the provided CSV files.",
+          "Exact semantic mapping from numeric IDs to attack-category names should be verified against the upstream preprocessing source before thesis write-up tables use human-readable class names."
+        ]
+      },
+      "data_path": "C:\\Users\\kk199\\Downloads\\thesis\\thesisProject\\data\\global.csv",
+      "max_rows": 20000,
+      "training_config": {
+        "input_dim": 39,
+        "output_dim": 8,
+        "hidden_dims": [
+          256,
+          128,
+          64
+        ],
+        "learning_rate": 0.0005,
+        "batch_size": 256,
+        "epochs": 10,
+        "weight_decay": 0.0005,
+        "focal_gamma": 0.0,
+        "gradient_clip_norm": 5.0,
+        "seed": 42
+      },
+      "preprocessing": {
+        "random_sample": true,
+        "stratified_split": true,
+        "standardize": true,
+        "class_weighted": true,
+        "patience": 5
+      },
+      "split_summary": {
+        "train_samples": 13997,
+        "val_samples": 2996,
+        "test_samples": 3007,
+        "train_distribution": {
+          "0": 700,
+          "1": 10,
+          "2": 8187,
+          "3": 2803,
+          "4": 1575,
+          "5": 424,
+          "6": 287,
+          "7": 11
+        },
+        "val_distribution": {
+          "0": 150,
+          "1": 2,
+          "2": 1754,
+          "3": 600,
+          "4": 337,
+          "5": 90,
+          "6": 61,
+          "7": 2
+        },
+        "test_distribution": {
+          "0": 150,
+          "1": 3,
+          "2": 1755,
+          "3": 602,
+          "4": 338,
+          "5": 92,
+          "6": 63,
+          "7": 4
+        }
+      },
+      "class_weights": [
+        0.057345200330019,
+        4.014163970947266,
+        0.004903095308691263,
+        0.014320955611765385,
+        0.02548675611615181,
+        0.09467367827892303,
+        0.13986633718013763,
+        3.649240016937256
+      ],
+      "training_time_seconds": 4.3075361251831055,
+      "history": [
+        {
+          "epoch": 1.0,
+          "train_loss": 0.3147678077220917,
+          "val_loss": 0.31263354420661926
+        },
+        {
+          "epoch": 2.0,
+          "train_loss": 0.31357574462890625,
+          "val_loss": 0.311644047498703
+        },
+        {
+          "epoch": 3.0,
+          "train_loss": 0.3124291002750397,
+          "val_loss": 0.31069913506507874
+        },
+        {
+          "epoch": 4.0,
+          "train_loss": 0.3112998902797699,
+          "val_loss": 0.30979329347610474
+        },
+        {
+          "epoch": 5.0,
+          "train_loss": 0.31019601225852966,
+          "val_loss": 0.3089243769645691
+        },
+        {
+          "epoch": 6.0,
+          "train_loss": 0.3091585040092468,
+          "val_loss": 0.30810487270355225
+        },
+        {
+          "epoch": 7.0,
+          "train_loss": 0.3081212043762207,
+          "val_loss": 0.3072932958602905
+        },
+        {
+          "epoch": 8.0,
+          "train_loss": 0.3071441352367401,
+          "val_loss": 0.3065357804298401
+        },
+        {
+          "epoch": 9.0,
+          "train_loss": 0.30615630745887756,
+          "val_loss": 0.305790513753891
+        },
+        {
+          "epoch": 10.0,
+          "train_loss": 0.30519354343414307,
+          "val_loss": 0.3050752580165863
+        }
+      ],
+      "test_metrics": {
+        "accuracy": 0.1676089125374127,
+        "precision_macro": 0.06400413312956124,
+        "recall_macro": 0.13655235161049115,
+        "f1_macro": 0.06097893573044681,
+        "auc_macro_ovr": 0.38365026657133383,
+        "confusion_matrix": [
+          [
+            56,
+            0,
+            31,
+            63,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            568,
+            0,
+            23,
+            944,
+            1,
+            1,
+            0,
+            218
+          ],
+          [
+            157,
+            0,
+            8,
+            425,
+            0,
+            0,
+            0,
+            12
+          ],
+          [
+            6,
+            0,
+            0,
+            332,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            23,
+            0,
+            28,
+            38,
+            0,
+            0,
+            3,
+            0
+          ],
+          [
+            16,
+            0,
+            14,
+            33,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            3,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "per_class": {
+          "0": {
+            "precision": 0.06771463119709795,
+            "recall": 0.37333333333333335,
+            "f1": 0.11463664278403277,
+            "support": 150
+          },
+          "1": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 3
+          },
+          "2": {
+            "precision": 0.21296296296296297,
+            "recall": 0.013105413105413105,
+            "f1": 0.024691358024691357,
+            "support": 1755
+          },
+          "3": {
+            "precision": 0.23135547087642896,
+            "recall": 0.7059800664451827,
+            "f1": 0.34850348503485035,
+            "support": 602
+          },
+          "4": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 338
+          },
+          "5": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 92
+          },
+          "6": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 63
+          },
+          "7": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 4
+          }
+        }
+      },
+      "trial_index": 7
+    },
+    {
+      "mode": "centralized",
+      "task": {
+        "name": "thesis_multiclass_category_ids",
+        "problem_type": "multiclass_classification",
+        "label_space": "8 encoded classes already present in the prepared CICIoT2023 CSV files",
+        "expected_num_classes": 8,
+        "class_names": [
+          "label_0",
+          "label_1",
+          "label_2",
+          "label_3",
+          "label_4",
+          "label_5",
+          "label_6",
+          "label_7"
+        ],
+        "notes": [
+          "This project is locked to multiclass IDS rather than binary benign-vs-attack classification.",
+          "The proposal describes a category-level setting aligned with benign plus seven attack super-categories.",
+          "Numeric label IDs are already encoded in the provided CSV files.",
+          "Exact semantic mapping from numeric IDs to attack-category names should be verified against the upstream preprocessing source before thesis write-up tables use human-readable class names."
+        ]
+      },
+      "data_path": "C:\\Users\\kk199\\Downloads\\thesis\\thesisProject\\data\\global.csv",
+      "max_rows": 20000,
+      "training_config": {
+        "input_dim": 39,
+        "output_dim": 8,
+        "hidden_dims": [
+          256,
+          128,
+          64
+        ],
+        "learning_rate": 0.0005,
+        "batch_size": 256,
+        "epochs": 10,
+        "weight_decay": 0.0001,
+        "focal_gamma": 1.5,
+        "gradient_clip_norm": 5.0,
+        "seed": 42
+      },
+      "preprocessing": {
+        "random_sample": true,
+        "stratified_split": true,
+        "standardize": true,
+        "class_weighted": true,
+        "patience": 5
+      },
+      "split_summary": {
+        "train_samples": 13997,
+        "val_samples": 2996,
+        "test_samples": 3007,
+        "train_distribution": {
+          "0": 700,
+          "1": 10,
+          "2": 8187,
+          "3": 2803,
+          "4": 1575,
+          "5": 424,
+          "6": 287,
+          "7": 11
+        },
+        "val_distribution": {
+          "0": 150,
+          "1": 2,
+          "2": 1754,
+          "3": 600,
+          "4": 337,
+          "5": 90,
+          "6": 61,
+          "7": 2
+        },
+        "test_distribution": {
+          "0": 150,
+          "1": 3,
+          "2": 1755,
+          "3": 602,
+          "4": 338,
+          "5": 92,
+          "6": 63,
+          "7": 4
+        }
+      },
+      "class_weights": [
+        0.057345200330019,
+        4.014163970947266,
+        0.004903095308691263,
+        0.014320955611765385,
+        0.02548675611615181,
+        0.09467367827892303,
+        0.13986633718013763,
+        3.649240016937256
+      ],
+      "training_time_seconds": 4.424137353897095,
+      "history": [
+        {
+          "epoch": 1.0,
+          "train_loss": 0.12546363472938538,
+          "val_loss": 0.12343943119049072
+        },
+        {
+          "epoch": 2.0,
+          "train_loss": 0.12424902617931366,
+          "val_loss": 0.12241272628307343
+        },
+        {
+          "epoch": 3.0,
+          "train_loss": 0.12307901680469513,
+          "val_loss": 0.12142961472272873
+        },
+        {
+          "epoch": 4.0,
+          "train_loss": 0.12192799150943756,
+          "val_loss": 0.12048657238483429
+        },
+        {
+          "epoch": 5.0,
+          "train_loss": 0.1208016574382782,
+          "val_loss": 0.11958087980747223
+        },
+        {
+          "epoch": 6.0,
+          "train_loss": 0.11974219232797623,
+          "val_loss": 0.1187257468700409
+        },
+        {
+          "epoch": 7.0,
+          "train_loss": 0.11868185549974442,
+          "val_loss": 0.11787613481283188
+        },
+        {
+          "epoch": 8.0,
+          "train_loss": 0.11768347024917603,
+          "val_loss": 0.1170826256275177
+        },
+        {
+          "epoch": 9.0,
+          "train_loss": 0.11667627841234207,
+          "val_loss": 0.11629927158355713
+        },
+        {
+          "epoch": 10.0,
+          "train_loss": 0.1156892329454422,
+          "val_loss": 0.11554715037345886
+        }
+      ],
+      "test_metrics": {
+        "accuracy": 0.1659461257066844,
+        "precision_macro": 0.06146745234693117,
+        "recall_macro": 0.1325221010686127,
+        "f1_macro": 0.059681480726460796,
+        "auc_macro_ovr": 0.3809893134767916,
+        "confusion_matrix": [
+          [
+            51,
+            0,
+            34,
+            65,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            568,
+            0,
+            22,
+            945,
+            1,
+            1,
+            0,
+            218
+          ],
+          [
+            156,
+            0,
+            8,
+            426,
+            0,
+            0,
+            0,
+            12
+          ],
+          [
+            6,
+            0,
+            0,
+            332,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            23,
+            0,
+            28,
+            38,
+            0,
+            0,
+            3,
+            0
+          ],
+          [
+            14,
+            0,
+            15,
+            34,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            3,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "per_class": {
+          "0": {
+            "precision": 0.06227106227106227,
+            "recall": 0.34,
+            "f1": 0.10526315789473684,
+            "support": 150
+          },
+          "1": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 3
+          },
+          "2": {
+            "precision": 0.1981981981981982,
+            "recall": 0.012535612535612535,
+            "f1": 0.023579849946409433,
+            "support": 1755
+          },
+          "3": {
+            "precision": 0.23127035830618892,
+            "recall": 0.707641196013289,
+            "f1": 0.3486088379705401,
+            "support": 602
+          },
+          "4": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 338
+          },
+          "5": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 92
+          },
+          "6": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 63
+          },
+          "7": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 4
+          }
+        }
+      },
+      "trial_index": 6
+    },
+    {
+      "mode": "centralized",
+      "task": {
+        "name": "thesis_multiclass_category_ids",
+        "problem_type": "multiclass_classification",
+        "label_space": "8 encoded classes already present in the prepared CICIoT2023 CSV files",
+        "expected_num_classes": 8,
+        "class_names": [
+          "label_0",
+          "label_1",
+          "label_2",
+          "label_3",
+          "label_4",
+          "label_5",
+          "label_6",
+          "label_7"
+        ],
+        "notes": [
+          "This project is locked to multiclass IDS rather than binary benign-vs-attack classification.",
+          "The proposal describes a category-level setting aligned with benign plus seven attack super-categories.",
+          "Numeric label IDs are already encoded in the provided CSV files.",
+          "Exact semantic mapping from numeric IDs to attack-category names should be verified against the upstream preprocessing source before thesis write-up tables use human-readable class names."
+        ]
+      },
+      "data_path": "C:\\Users\\kk199\\Downloads\\thesis\\thesisProject\\data\\global.csv",
+      "max_rows": 20000,
+      "training_config": {
+        "input_dim": 39,
+        "output_dim": 8,
+        "hidden_dims": [
+          256,
+          128,
+          64
+        ],
+        "learning_rate": 0.0005,
+        "batch_size": 256,
+        "epochs": 10,
+        "weight_decay": 0.0005,
+        "focal_gamma": 1.5,
+        "gradient_clip_norm": 5.0,
+        "seed": 42
+      },
+      "preprocessing": {
+        "random_sample": true,
+        "stratified_split": true,
+        "standardize": true,
+        "class_weighted": true,
+        "patience": 5
+      },
+      "split_summary": {
+        "train_samples": 13997,
+        "val_samples": 2996,
+        "test_samples": 3007,
+        "train_distribution": {
+          "0": 700,
+          "1": 10,
+          "2": 8187,
+          "3": 2803,
+          "4": 1575,
+          "5": 424,
+          "6": 287,
+          "7": 11
+        },
+        "val_distribution": {
+          "0": 150,
+          "1": 2,
+          "2": 1754,
+          "3": 600,
+          "4": 337,
+          "5": 90,
+          "6": 61,
+          "7": 2
+        },
+        "test_distribution": {
+          "0": 150,
+          "1": 3,
+          "2": 1755,
+          "3": 602,
+          "4": 338,
+          "5": 92,
+          "6": 63,
+          "7": 4
+        }
+      },
+      "class_weights": [
+        0.057345200330019,
+        4.014163970947266,
+        0.004903095308691263,
+        0.014320955611765385,
+        0.02548675611615181,
+        0.09467367827892303,
+        0.13986633718013763,
+        3.649240016937256
+      ],
+      "training_time_seconds": 4.36936092376709,
+      "history": [
+        {
+          "epoch": 1.0,
+          "train_loss": 0.3091149926185608,
+          "val_loss": 0.3070905804634094
+        },
+        {
+          "epoch": 2.0,
+          "train_loss": 0.3078896701335907,
+          "val_loss": 0.3060529828071594
+        },
+        {
+          "epoch": 3.0,
+          "train_loss": 0.3067091107368469,
+          "val_loss": 0.30505913496017456
+        },
+        {
+          "epoch": 4.0,
+          "train_loss": 0.30554771423339844,
+          "val_loss": 0.3041055202484131
+        },
+        {
+          "epoch": 5.0,
+          "train_loss": 0.30441129207611084,
+          "val_loss": 0.3031895160675049
+        },
+        {
+          "epoch": 6.0,
+          "train_loss": 0.3033420145511627,
+          "val_loss": 0.3023243248462677
+        },
+        {
+          "epoch": 7.0,
+          "train_loss": 0.3022719621658325,
+          "val_loss": 0.30146467685699463
+        },
+        {
+          "epoch": 8.0,
+          "train_loss": 0.30126410722732544,
+          "val_loss": 0.3006614148616791
+        },
+        {
+          "epoch": 9.0,
+          "train_loss": 0.30024757981300354,
+          "val_loss": 0.2998684048652649
+        },
+        {
+          "epoch": 10.0,
+          "train_loss": 0.2992513179779053,
+          "val_loss": 0.2991067171096802
+        }
+      ],
+      "test_metrics": {
+        "accuracy": 0.1659461257066844,
+        "precision_macro": 0.06146745234693117,
+        "recall_macro": 0.1325221010686127,
+        "f1_macro": 0.059681480726460796,
+        "auc_macro_ovr": 0.3809830283431995,
+        "confusion_matrix": [
+          [
+            51,
+            0,
+            34,
+            65,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            568,
+            0,
+            22,
+            945,
+            1,
+            1,
+            0,
+            218
+          ],
+          [
+            156,
+            0,
+            8,
+            426,
+            0,
+            0,
+            0,
+            12
+          ],
+          [
+            6,
+            0,
+            0,
+            332,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            23,
+            0,
+            28,
+            38,
+            0,
+            0,
+            3,
+            0
+          ],
+          [
+            14,
+            0,
+            15,
+            34,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            3,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "per_class": {
+          "0": {
+            "precision": 0.06227106227106227,
+            "recall": 0.34,
+            "f1": 0.10526315789473684,
+            "support": 150
+          },
+          "1": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 3
+          },
+          "2": {
+            "precision": 0.1981981981981982,
+            "recall": 0.012535612535612535,
+            "f1": 0.023579849946409433,
+            "support": 1755
+          },
+          "3": {
+            "precision": 0.23127035830618892,
+            "recall": 0.707641196013289,
+            "f1": 0.3486088379705401,
+            "support": 602
+          },
+          "4": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 338
+          },
+          "5": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 92
+          },
+          "6": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 63
+          },
+          "7": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 4
+          }
+        }
+      },
+      "trial_index": 8
+    }
+  ]
+}
