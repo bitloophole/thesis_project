@@ -52,6 +52,35 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--num-workers", type=int, default=0)
     parser.add_argument("--skip-train-loss", action="store_true")
     parser.add_argument("--disable-local-val", action="store_true")
+    parser.add_argument("--focal-gamma", type=float, default=0.0)
+    parser.add_argument(
+        "--fedavg-weighting",
+        choices=["samples", "sqrt_samples", "uniform"],
+        default="samples",
+        help="Client weight mode during FedAvg aggregation.",
+    )
+    parser.add_argument(
+        "--round-early-stop-patience",
+        type=int,
+        default=0,
+        help="Stop after this many evaluated rounds without improvement on --early-stop-metric. 0 disables.",
+    )
+    parser.add_argument(
+        "--round-min-delta",
+        type=float,
+        default=0.001,
+        help="Minimum metric improvement required to reset round early-stopping patience.",
+    )
+    parser.add_argument(
+        "--early-stop-metric",
+        choices=["f1_macro", "accuracy", "precision_macro", "recall_macro", "auc_macro_ovr"],
+        default="f1_macro",
+    )
+    parser.add_argument(
+        "--balanced-sampler",
+        action="store_true",
+        help="Use inverse-frequency sampling for local client train loader instead of plain shuffle.",
+    )
     parser.add_argument("--disable-class-weighted", action="store_true")
     parser.add_argument("--disable-standardize", action="store_true")
     parser.add_argument("--sequential-sample", action="store_true")
@@ -64,14 +93,14 @@ def resolve_torch():
     try:
         import torch
         from torch import nn
-        from torch.utils.data import DataLoader, TensorDataset
+        from torch.utils.data import DataLoader, TensorDataset, WeightedRandomSampler
 
         from ciciot.models.tabtransformer_torch import TabTransformerClassifier, TabTransformerConfig
     except Exception as exc:  # pragma: no cover - runtime dependency guard
         raise RuntimeError(
             "Federated TabTransformer training requires PyTorch. Install torch and rerun train_federated_tabtransformer.py."
         ) from exc
-    return torch, nn, DataLoader, TensorDataset, TabTransformerClassifier, TabTransformerConfig
+    return torch, nn, DataLoader, TensorDataset, WeightedRandomSampler, TabTransformerClassifier, TabTransformerConfig
 
 
 def choose_device(torch_module, requested: str) -> str:
@@ -97,6 +126,7 @@ def make_loader(
     torch_module,
     dataloader_cls,
     tensor_dataset_cls,
+    weighted_sampler_cls,
     x: np.ndarray,
     y: np.ndarray,
     args: argparse.Namespace,
@@ -108,10 +138,22 @@ def make_loader(
     loader_kwargs: dict[str, object] = {
         "dataset": dataset,
         "batch_size": args.batch_size,
-        "shuffle": True,
         "pin_memory": device == "cuda",
         "num_workers": max(args.num_workers, 0),
     }
+    if args.balanced_sampler:
+        class_counts = np.bincount(y.astype(np.int64))
+        class_counts = np.where(class_counts > 0, class_counts, 1)
+        sample_weights = (1.0 / class_counts[y.astype(np.int64)]).astype(np.float64)
+        sampler = weighted_sampler_cls(
+            weights=torch_module.from_numpy(sample_weights),
+            num_samples=len(sample_weights),
+            replacement=True,
+        )
+        loader_kwargs["sampler"] = sampler
+        loader_kwargs["shuffle"] = False
+    else:
+        loader_kwargs["shuffle"] = True
     if args.num_workers > 0:
         loader_kwargs["persistent_workers"] = True
         loader_kwargs["prefetch_factor"] = 4
@@ -137,9 +179,20 @@ def evaluate_model(torch_module, model, x: np.ndarray, y: np.ndarray, batch_size
     return total_loss / max(total_samples, 1), np.concatenate(all_probs, axis=0)
 
 
-def average_state_dicts(torch_module, weighted_states: list[tuple[int, dict[str, object]]]) -> dict[str, object]:
-    total_examples = sum(num_examples for num_examples, _ in weighted_states)
-    if total_examples <= 0:
+def average_state_dicts(
+    torch_module, weighted_states: list[tuple[int, dict[str, object]]], weighting_mode: str
+) -> dict[str, object]:
+    if weighting_mode == "samples":
+        client_weights = [float(num_examples) for num_examples, _ in weighted_states]
+    elif weighting_mode == "sqrt_samples":
+        client_weights = [float(np.sqrt(num_examples)) for num_examples, _ in weighted_states]
+    elif weighting_mode == "uniform":
+        client_weights = [1.0 for _ in weighted_states]
+    else:  # pragma: no cover - guarded by argparse choices
+        raise ValueError(f"Unsupported FedAvg weighting mode: {weighting_mode}")
+
+    total_weight = float(sum(client_weights))
+    if total_weight <= 0:
         raise ValueError("Cannot average model states with zero examples.")
 
     averaged: dict[str, object] = {}
@@ -151,9 +204,9 @@ def average_state_dicts(torch_module, weighted_states: list[tuple[int, dict[str,
                 averaged[key] = first_value.detach().clone()
                 continue
             acc = torch_module.zeros_like(first_value, dtype=torch_module.float32)
-            for num_examples, state in weighted_states:
+            for client_weight, (_, state) in zip(client_weights, weighted_states):
                 acc += state[key].detach().to(dtype=torch_module.float32, device=acc.device) * (
-                    num_examples / total_examples
+                    client_weight / total_weight
                 )
             averaged[key] = acc.to(dtype=first_value.dtype)
         else:
@@ -166,6 +219,7 @@ def train_one_client(
     nn_module,
     dataloader_cls,
     tensor_dataset_cls,
+    weighted_sampler_cls,
     model_cls,
     model_config,
     global_state: dict[str, object],
@@ -186,7 +240,9 @@ def train_one_client(
     local_model = model_cls(model_config).to(device)
     local_model.load_state_dict(global_state)
 
-    train_loader = make_loader(torch_module, dataloader_cls, tensor_dataset_cls, x_train, y_train, args, device)
+    train_loader = make_loader(
+        torch_module, dataloader_cls, tensor_dataset_cls, weighted_sampler_cls, x_train, y_train, args, device
+    )
     weight_tensor = (
         torch_module.tensor(class_weights, dtype=torch_module.float32, device=device)
         if class_weights is not None
@@ -209,7 +265,17 @@ def train_one_client(
             batch_y = batch_y.to(device, non_blocking=device != "cpu")
             optimizer.zero_grad(set_to_none=True)
             logits = local_model(batch_x)
-            loss = criterion(logits, batch_y)
+            if args.focal_gamma > 0.0:
+                ce_per_sample = nn_module.functional.cross_entropy(
+                    logits,
+                    batch_y,
+                    weight=weight_tensor,
+                    reduction="none",
+                )
+                pt = torch_module.exp(-ce_per_sample)
+                loss = ((1.0 - pt) ** args.focal_gamma * ce_per_sample).mean()
+            else:
+                loss = criterion(logits, batch_y)
             loss.backward()
             optimizer.step()
             running_loss += float(loss.item()) * len(batch_y)
@@ -240,7 +306,9 @@ def train_one_client(
 
 
 def run_federated_experiment(args: argparse.Namespace) -> dict[str, object]:
-    torch, nn, DataLoader, TensorDataset, TabTransformerClassifier, TabTransformerConfig = resolve_torch()
+    torch, nn, DataLoader, TensorDataset, WeightedRandomSampler, TabTransformerClassifier, TabTransformerConfig = (
+        resolve_torch()
+    )
     device = choose_device(torch, args.device)
 
     test_split = build_test_split_from_global(
@@ -314,6 +382,11 @@ def run_federated_experiment(args: argparse.Namespace) -> dict[str, object]:
 
     round_history: list[dict[str, object]] = []
     client_summaries: list[dict[str, object]] = []
+    best_metric = float("-inf")
+    best_round = 0
+    best_global_state = {key: value.detach().cpu().clone() for key, value in global_model.state_dict().items()}
+    no_improve_evals = 0
+    early_stopped = False
     start_time = time.time()
 
     for round_idx in range(1, args.rounds + 1):
@@ -332,6 +405,7 @@ def run_federated_experiment(args: argparse.Namespace) -> dict[str, object]:
                 nn,
                 DataLoader,
                 TensorDataset,
+                WeightedRandomSampler,
                 TabTransformerClassifier,
                 model_config,
                 global_state,
@@ -360,7 +434,7 @@ def run_federated_experiment(args: argparse.Namespace) -> dict[str, object]:
                     }
                 )
 
-        averaged_state = average_state_dicts(torch, client_updates)
+        averaged_state = average_state_dicts(torch, client_updates, args.fedavg_weighting)
         global_model.load_state_dict(averaged_state)
 
         should_eval_global = (round_idx % args.round_eval_every == 0) or (round_idx == args.rounds)
@@ -379,11 +453,46 @@ def run_federated_experiment(args: argparse.Namespace) -> dict[str, object]:
                 round_result["client_histories"] = round_client_histories
             round_history.append(round_result)
             print(json.dumps({"round": round_idx, "metrics": test_metrics}))
+            metric_value = float(round_result.get(args.early_stop_metric, float("nan")))
+            if np.isfinite(metric_value):
+                if metric_value > best_metric + args.round_min_delta:
+                    best_metric = metric_value
+                    best_round = round_idx
+                    best_global_state = {key: value.detach().cpu().clone() for key, value in global_model.state_dict().items()}
+                    no_improve_evals = 0
+                else:
+                    no_improve_evals += 1
+                    if args.round_early_stop_patience > 0 and no_improve_evals >= args.round_early_stop_patience:
+                        early_stopped = True
+                        print(
+                            json.dumps(
+                                {
+                                    "round": round_idx,
+                                    "early_stopped": True,
+                                    "metric": args.early_stop_metric,
+                                    "best_round": best_round,
+                                    "best_metric": best_metric,
+                                }
+                            )
+                        )
+                        break
         else:
             round_history.append({"round": float(round_idx), "skipped_test_eval": True})
             print(json.dumps({"round": round_idx, "skipped_test_eval": True}))
 
     training_time = time.time() - start_time
+    global_model.load_state_dict(best_global_state)
+    _, final_best_probabilities = evaluate_model(
+        torch,
+        global_model,
+        test_split.x_test,
+        test_split.y_test,
+        args.batch_size,
+        device,
+    )
+    final_best_metrics = evaluate_classification_detailed(test_split.y_test, final_best_probabilities)
+    final_best_metrics["round"] = float(best_round)
+
     split_summary = {
         "train_samples": int(len(test_split.y_train)),
         "val_samples": int(len(test_split.y_val)),
@@ -417,6 +526,11 @@ def run_federated_experiment(args: argparse.Namespace) -> dict[str, object]:
             "disable_local_val": args.disable_local_val,
             "local_epochs": args.local_epochs,
             "rounds": args.rounds,
+            "focal_gamma": args.focal_gamma,
+            "fedavg_weighting": args.fedavg_weighting,
+            "round_early_stop_patience": args.round_early_stop_patience,
+            "round_min_delta": args.round_min_delta,
+            "early_stop_metric": args.early_stop_metric,
             "seed": args.seed,
             "device": device,
             "num_workers": args.num_workers,
@@ -426,13 +540,23 @@ def run_federated_experiment(args: argparse.Namespace) -> dict[str, object]:
             "stratified_split": not args.non_stratified,
             "standardize": standardization_enabled,
             "class_weighted": class_weighting_enabled,
+            "balanced_sampler": args.balanced_sampler,
             "patience": args.patience,
         },
         "split_summary": split_summary,
         "client_summaries": client_summaries,
         "training_time_seconds": training_time,
+        "early_stopping": {
+            "enabled": args.round_early_stop_patience > 0,
+            "metric": args.early_stop_metric,
+            "min_delta": args.round_min_delta,
+            "patience": args.round_early_stop_patience,
+            "best_round": int(best_round),
+            "best_metric": float(best_metric) if np.isfinite(best_metric) else None,
+            "early_stopped": early_stopped,
+        },
         "round_history": round_history,
-        "final_test_metrics": next((entry for entry in reversed(round_history) if "accuracy" in entry), {}),
+        "final_test_metrics": final_best_metrics,
     }
     return output
 

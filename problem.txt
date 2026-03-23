@@ -1,0 +1,18 @@
+Top causes for low federated f1_macro (like ~0.57) are usually:
+
+Client drift from non-IID data
+Clients learn different class patterns; FedAvg averages conflicting updates.
+Class imbalance (especially rare classes)
+Macro-F1 punishes poor minority-class performance heavily, even when accuracy looks OK.
+Overweighting large clients
+Using pure sample-weighted aggregation can bias toward majority-class-heavy clients.
+Too many local steps / too high LR
+Local models move too far before aggregation, hurting global consistency.
+Inadequate round budget or unstable convergence
+Too few rounds underfit; too many without proper early stopping can oscillate.
+Batch size mismatch to task
+Very large batches can reduce minority sensitivity; very small batches can be noisy.
+Loss/setup not tuned for imbalance
+Aggressive focal gamma or poorly calibrated class weighting can hurt instead of help.
+Train/test distribution mismatch
+If federated client distributions differ strongly from the global test split, macro-F1 drops.
