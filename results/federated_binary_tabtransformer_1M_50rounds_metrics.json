@@ -1,0 +1,5673 @@
+{
+  "mode": "federated_binary",
+  "model": "tabtransformer",
+  "task": {
+    "name": "thesis_binary_benign_vs_attack",
+    "problem_type": "binary_classification",
+    "label_space": "0=benign, all other original labels=attack",
+    "expected_num_classes": 2,
+    "class_names": [
+      "benign",
+      "attack"
+    ],
+    "notes": [
+      "Derived from the prepared multiclass CICIoT2023 CSV files used elsewhere in this repository.",
+      "By default this maps original label 0 to benign and labels 1..N to attack."
+    ]
+  },
+  "global_data_path": "/Users/gwd/Documents/projects/thesis_project/data/global.csv",
+  "client_dir": "/Users/gwd/Documents/projects/thesis_project/data/federated_clients",
+  "test_rows": 100000,
+  "client_max_rows": 1000000,
+  "training_config": {
+    "input_dim": 39,
+    "output_dim": 2,
+    "d_token": 64,
+    "n_heads": 8,
+    "n_layers": 4,
+    "ffn_dim": 128,
+    "mlp_hidden_dim": 128,
+    "dropout": 0.1,
+    "learning_rate": 0.001,
+    "batch_size": 256,
+    "weight_decay": 0.0001,
+    "eval_every": 1,
+    "round_eval_every": 1,
+    "local_epochs": 2,
+    "rounds": 50,
+    "seed": 42,
+    "device": "mps",
+    "num_workers": 0,
+    "fedavg_weighting": "samples"
+  },
+  "preprocessing": {
+    "random_sample": true,
+    "stratified_split": true,
+    "standardize": true,
+    "class_weighted": true,
+    "balanced_sampler": false,
+    "patience": 3
+  },
+  "split_summary": {
+    "train_samples": 69995,
+    "val_samples": 14997,
+    "test_samples": 15008,
+    "train_distribution": {
+      "distribution": {
+        "0": 3504,
+        "1": 66491
+      },
+      "attack_rate": 0.9499392813772413
+    },
+    "val_distribution": {
+      "distribution": {
+        "0": 751,
+        "1": 14246
+      },
+      "attack_rate": 0.9499233179969327
+    },
+    "test_distribution": {
+      "distribution": {
+        "0": 752,
+        "1": 14256
+      },
+      "attack_rate": 0.9498933901918977
+    }
+  },
+  "client_summaries": [
+    {
+      "client_name": "client_1",
+      "client_index": 1,
+      "train_samples": 849999,
+      "val_samples": 150001,
+      "train_distribution": {
+        "distribution": {
+          "0": 24666,
+          "1": 825333
+        },
+        "attack_rate": 0.9709811423307557
+      },
+      "val_distribution": {
+        "distribution": {
+          "0": 4353,
+          "1": 145648
+        },
+        "attack_rate": 0.9709801934653769
+      }
+    },
+    {
+      "client_name": "client_2",
+      "client_index": 2,
+      "train_samples": 849999,
+      "val_samples": 150001,
+      "train_distribution": {
+        "distribution": {
+          "0": 102555,
+          "1": 747444
+        },
+        "attack_rate": 0.8793469168787258
+      },
+      "val_distribution": {
+        "distribution": {
+          "0": 18099,
+          "1": 131902
+        },
+        "attack_rate": 0.8793408043946374
+      }
+    },
+    {
+      "client_name": "client_3",
+      "client_index": 3,
+      "train_samples": 849999,
+      "val_samples": 150001,
+      "train_distribution": {
+        "distribution": {
+          "0": 796,
+          "1": 849203
+        },
+        "attack_rate": 0.9990635283100333
+      },
+      "val_distribution": {
+        "distribution": {
+          "0": 141,
+          "1": 149860
+        },
+        "attack_rate": 0.9990600062666248
+      }
+    },
+    {
+      "client_name": "client_4",
+      "client_index": 4,
+      "train_samples": 849999,
+      "val_samples": 150001,
+      "train_distribution": {
+        "distribution": {
+          "0": 4303,
+          "1": 845696
+        },
+        "attack_rate": 0.9949376411031072
+      },
+      "val_distribution": {
+        "distribution": {
+          "0": 760,
+          "1": 149241
+        },
+        "attack_rate": 0.994933367110886
+      }
+    },
+    {
+      "client_name": "client_5",
+      "client_index": 5,
+      "train_samples": 849999,
+      "val_samples": 150001,
+      "train_distribution": {
+        "distribution": {
+          "0": 96863,
+          "1": 753136
+        },
+        "attack_rate": 0.886043395345171
+      },
+      "val_distribution": {
+        "distribution": {
+          "0": 17094,
+          "1": 132907
+        },
+        "attack_rate": 0.8860407597282685
+      }
+    }
+  ],
+  "training_time_seconds": 55799.90514469147,
+  "round_history": [
+    {
+      "round": 1.0,
+      "accuracy": 0.9451625799573561,
+      "precision_macro": 0.7387301587301587,
+      "recall_macro": 0.971134960718294,
+      "f1_macro": 0.8083013733033879,
+      "auc_macro_ovr": 0.986142732735153,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          823,
+          13433
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.4774603174603175,
+          "recall": 1.0,
+          "f1": 0.6463257412978084,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.942269921436588,
+          "f1": 0.9702770053089675,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": NaN
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": NaN
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.031889102905663845,
+              "val_loss": 0.07576687833039626
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.026238237413760603,
+              "val_loss": 0.02539677750802161
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.136613941266649,
+              "val_loss": 0.06240542766666828
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.09990325467964695
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08955977996628238,
+              "val_loss": 0.05533266419994468
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08201242970328106,
+              "val_loss": 0.07313278699440198
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.27891165934907364,
+              "val_loss": 0.35803036637672137
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.2563897788128221,
+              "val_loss": 0.34015120243998526
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 2.0,
+      "accuracy": 0.9464952025586354,
+      "precision_macro": 0.7418006430868167,
+      "recall_macro": 0.9718364197530864,
+      "f1_macro": 0.8114745790681759,
+      "auc_macro_ovr": 0.9890752419287437,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          803,
+          13453
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.48360128617363346,
+          "recall": 1.0,
+          "f1": 0.6519289120069355,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9436728395061729,
+          "f1": 0.9710202461294164,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.09620518101573708,
+              "val_loss": 0.10579953389559871
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08843337602572239,
+              "val_loss": 0.10986510131362653
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.02624208750764555,
+              "val_loss": 0.027408042264634783
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.020318656276077745,
+              "val_loss": 0.02447811973109265
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.05795829748605652
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.103952443891175,
+              "val_loss": 0.07402845420251636
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.07292996109574754,
+              "val_loss": 0.08273840509376178
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.06302033791385231
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.2619235823993485,
+              "val_loss": 0.38680852788638154
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.24732172433754912,
+              "val_loss": 0.3862744717533398
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 3.0,
+      "accuracy": 0.9503598081023454,
+      "precision_macro": 0.7511690046760187,
+      "recall_macro": 0.9738706509539843,
+      "f1_macro": 0.8209556263810794,
+      "auc_macro_ovr": 0.9898608387360603,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          745,
+          13511
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5023380093520374,
+          "recall": 1.0,
+          "f1": 0.6687416629613162,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9477413019079686,
+          "f1": 0.9731695898008427,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08982072009995562,
+              "val_loss": 0.10309296268536526
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08369742879067038,
+              "val_loss": 0.08820493481810145
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.023142123884210594,
+              "val_loss": 0.026292290364753373
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.02606008758534182,
+              "val_loss": 0.021789567343283547
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.10461690185167226,
+              "val_loss": 0.05827158298904817
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.1006640919388893,
+              "val_loss": 0.04143081997300059
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.0830561114440821,
+              "val_loss": 0.0839194364984283
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.07629562827427495,
+              "val_loss": 0.07164774830495349
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.2555813741745612,
+              "val_loss": 0.3279928642264487
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.24365619001784952,
+              "val_loss": 0.29881298952755575
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 4.0,
+      "accuracy": 0.9514925373134329,
+      "precision_macro": 0.7540540540540541,
+      "recall_macro": 0.9744668911335578,
+      "f1_macro": 0.8238164973626553,
+      "auc_macro_ovr": 0.9905886024846574,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          728,
+          13528
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5081081081081081,
+          "recall": 1.0,
+          "f1": 0.6738351254480287,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9489337822671156,
+          "f1": 0.9737978692772818,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.113127222859272
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.08640410792424999
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.01697566854022586,
+              "val_loss": 0.025535560358879737
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.022635841256302813,
+              "val_loss": 0.02373238171519817
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.10399986019051204,
+              "val_loss": 0.043031602731920734
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.09358843039174723,
+              "val_loss": 0.04858449333758097
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.07640585017663255,
+              "val_loss": 0.07989890159874945
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06522522932653996,
+              "val_loss": 0.08423048051770908
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.25675678440038113,
+              "val_loss": 0.3065010143960624
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.24413378313101128,
+              "val_loss": 0.30235898588954774
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 5.0,
+      "accuracy": 0.9527585287846482,
+      "precision_macro": 0.7573579739904175,
+      "recall_macro": 0.9751332772166106,
+      "f1_macro": 0.8270597897651183,
+      "auc_macro_ovr": 0.9913977989110968,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          709,
+          13547
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5147159479808351,
+          "recall": 1.0,
+          "f1": 0.6796204247627655,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9502665544332211,
+          "f1": 0.9744991547674711,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.07640966847177902,
+              "val_loss": 0.11720122219608416
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.07357448860498648,
+              "val_loss": 0.09253239476110581
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.02777138031419208,
+              "val_loss": 0.021953058053412806
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.019873049464598714,
+              "val_loss": 0.026237628444700043
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.09895715153199827,
+              "val_loss": 0.04985892426642102
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.09620597161562067,
+              "val_loss": 0.07073174690282014
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.07418050741563095,
+              "val_loss": 0.07007268900647197
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.07023885580517478,
+              "val_loss": 0.09767761125728193
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.2553186939077431,
+              "val_loss": 0.2828536189437861
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.24112797127219213,
+              "val_loss": 0.3009263444925222
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 6.0,
+      "accuracy": 0.9538246268656716,
+      "precision_macro": 0.7601849006567032,
+      "recall_macro": 0.9750646237791628,
+      "f1_macro": 0.8296866094580069,
+      "auc_macro_ovr": 0.9914131433274829,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          692,
+          13564
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5204435204435205,
+          "recall": 0.9986702127659575,
+          "f1": 0.6842824601366743,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262808698858,
+          "recall": 0.9514590347923682,
+          "f1": 0.9750907587793395,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08467050008011345,
+              "val_loss": 0.0992643766549177
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.11290629296068758
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.04290435416964501
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.01962642723990252,
+              "val_loss": 0.025231870736685223
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.09299896340340003,
+              "val_loss": 0.05407224501670033
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08521482644442598,
+              "val_loss": 0.05049844623346026
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06667037838047665,
+              "val_loss": 0.08229005328377144
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.09019250533658922,
+              "val_loss": 0.07372749278607106
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.5267041870332106
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.3303378977844063
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 7.0,
+      "accuracy": 0.9553571428571429,
+      "precision_macro": 0.7644163150492265,
+      "recall_macro": 0.9765011223344557,
+      "f1_macro": 0.8338739821573002,
+      "auc_macro_ovr": 0.9914985403682213,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          670,
+          13586
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5288326300984529,
+          "recall": 1.0,
+          "f1": 0.6918123275068998,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9530022446689114,
+          "f1": 0.9759356368077006,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.07479452028581833,
+              "val_loss": 0.10809461596346082
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.11661636965000718
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.01861680597844721,
+              "val_loss": 0.02515866359300082
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.023161396817773173
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08928741538302015,
+              "val_loss": 0.04083180867728637
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08587827943875115,
+              "val_loss": 0.0924838003820894
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08463955129819999,
+              "val_loss": 0.08919915904772943
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06585579356820258,
+              "val_loss": 0.05610863086293361
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.24511345467857568,
+              "val_loss": 0.3647706697703134
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.29199216455196736
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 8.0,
+      "accuracy": 0.9562899786780383,
+      "precision_macro": 0.7670454545454546,
+      "recall_macro": 0.9769921436588103,
+      "f1_macro": 0.8363733061033463,
+      "auc_macro_ovr": 0.9914668254650524,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          656,
+          13600
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5340909090909091,
+          "recall": 1.0,
+          "f1": 0.6962962962962962,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9539842873176206,
+          "f1": 0.9764503159103963,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.1093008913687712
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.07268057886051925,
+              "val_loss": 0.10507329952540319
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.025376887975546332
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.019396510388610604,
+              "val_loss": 0.021364775719783884
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.09898114464830256,
+              "val_loss": 0.058109835793096094
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08598411683938789,
+              "val_loss": 0.06769084203014654
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.061357687465525786,
+              "val_loss": 0.07471058187745228
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.06891668710931316
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.2566133722351561,
+              "val_loss": 0.3039366666856975
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.22554166471770412,
+              "val_loss": 0.24888677035605677
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 9.0,
+      "accuracy": 0.955090618336887,
+      "precision_macro": 0.7636746143057503,
+      "recall_macro": 0.9763608305274971,
+      "f1_macro": 0.8331651360016773,
+      "auc_macro_ovr": 0.9915571196599565,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          674,
+          13582
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5273492286115007,
+          "recall": 1.0,
+          "f1": 0.6905417814508723,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9527216610549943,
+          "f1": 0.9757884905524823,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.09914237803664165
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.1370825815730469
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.01967693890165786,
+              "val_loss": 0.022370065914706774
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.024444186775065376
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.07669803546393603
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.13660001565368246
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.07269276341296498
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.061612056329410025,
+              "val_loss": 0.0678212329955497
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.23211369483201608,
+              "val_loss": 0.27348303982951977
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.22584125093933055,
+              "val_loss": 0.24723301921476296
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 10.0,
+      "accuracy": 0.9542910447761194,
+      "precision_macro": 0.7614742698191933,
+      "recall_macro": 0.9759399551066218,
+      "f1_macro": 0.8310523944131618,
+      "auc_macro_ovr": 0.9917331373725434,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          686,
+          13570
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5229485396383866,
+          "recall": 1.0,
+          "f1": 0.6867579908675798,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9518799102132436,
+          "f1": 0.9753467979587437,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.07181954720160937,
+              "val_loss": 0.0828616488647834
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.0643589811154343,
+              "val_loss": 0.08372550427501602
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.01654037867687245,
+              "val_loss": 0.02453031896478541
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.027567139747124696
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.06303658850937136
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.07439152637975151
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.07088969931719795
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.07115049222258667
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.32559247826244997
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.30426579758206707
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 11.0,
+      "accuracy": 0.954957356076759,
+      "precision_macro": 0.7633053221288515,
+      "recall_macro": 0.976290684624018,
+      "f1_macro": 0.8328115792235254,
+      "auc_macro_ovr": 0.9913413183997182,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          676,
+          13580
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5266106442577031,
+          "recall": 1.0,
+          "f1": 0.689908256880734,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9525813692480359,
+          "f1": 0.9757149015663169,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.07373876972754333,
+              "val_loss": 0.09813899040449062
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06929628751157196,
+              "val_loss": 0.08996319383432566
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.01666025960966237,
+              "val_loss": 0.02501682725340298
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.0256519013650796,
+              "val_loss": 0.023726529635580827
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08759345154146984,
+              "val_loss": 0.08078006386766136
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.04893797357439369
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.10112763282884576
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.09712970367098113
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.29672942714544426
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.2741222433966049
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 12.0,
+      "accuracy": 0.9565565031982942,
+      "precision_macro": 0.7678062678062678,
+      "recall_macro": 0.9771324354657688,
+      "f1_macro": 0.8370926991171068,
+      "auc_macro_ovr": 0.9916276386799436,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          652,
+          13604
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5356125356125356,
+          "recall": 1.0,
+          "f1": 0.6975881261595548,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9542648709315376,
+          "f1": 0.976597272074659,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.08707162168717701
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.07724607739130634
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.030367744053919545
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.021912389056740988
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.08517130177653753
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.05629516684781056
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.10724362225516033
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.07624240271066282
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.3349350934613113
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.3446912191891521
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 13.0,
+      "accuracy": 0.9540245202558635,
+      "precision_macro": 0.760748959778086,
+      "recall_macro": 0.9757996632996633,
+      "f1_macro": 0.8303527038373324,
+      "auc_macro_ovr": 0.9917392471553597,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          690,
+          13566
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.521497919556172,
+          "recall": 1.0,
+          "f1": 0.6855059252506837,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9515993265993266,
+          "f1": 0.975199482423981,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.07469211390928286
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.11081361954250701
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.022424723897750548
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.026420145007976074
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08439174687529774,
+              "val_loss": 0.04092391652764891
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.09773920327759666,
+              "val_loss": 0.0730822559016772
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06094491105457873,
+              "val_loss": 0.05780960194704782
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.061581778054853896,
+              "val_loss": 0.0640094445820539
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.22775114824871515,
+              "val_loss": 0.29350539127216874
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.4376154589883167
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 14.0,
+      "accuracy": 0.9544909381663113,
+      "precision_macro": 0.7620209059233449,
+      "recall_macro": 0.9760451739618407,
+      "f1_macro": 0.8315786512715819,
+      "auc_macro_ovr": 0.9918690917000978,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          683,
+          13573
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5240418118466899,
+          "recall": 1.0,
+          "f1": 0.6877000457247371,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9520903479236813,
+          "f1": 0.9754572568184269,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.10197850956246961
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.09082136581468714
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.026806115297357654
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.027030827242274163
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.08998078873942156
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.1352647268310392,
+              "val_loss": 0.06685572756522111
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.07717764413580058
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.07430730831662337
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.31013210286149256
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.3263343557022119
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 15.0,
+      "accuracy": 0.9568896588486141,
+      "precision_macro": 0.7687634024303074,
+      "recall_macro": 0.9773078002244668,
+      "f1_macro": 0.8379952889350035,
+      "auc_macro_ovr": 0.9921652529282183,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          647,
+          13609
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5375268048606148,
+          "recall": 1.0,
+          "f1": 0.699209669920967,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9546156004489338,
+          "f1": 0.97678090794904,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.1223407079878515
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.0874843399088165
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.032101297503028474
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.029301407797392123
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.059056175798687334
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.2052623950736567
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.05890025718953716
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06201064215856004,
+              "val_loss": 0.07276909170805625
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.22323445469215794,
+              "val_loss": 0.2963367123637469
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.2176930276951332,
+              "val_loss": 0.22955922718127997
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 16.0,
+      "accuracy": 0.9548907249466951,
+      "precision_macro": 0.7631210636808957,
+      "recall_macro": 0.9762556116722783,
+      "f1_macro": 0.8326350167073984,
+      "auc_macro_ovr": 0.9920195975714593,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          677,
+          13579
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5262421273617914,
+          "recall": 1.0,
+          "f1": 0.6895919303071985,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9525112233445566,
+          "f1": 0.9756781031075984,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.07191579851703682,
+              "val_loss": 0.09935146929897454
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.21781098707041055
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.026449032041505553
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.03747127710748818
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.0907857007797544,
+              "val_loss": 0.061440559140555316
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.06105913331090675
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06954304955172284,
+              "val_loss": 0.06059703409402372
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06852539876288642,
+              "val_loss": 0.07282109441281147
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.22707983915381647,
+              "val_loss": 0.272226421968944
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.21547425566688214,
+              "val_loss": 0.2413033487993859
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 17.0,
+      "accuracy": 0.9560234541577826,
+      "precision_macro": 0.7662752866243367,
+      "recall_macro": 0.9762220311865701,
+      "f1_macro": 0.8355160617803139,
+      "auc_macro_ovr": 0.991772361245433,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          659,
+          13597
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5326241134751774,
+          "recall": 0.9986702127659575,
+          "f1": 0.6947271045328399,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999264597734961,
+          "recall": 0.9537738496071829,
+          "f1": 0.9763050190277878,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.07158613599917933,
+              "val_loss": 0.08234106521332293
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.0866077586911818
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.02547265301477921,
+              "val_loss": 0.022444865017705266
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.01961630157563116,
+              "val_loss": 0.024159178624447917
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.09574253779756581,
+              "val_loss": 0.0547036126143188
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.09313191866638491,
+              "val_loss": 0.053821987103431154
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06289401090877239,
+              "val_loss": NaN
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": NaN
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.2459157277684281
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.21155952541378348,
+              "val_loss": 0.3072042238960185
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 18.0,
+      "accuracy": 0.9580223880597015,
+      "precision_macro": 0.7720647601060051,
+      "recall_macro": 0.9772742197387587,
+      "f1_macro": 0.8409546060966056,
+      "auc_macro_ovr": 0.9921283143939394,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          629,
+          13627
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5442028985507247,
+          "recall": 0.9986702127659575,
+          "f1": 0.7045028142589118,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999266216612855,
+          "recall": 0.9558782267115601,
+          "f1": 0.9774063979342993,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.10949528181652465
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06868738942953902,
+              "val_loss": 0.07599843769644006
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.026179196091705548
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.027590366972547856,
+              "val_loss": 0.02551238913640848
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.0708285325158779
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.09256479574593181,
+              "val_loss": 0.05961789245878289
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06626752583823448,
+              "val_loss": 0.07035193797428035
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06347560503847013,
+              "val_loss": 0.06992249782801695
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.2256714764030614,
+              "val_loss": 0.21491858336270034
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.21154227455605012,
+              "val_loss": 0.29660888304221694
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 19.0,
+      "accuracy": 0.9574227078891258,
+      "precision_macro": 0.7703091301222142,
+      "recall_macro": 0.9775883838383839,
+      "f1_macro": 0.839447233493012,
+      "auc_macro_ovr": 0.9922476650368938,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          639,
+          13617
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5406182602444285,
+          "recall": 1.0,
+          "f1": 0.701819878674755,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9551767676767676,
+          "f1": 0.9770745883112689,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06598490493122289,
+              "val_loss": 0.09631700704053776
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.09546705307518628
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.025651412904791032
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.020862475877966188,
+              "val_loss": 0.025406099725689364
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.0946993550443323,
+              "val_loss": 0.04471190131506279
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08564866908551814,
+              "val_loss": 0.06885112281860038
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06886428363606939,
+              "val_loss": 0.07765447292904429
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06974000466470312,
+              "val_loss": 0.0620852892471619
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.22376707775765287,
+              "val_loss": 0.2161516892263973
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.21631796256662697,
+              "val_loss": 0.23395503560238418
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 20.0,
+      "accuracy": 0.9561567164179104,
+      "precision_macro": 0.7666666666666666,
+      "recall_macro": 0.9769219977553311,
+      "f1_macro": 0.8360144979567372,
+      "auc_macro_ovr": 0.9917457766942475,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          658,
+          13598
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5333333333333333,
+          "recall": 1.0,
+          "f1": 0.6956521739130436,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9538439955106621,
+          "f1": 0.9763768220004307,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06885571152260339,
+              "val_loss": 0.07026100274345998
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.0622322736701052,
+              "val_loss": 0.06961220071937037
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.01804299608942289,
+              "val_loss": 0.01984911972172549
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.023449139678118073
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.0603355968259909
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08166975140508904,
+              "val_loss": 0.06900049126418092
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06423279781874652,
+              "val_loss": 0.06954662759580484
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.07487556772581822
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.22073005280745545,
+              "val_loss": 0.28368184605534613
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.21909997449591564,
+              "val_loss": 0.28437927878654556
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 21.0,
+      "accuracy": 0.95715618336887,
+      "precision_macro": 0.7695340501792114,
+      "recall_macro": 0.9774480920314254,
+      "f1_macro": 0.8387200560049202,
+      "auc_macro_ovr": 0.9926251656637295,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          643,
+          13613
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5390681003584229,
+          "recall": 1.0,
+          "f1": 0.7005123428039125,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9548961840628507,
+          "f1": 0.9769277692059277,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.0631915318845286,
+              "val_loss": 0.0733692167329751
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.07099403551117592,
+              "val_loss": 0.08787590132056071
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.023085944449689845
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.021378777962090385,
+              "val_loss": 0.025609236698594415
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.09351420955371105,
+              "val_loss": 0.06437133156714979
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08859587397197516,
+              "val_loss": 0.0670938925881522
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06836118783308578,
+              "val_loss": 0.0728720124143888
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.062342814014245955,
+              "val_loss": 0.06960145790087456
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.21603127051320414,
+              "val_loss": 0.2696028201100241
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.22694812295588884,
+              "val_loss": 0.23881780077047024
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 22.0,
+      "accuracy": 0.9572894456289979,
+      "precision_macro": 0.7699129576843594,
+      "recall_macro": 0.9768884172696229,
+      "f1_macro": 0.8389447209217851,
+      "auc_macro_ovr": 0.9920522919054613,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          640,
+          13616
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5398993529834651,
+          "recall": 0.9986702127659575,
+          "f1": 0.7008866075594959,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999265623852537,
+          "recall": 0.9551066217732884,
+          "f1": 0.9770028342840743,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.07107390847166246,
+              "val_loss": 0.08788875553202707
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.07015718640960457,
+              "val_loss": 0.0870245737125196
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.0262559649083785
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.028116072823359834
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.09276368705051188,
+              "val_loss": 0.07360439905702014
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.0938440590362022,
+              "val_loss": 0.06403996706389484
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.057387271446416394,
+              "val_loss": 0.06650047792459239
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06543947139306254,
+              "val_loss": 0.07295178804609949
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.2192689020949064,
+              "val_loss": 0.23664132289386244
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.21585532551733333,
+              "val_loss": 0.26440518082247966
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 23.0,
+      "accuracy": 0.9568230277185501,
+      "precision_macro": 0.7685714285714286,
+      "recall_macro": 0.9772727272727273,
+      "f1_macro": 0.8378144722054119,
+      "auc_macro_ovr": 0.9922275633850324,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          648,
+          13608
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5371428571428571,
+          "recall": 1.0,
+          "f1": 0.6988847583643123,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9545454545454546,
+          "f1": 0.9767441860465117,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.08355352370927142
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.09260241279127934
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.024782790112213023,
+              "val_loss": 0.02413149813471472
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.02486508321184788
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.09214824962188832,
+              "val_loss": 0.09147865688862959
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.09291769617054454,
+              "val_loss": 0.07710142356177688
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.06788720216015805
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06268548899587385,
+              "val_loss": 0.06640061747228032
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.22506473523137688,
+              "val_loss": 0.25161794752055205
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.22457763788809074,
+              "val_loss": 0.2676199580886591
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 24.0,
+      "accuracy": 0.9562899786780383,
+      "precision_macro": 0.7670454545454546,
+      "recall_macro": 0.9769921436588103,
+      "f1_macro": 0.8363733061033463,
+      "auc_macro_ovr": 0.9922181421932086,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          656,
+          13600
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5340909090909091,
+          "recall": 1.0,
+          "f1": 0.6962962962962962,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9539842873176206,
+          "f1": 0.9764503159103963,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.07273613687107698,
+              "val_loss": 0.07625998664775763
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.07715294839436028,
+              "val_loss": 0.08263196783820871
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.026773076528621976,
+              "val_loss": 0.02634172682443132
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.030288337769862
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.09413203638865716,
+              "val_loss": 0.06618635121498581
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08554893478330146,
+              "val_loss": 0.05786580916561509
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.07046538572213207,
+              "val_loss": 0.061096855052854955
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06243806815939484,
+              "val_loss": 0.05509162821371502
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.23736097273754692
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.2747960806416667
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 25.0,
+      "accuracy": 0.9559568230277186,
+      "precision_macro": 0.7661004953998585,
+      "recall_macro": 0.9768167789001123,
+      "f1_macro": 0.8354773915266517,
+      "auc_macro_ovr": 0.9923610924552857,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          661,
+          13595
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5322009907997169,
+          "recall": 1.0,
+          "f1": 0.6946882217090069,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9536335578002245,
+          "f1": 0.9762665613442965,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06250423135483898,
+              "val_loss": 0.0774036003049775
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.07270225881437468
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.024036700836099024,
+              "val_loss": 0.02214522348638215
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.01847679796378265,
+              "val_loss": 0.02388796982983564
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.0931843288054615,
+              "val_loss": 0.060120322485114605
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.06285695127133585
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.050662313298454574
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06575462795784166,
+              "val_loss": 0.06538396633026955
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.22774020014472077,
+              "val_loss": 0.2770952211849378
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.2483267647044778
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 26.0,
+      "accuracy": 0.9582889125799574,
+      "precision_macro": 0.7728557634567093,
+      "recall_macro": 0.9774145115457172,
+      "f1_macro": 0.8416900685448561,
+      "auc_macro_ovr": 0.992043103911455,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          625,
+          13631
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5457848837209303,
+          "recall": 0.9986702127659575,
+          "f1": 0.705827067669173,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999266431924883,
+          "recall": 0.956158810325477,
+          "f1": 0.9775530694205392,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06919700775378912,
+              "val_loss": 0.0680431319987981
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06735671585028108,
+              "val_loss": 0.06793549973883105
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.015637984153196248,
+              "val_loss": 0.02088541797860963
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.020907638792937087,
+              "val_loss": 0.025099390052601346
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08903439103317329,
+              "val_loss": 0.07135125021834203
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08701890998202555,
+              "val_loss": 0.04158135719670405
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06746034825769132,
+              "val_loss": 0.07606397855091175
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06539836680156524,
+              "val_loss": 0.07903758502234577
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.22109533256784264,
+              "val_loss": 0.30332967625359786
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.21863110858393647,
+              "val_loss": 0.2665101957749841
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 27.0,
+      "accuracy": 0.9584221748400853,
+      "precision_macro": 0.7732558139534884,
+      "recall_macro": 0.9781144781144782,
+      "f1_macro": 0.8421958510734667,
+      "auc_macro_ovr": 0.9923266724574349,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          624,
+          13632
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5465116279069767,
+          "recall": 1.0,
+          "f1": 0.706766917293233,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9562289562289562,
+          "f1": 0.9776247848537004,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.056339573605985904,
+              "val_loss": 0.07867041020730044
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.07075117071317738,
+              "val_loss": 0.09119701518857583
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.021336938292133283,
+              "val_loss": 0.022799167004828865
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.01880450453244478,
+              "val_loss": 0.02217616137985159
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.0587605293230344
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08228468457992826,
+              "val_loss": 0.05004148627789845
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.07029633854619585,
+              "val_loss": 0.06822813647729836
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.06649832543804467
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.2162010412785284,
+              "val_loss": 0.2535777633216349
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.2105955460704751,
+              "val_loss": 0.25293927707477953
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 28.0,
+      "accuracy": 0.9572228144989339,
+      "precision_macro": 0.7697274031563845,
+      "recall_macro": 0.977483164983165,
+      "f1_macro": 0.8389016238687743,
+      "auc_macro_ovr": 0.9926212945799604,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          642,
+          13614
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.539454806312769,
+          "recall": 1.0,
+          "f1": 0.7008387698042869,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.95496632996633,
+          "f1": 0.9769644779332616,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06692037115388208,
+              "val_loss": 0.07119397283679339
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.06410172638776021
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.02186977123990662,
+              "val_loss": 0.022661904101010134
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.01822589228051421,
+              "val_loss": 0.02263036017436403
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08920125771710229,
+              "val_loss": 0.07545504182650248
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08452576491166672,
+              "val_loss": 0.06298729964173085
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.08446264906526316
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06315294795093458,
+              "val_loss": 0.06654058860552199
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.2677465231512975
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.21088843838866198,
+              "val_loss": 0.24605012218175465
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 29.0,
+      "accuracy": 0.9598880597014925,
+      "precision_macro": 0.7776957163958641,
+      "recall_macro": 0.9788860830527497,
+      "f1_macro": 0.8462903587470648,
+      "auc_macro_ovr": 0.9926731111349906,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          602,
+          13654
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5553914327917282,
+          "recall": 1.0,
+          "f1": 0.7141500474833808,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9577721661054994,
+          "f1": 0.9784306700107488,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06486051624458614,
+              "val_loss": 0.07179844386438482
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06229732561810494,
+              "val_loss": 0.06776677950356509
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.022397849881858962
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.022891858408427473
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08373826473291866,
+              "val_loss": 0.04473445715885842
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.09014456714902726,
+              "val_loss": 0.03902204252556514
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.04762528838843093
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06300550319075138,
+              "val_loss": 0.06907919460403165
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.22264255078779707,
+              "val_loss": 0.2673107034492847
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.21268030545398933,
+              "val_loss": 0.2806843002400267
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 30.0,
+      "accuracy": 0.9578224946695096,
+      "precision_macro": 0.7714801444043322,
+      "recall_macro": 0.9777988215488216,
+      "f1_macro": 0.8405425491465114,
+      "auc_macro_ovr": 0.9927071580163336,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          633,
+          13623
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5429602888086643,
+          "recall": 1.0,
+          "f1": 0.7037903603182031,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9555976430976431,
+          "f1": 0.9772947379748197,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06490254544426581,
+              "val_loss": 0.09304504644906839
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.0602164082717677,
+              "val_loss": 0.09319175617879716
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.02258405393469341,
+              "val_loss": 0.02169197380554229
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.015648653026421766,
+              "val_loss": 0.022080420672550997
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08461748009834157,
+              "val_loss": 0.06189257457240228
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.0862617165907307,
+              "val_loss": 0.04494932666651903
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.05892081291887814,
+              "val_loss": 0.06605947575798883
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.056624162152781155,
+              "val_loss": 0.05851734172822757
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.21194090681373182,
+              "val_loss": 0.29036875275421753
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.20898826108267712,
+              "val_loss": 0.26640779061116887
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 31.0,
+      "accuracy": 0.9568896588486141,
+      "precision_macro": 0.7687634024303074,
+      "recall_macro": 0.9773078002244668,
+      "f1_macro": 0.8379952889350035,
+      "auc_macro_ovr": 0.9927061785855005,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          647,
+          13609
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5375268048606148,
+          "recall": 1.0,
+          "f1": 0.699209669920967,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9546156004489338,
+          "f1": 0.97678090794904,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.062060571554661784,
+              "val_loss": 0.06769193257409364
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06039478240884821,
+              "val_loss": 0.07977888133750878
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.022968719309006097
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.020717810836745534,
+              "val_loss": 0.02297917593146191
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08825127638387162,
+              "val_loss": 0.06276915452742035
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.06928727980741485
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.062016478514728704
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.05806029454463388,
+              "val_loss": 0.06487763396438814
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.2142796767201438,
+              "val_loss": 0.2659372434254188
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.2080905841404324,
+              "val_loss": 0.30053526878292564
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 32.0,
+      "accuracy": 0.9584888059701493,
+      "precision_macro": 0.7734545454545454,
+      "recall_macro": 0.9781495510662177,
+      "f1_macro": 0.8423803221660697,
+      "auc_macro_ovr": 0.9926378982645605,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          623,
+          13633
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5469090909090909,
+          "recall": 1.0,
+          "f1": 0.7070992007522332,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9562991021324355,
+          "f1": 0.9776614435799061,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06036639343093576,
+              "val_loss": 0.08912795271854523
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06398141253120605,
+              "val_loss": 0.10360732307431562
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.02369135048730615,
+              "val_loss": 0.022174947469392525
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.01577533081593812,
+              "val_loss": 0.022237512311208806
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.092805397455566,
+              "val_loss": 0.054446356920981216
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08646290834510251,
+              "val_loss": 0.0420331541882974
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.05966761866096374,
+              "val_loss": 0.07025640715458266
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06315261980496038,
+              "val_loss": 0.07300174306337565
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.21607678623584545,
+              "val_loss": 0.25889601332094786
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.21297283913299087,
+              "val_loss": 0.247621744700274
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 33.0,
+      "accuracy": 0.9585554371002132,
+      "precision_macro": 0.7736535662299855,
+      "recall_macro": 0.9781846240179574,
+      "f1_macro": 0.8425649482394044,
+      "auc_macro_ovr": 0.9925394421460467,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          622,
+          13634
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5473071324599709,
+          "recall": 1.0,
+          "f1": 0.7074317968015051,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9563692480359147,
+          "f1": 0.9776980996773037,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06671192362016456,
+              "val_loss": 0.0820887918634644
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06052573006302096,
+              "val_loss": 0.08078036731643636
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.015803662272276635,
+              "val_loss": 0.024769268941320404
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.02073260231570968,
+              "val_loss": 0.028196662980762996
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08562462065891348,
+              "val_loss": 0.04885482992083958
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08335948542329091,
+              "val_loss": 0.052058062840257165
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.058624620906109516,
+              "val_loss": 0.07114208884316038
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.05713081331975287,
+              "val_loss": 0.062135905255822806
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.2066571402428767,
+              "val_loss": 0.2247171722163609
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.2121248180114445,
+              "val_loss": 0.24465000325244707
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 34.0,
+      "accuracy": 0.9595549040511727,
+      "precision_macro": 0.7766740250183959,
+      "recall_macro": 0.9787107182940517,
+      "f1_macro": 0.8453530881617616,
+      "auc_macro_ovr": 0.9926529628435656,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          607,
+          13649
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5533480500367918,
+          "recall": 1.0,
+          "f1": 0.7124585504500237,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9574214365881033,
+          "f1": 0.9782476258734994,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.05616896875486103,
+              "val_loss": 0.0682183787128926
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06169079607541498,
+              "val_loss": 0.07751800532360606
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.015577189068784832,
+              "val_loss": 0.021985395644537976
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.015800009798525163,
+              "val_loss": 0.02295651006128027
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08294415305593236,
+              "val_loss": 0.0518888459114727
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08522026128661851,
+              "val_loss": 0.046148080099599434
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.05772904728845259,
+              "val_loss": 0.05935176808946005
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.05732713771418768,
+              "val_loss": 0.058717272079941984
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.21369250701661305,
+              "val_loss": 0.2761821104580472
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.2085304964879809,
+              "val_loss": 0.3708793103131457
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 35.0,
+      "accuracy": 0.9572228144989339,
+      "precision_macro": 0.7697274031563845,
+      "recall_macro": 0.977483164983165,
+      "f1_macro": 0.8389016238687743,
+      "auc_macro_ovr": 0.9924347829655897,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          642,
+          13614
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.539454806312769,
+          "recall": 1.0,
+          "f1": 0.7008387698042869,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.95496632996633,
+          "f1": 0.9769644779332616,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.08043974360112711
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.05519869750082289,
+              "val_loss": 0.08891339336044363
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.021648637331258873,
+              "val_loss": 0.02265704520060966
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.018315706085321286,
+              "val_loss": 0.02726495452440032
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.09074474178104777,
+              "val_loss": 0.06291955517268469
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08511912695463816,
+              "val_loss": 0.07847515784664003
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06257815825781597,
+              "val_loss": 0.05389313223248904
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.0577537747223625,
+              "val_loss": 0.061121520838009376
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.21562793197494326,
+              "val_loss": 0.24938022839349194
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.2055900420427703,
+              "val_loss": 0.3299654128295169
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 36.0,
+      "accuracy": 0.9598214285714286,
+      "precision_macro": 0.7775032289986465,
+      "recall_macro": 0.9769615481051651,
+      "f1_macro": 0.8456962614205104,
+      "auc_macro_ovr": 0.9926363591589655,
+      "confusion_matrix": [
+        [
+          749,
+          3
+        ],
+        [
+          600,
+          13656
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5552260934025204,
+          "recall": 0.9960106382978723,
+          "f1": 0.7129938124702523,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9997803645947727,
+          "recall": 0.9579124579124579,
+          "f1": 0.9783987103707685,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06414273760154413,
+              "val_loss": 0.10109475372686198
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06413460743838634,
+              "val_loss": 0.08728988916900746
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.040230227889305144
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.023995813618228588,
+              "val_loss": 0.025422176404855754
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08574782382570728,
+              "val_loss": 0.055767948895822164
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08190908247571616,
+              "val_loss": 0.05251494504781513
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.05944964262129816,
+              "val_loss": 0.051087981238277264
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.05619061547616601,
+              "val_loss": 0.06450420817776183
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.21064214847654622,
+              "val_loss": 0.27121785686112737
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.20540430743725394,
+              "val_loss": 0.24356727027388259
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 37.0,
+      "accuracy": 0.9572228144989339,
+      "precision_macro": 0.769719025622324,
+      "recall_macro": 0.9768533443178833,
+      "f1_macro": 0.8387629161882892,
+      "auc_macro_ovr": 0.9924287664619003,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          641,
+          13615
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5395114942528736,
+          "recall": 0.9986702127659575,
+          "f1": 0.7005597014925373,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999265569917744,
+          "recall": 0.9550364758698092,
+          "f1": 0.9769661308840413,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06165246996604734,
+              "val_loss": 0.07891897634912522
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.05511818093086881,
+              "val_loss": 0.0742630591005302
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.015566641574776038,
+              "val_loss": 0.02298628147130339
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.019477212985695064,
+              "val_loss": 0.027028781397758432
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08531971931656389,
+              "val_loss": 0.06742427073849089
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08077979235354765,
+              "val_loss": 0.05678831675795951
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.057960354728024896,
+              "val_loss": 0.05973478487714585
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.0629593499890225,
+              "val_loss": 0.06541512742222451
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.21128690933046032,
+              "val_loss": 0.26038306624255775
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.20187783845257068,
+              "val_loss": 0.27256404874526674
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 38.0,
+      "accuracy": 0.9584888059701493,
+      "precision_macro": 0.7734545454545454,
+      "recall_macro": 0.9781495510662177,
+      "f1_macro": 0.8423803221660697,
+      "auc_macro_ovr": 0.9924706021503451,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          623,
+          13633
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5469090909090909,
+          "recall": 1.0,
+          "f1": 0.7070992007522332,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9562991021324355,
+          "f1": 0.9776614435799061,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.05889594684096096,
+              "val_loss": 0.07402533373549042
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.054896746160392765,
+              "val_loss": 0.07496522743967643
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.02356595888457151
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.017375497634531955,
+              "val_loss": 0.021112474342816136
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08531730892797922,
+              "val_loss": 0.08011114642217455
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08823764628340575,
+              "val_loss": 0.043421035809428805
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.059324394126432735,
+              "val_loss": 0.057802862804685155
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.05827369144185911,
+              "val_loss": 0.06299143169880678
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.21335513238746565,
+              "val_loss": 0.261610846215417
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.20573863575665613,
+              "val_loss": 0.2510552298510793
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 39.0,
+      "accuracy": 0.9572894456289979,
+      "precision_macro": 0.7699210337401292,
+      "recall_macro": 0.9775182379349046,
+      "f1_macro": 0.8390833425959543,
+      "auc_macro_ovr": 0.9924526925579674,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          641,
+          13615
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5398420674802584,
+          "recall": 1.0,
+          "f1": 0.7011655011655011,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9550364758698092,
+          "f1": 0.9770011840264075,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.060611437840124065,
+              "val_loss": 0.06363099652010783
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.05623835583694145,
+              "val_loss": 0.07143454101864019
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.01551684167991873,
+              "val_loss": 0.022827723780250987
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.020615301519868408,
+              "val_loss": 0.02338168708578162
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08331705101897867,
+              "val_loss": 0.034401816976357816
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.07915714381544027,
+              "val_loss": 0.04856880615992772
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06701907455994732,
+              "val_loss": 0.0674602369082109
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06739979307075716,
+              "val_loss": 0.06693788079344842
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.27985673557325136
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.19972195625995187,
+              "val_loss": 0.24203672095424042
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 40.0,
+      "accuracy": 0.9595549040511727,
+      "precision_macro": 0.7766740250183959,
+      "recall_macro": 0.9787107182940517,
+      "f1_macro": 0.8453530881617616,
+      "auc_macro_ovr": 0.992574095341715,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          607,
+          13649
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5533480500367918,
+          "recall": 1.0,
+          "f1": 0.7124585504500237,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9574214365881033,
+          "f1": 0.9782476258734994,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.07112596368773236,
+              "val_loss": 0.08825264430697219
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06113181631633021,
+              "val_loss": 0.10795510938045844
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.018291741272596355,
+              "val_loss": 0.021803405728721144
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.02455468018897655,
+              "val_loss": 0.036008635049055784
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.09057277360810859,
+              "val_loss": 0.06681878891323827
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.05071242859361335
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.04871578090774858
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.067310963830708,
+              "val_loss": 0.09213152218915098
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.21464097215413713,
+              "val_loss": 0.2477893442384995
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.20273300028908506,
+              "val_loss": 0.22637297100524859
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 41.0,
+      "accuracy": 0.9576226012793176,
+      "precision_macro": 0.770893371757925,
+      "recall_macro": 0.9776936026936027,
+      "f1_macro": 0.8399942066534976,
+      "auc_macro_ovr": 0.9922728970407384,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          636,
+          13620
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5417867435158501,
+          "recall": 1.0,
+          "f1": 0.702803738317757,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9553872053872053,
+          "f1": 0.977184674989238,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06341525872998331,
+              "val_loss": 0.07089507973839695
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.05884330574700767,
+              "val_loss": 0.08939724782543915
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.023164279708465275
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.024642393411135464,
+              "val_loss": 0.024231628240044507
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.09163463374530872,
+              "val_loss": 0.06452036998269614
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08660802684710824,
+              "val_loss": 0.07398474840482883
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06135151224915121,
+              "val_loss": 0.06699464601878441
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.06906545610002672
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.2144432924827013,
+              "val_loss": 0.26223702152802414
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.2591018350382835
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 42.0,
+      "accuracy": 0.9573560767590619,
+      "precision_macro": 0.7701071687810568,
+      "recall_macro": 0.9769234902213626,
+      "f1_macro": 0.8391266769557313,
+      "auc_macro_ovr": 0.992282318232562,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          639,
+          13617
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5402877697841727,
+          "recall": 0.9986702127659575,
+          "f1": 0.7012138188608777,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.999926567777941,
+          "recall": 0.9551767676767676,
+          "f1": 0.9770395350505847,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.07484110180555587,
+              "val_loss": 0.08330453116427337
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.05875190201670637,
+              "val_loss": 0.07643254808828484
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.020787985588874847,
+              "val_loss": 0.021240156768717672
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.024595639324405866,
+              "val_loss": 0.02356122365509928
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.09089206643117394,
+              "val_loss": 0.0622373092794295
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.06059185237376586
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.0716247701567229,
+              "val_loss": 0.06210482820734681
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.07000067317096023,
+              "val_loss": 0.06579312739515916
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.2061220271953255,
+              "val_loss": 0.2564000428484276
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.2966888423435717
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 43.0,
+      "accuracy": 0.9588219616204691,
+      "precision_macro": 0.7744525547445256,
+      "recall_macro": 0.9783249158249159,
+      "f1_macro": 0.8433050067621689,
+      "auc_macro_ovr": 0.9924926626638728,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          618,
+          13638
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5489051094890511,
+          "recall": 1.0,
+          "f1": 0.7087653157398681,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9566498316498316,
+          "f1": 0.9778446977844697,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06511292913224251,
+              "val_loss": 0.07143952102712285
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06730809315431942,
+              "val_loss": 0.06957514528307193
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.027169521824152068,
+              "val_loss": 0.025023290692867146
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.025135051655134088,
+              "val_loss": 0.028054711728882395
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08978064259706059,
+              "val_loss": 0.06905712389303888
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.09029835374965284,
+              "val_loss": 0.04244384251025273
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06493420628076539,
+              "val_loss": 0.07321656225365213
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06955879595752636,
+              "val_loss": 0.08029047662763035
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.2067785506965084
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.2008254451566494,
+              "val_loss": 0.2426173622183437
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 44.0,
+      "accuracy": 0.9592217484008528,
+      "precision_macro": 0.7756598240469208,
+      "recall_macro": 0.9785353535353536,
+      "f1_macro": 0.8444197816940058,
+      "auc_macro_ovr": 0.9928794445638417,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          612,
+          13644
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5513196480938416,
+          "recall": 1.0,
+          "f1": 0.7107750472589792,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9570707070707071,
+          "f1": 0.9780645161290322,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06625506718997208,
+              "val_loss": 0.08211535194325091
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06230050261392238,
+              "val_loss": 0.07186243670066285
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.027235219975458757,
+              "val_loss": 0.025306505744869277
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.023604188830840204,
+              "val_loss": 0.028925312727652194
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.09330769694148695,
+              "val_loss": 0.07055821008837969
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08655495597623322,
+              "val_loss": 0.06114100990106977
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.07764546590382582,
+              "val_loss": 0.07371415269871073
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.07119001356827755,
+              "val_loss": 0.06374026670134172
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.2063807817205929,
+              "val_loss": 0.3003170268590736
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.2271534404677805
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 45.0,
+      "accuracy": 0.9594882729211087,
+      "precision_macro": 0.7764729428646955,
+      "recall_macro": 0.9780458246770304,
+      "f1_macro": 0.845030456002769,
+      "auc_macro_ovr": 0.9922652481523271,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          607,
+          13649
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.553019145802651,
+          "recall": 0.9986702127659575,
+          "f1": 0.7118483412322276,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.99992673992674,
+          "recall": 0.9574214365881033,
+          "f1": 0.9782125707733105,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06057496836952101,
+              "val_loss": 0.06045514991959591
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.061756834976796536,
+              "val_loss": 0.09393288144365292
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.02762391079778659,
+              "val_loss": 0.02691556594716463
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.02229991673082252,
+              "val_loss": 0.024799971139019692
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.09053186409590096,
+              "val_loss": 0.05963566439947071
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.09887076684616675,
+              "val_loss": 0.04016660071306481
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.06817069941061779
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": NaN
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.21488111257236425,
+              "val_loss": 0.24745499350890462
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.2132372271946987
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 46.0,
+      "accuracy": 0.9603544776119403,
+      "precision_macro": 0.7791388270230142,
+      "recall_macro": 0.979131593714927,
+      "f1_macro": 0.8476092517015532,
+      "auc_macro_ovr": 0.9927937676857225,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          595,
+          13661
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5582776540460282,
+          "recall": 1.0,
+          "f1": 0.7165316817532158,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9582631874298541,
+          "f1": 0.9786868216498907,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06239164819956937,
+              "val_loss": 0.06787598820172637
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.05839053124726205,
+              "val_loss": 0.0990716802261358
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.025363467606262218,
+              "val_loss": 0.02597408447009303
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.02478114982792233,
+              "val_loss": 0.025031629274367823
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.09071623867735659,
+              "val_loss": 0.05887828601078307
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.0904801065307709,
+              "val_loss": 0.07370519439335996
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06584625515537021,
+              "val_loss": 0.06598916388026632
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06849222573482748,
+              "val_loss": 0.0684998386427407
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.20975051098245936,
+              "val_loss": 0.23615314611699523
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.20725449787599043,
+              "val_loss": 0.24402294896832155
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 47.0,
+      "accuracy": 0.9602212153518124,
+      "precision_macro": 0.7787249814677539,
+      "recall_macro": 0.9790614478114479,
+      "f1_macro": 0.8472316220033909,
+      "auc_macro_ovr": 0.9927875179842156,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          597,
+          13659
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5574499629355077,
+          "recall": 1.0,
+          "f1": 0.7158495954307472,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9581228956228957,
+          "f1": 0.9786136485760344,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06187122152909445,
+              "val_loss": 0.06723547179513845
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06203522981885253,
+              "val_loss": 0.07338854758952465
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.018933478066574205,
+              "val_loss": 0.021260845663800817
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.018508359423121554,
+              "val_loss": 0.023587295779846647
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08963203776612409,
+              "val_loss": 0.069316131648287
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.0838892428566391,
+              "val_loss": 0.04540485665456949
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.07069358643753175,
+              "val_loss": 0.05366610770076284
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06445976466500725,
+              "val_loss": 0.06631085708232823
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.21638911593289503,
+              "val_loss": 0.23222389847377736
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.23867605549425402
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 48.0,
+      "accuracy": 0.9594882729211087,
+      "precision_macro": 0.7764705882352941,
+      "recall_macro": 0.978675645342312,
+      "f1_macro": 0.845166110647762,
+      "auc_macro_ovr": 0.9923394516978293,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          608,
+          13648
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5529411764705883,
+          "recall": 1.0,
+          "f1": 0.7121212121212122,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.957351290684624,
+          "f1": 0.9782110091743119,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.08817334057075572
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.07276503643488545
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.021574092566298105,
+              "val_loss": 0.02232090013982089
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.02377641048694179,
+              "val_loss": 0.024788074446654134
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08701454120543094,
+              "val_loss": 0.040259113158064616
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.06809498413445757
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.07644516647047471,
+              "val_loss": 0.07556581604420425
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06500435245325019,
+              "val_loss": 0.06570678856219475
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.27798122426945227
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.19688709303191743,
+              "val_loss": 0.2393832016203084
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 49.0,
+      "accuracy": 0.9610874200426439,
+      "precision_macro": 0.781437125748503,
+      "recall_macro": 0.9795173961840629,
+      "f1_macro": 0.8496977998158373,
+      "auc_macro_ovr": 0.9928622812044798,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          584,
+          13672
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.562874251497006,
+          "recall": 1.0,
+          "f1": 0.7203065134099617,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9590347923681257,
+          "f1": 0.979089086221713,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.05942616563289424,
+              "val_loss": 0.07220637243458354
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.05237841799042031,
+              "val_loss": 0.0705227729619861
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.015499836523093218,
+              "val_loss": 0.021628680519977756
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.0218005719569456
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08808778992280389,
+              "val_loss": 0.04731544330660006
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.09175081411910244,
+              "val_loss": 0.05393893702290565
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.044825625640619315
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06319253687426207,
+              "val_loss": 0.055927602242842045
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.20624724603082126,
+              "val_loss": 0.22410650581478872
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.198703754089005,
+              "val_loss": 0.2493546795523884
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "round": 50.0,
+      "accuracy": 0.9600879530916845,
+      "precision_macro": 0.7783123612139156,
+      "recall_macro": 0.9789913019079686,
+      "f1_macro": 0.8468546357416263,
+      "auc_macro_ovr": 0.9924440642387229,
+      "confusion_matrix": [
+        [
+          752,
+          0
+        ],
+        [
+          599,
+          13657
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5566247224278312,
+          "recall": 1.0,
+          "f1": 0.715168806466952,
+          "support": 752
+        },
+        "1": {
+          "precision": 1.0,
+          "recall": 0.9579826038159371,
+          "f1": 0.9785404650163007,
+          "support": 14256
+        }
+      },
+      "client_histories": [
+        {
+          "client_name": "client_1",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.05869409534352776,
+              "val_loss": 0.08412023466960708
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.05925123461146645,
+              "val_loss": 0.0689979225865053
+            }
+          ]
+        },
+        {
+          "client_name": "client_2",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": NaN,
+              "val_loss": 0.022923755744079094
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": NaN,
+              "val_loss": 0.02339286394024643
+            }
+          ]
+        },
+        {
+          "client_name": "client_3",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.08973369616744119,
+              "val_loss": 0.07919998248340157
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.08517069753416773,
+              "val_loss": 0.08740787196323353
+            }
+          ]
+        },
+        {
+          "client_name": "client_4",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.06517219631489689,
+              "val_loss": 0.06681951743375182
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.06042333463390691,
+              "val_loss": 0.062726151068584
+            }
+          ]
+        },
+        {
+          "client_name": "client_5",
+          "history": [
+            {
+              "epoch": 1.0,
+              "train_loss": 0.21195363529653558,
+              "val_loss": 0.23926406026648675
+            },
+            {
+              "epoch": 2.0,
+              "train_loss": 0.18933805305182325,
+              "val_loss": 0.20234229441279997
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "final_test_metrics": {
+    "accuracy": 0.9610874200426439,
+    "precision_macro": 0.781437125748503,
+    "recall_macro": 0.9795173961840629,
+    "f1_macro": 0.8496977998158373,
+    "auc_macro_ovr": 0.9928622812044798,
+    "confusion_matrix": [
+      [
+        752,
+        0
+      ],
+      [
+        584,
+        13672
+      ]
+    ],
+    "per_class": {
+      "0": {
+        "precision": 0.562874251497006,
+        "recall": 1.0,
+        "f1": 0.7203065134099617,
+        "support": 752
+      },
+      "1": {
+        "precision": 1.0,
+        "recall": 0.9590347923681257,
+        "f1": 0.979089086221713,
+        "support": 14256
+      }
+    },
+    "round": 49.0
+  },
+  "early_stopping": {
+    "enabled": false,
+    "metric": "f1_macro",
+    "min_delta": 0.001,
+    "patience": 0,
+    "best_round": 49,
+    "best_metric": 0.8496977998158373,
+    "early_stopped": false
+  }
+}
