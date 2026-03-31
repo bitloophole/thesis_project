@@ -165,6 +165,171 @@ def prepare_clients(args: argparse.Namespace) -> list[tuple[str, np.ndarray, np.
     return prepared
 
 
+def count_numpy_parameters(params: list[np.ndarray]) -> dict[str, object]:
+    parameter_tensors = []
+    total_parameters = 0
+    total_bytes = 0
+    for index, param in enumerate(params):
+        param_count = int(param.size)
+        param_bytes = int(param.nbytes)
+        total_parameters += param_count
+        total_bytes += param_bytes
+        parameter_tensors.append(
+            {
+                "name": f"param_{index}",
+                "shape": list(param.shape),
+                "count": param_count,
+                "bytes": param_bytes,
+                "dtype": str(param.dtype),
+            }
+        )
+    return {
+        "total_parameters": total_parameters,
+        "trainable_parameters": total_parameters,
+        "parameter_tensors": parameter_tensors,
+        "model_size_bytes": total_bytes,
+        "model_size_mb": total_bytes / (1024**2),
+    }
+
+
+def count_torch_parameters(model) -> dict[str, object]:
+    parameter_tensors = []
+    total_parameters = 0
+    trainable_parameters = 0
+    total_bytes = 0
+    for name, param in model.named_parameters():
+        param_count = int(param.numel())
+        param_bytes = int(param.numel() * param.element_size())
+        total_parameters += param_count
+        total_bytes += param_bytes
+        if param.requires_grad:
+            trainable_parameters += param_count
+        parameter_tensors.append(
+            {
+                "name": name,
+                "shape": list(param.shape),
+                "count": param_count,
+                "bytes": param_bytes,
+                "dtype": str(param.dtype).replace("torch.", ""),
+                "trainable": bool(param.requires_grad),
+            }
+        )
+    return {
+        "total_parameters": total_parameters,
+        "trainable_parameters": trainable_parameters,
+        "parameter_tensors": parameter_tensors,
+        "model_size_bytes": total_bytes,
+        "model_size_mb": total_bytes / (1024**2),
+    }
+
+
+def estimate_round_communication_cost(
+    *,
+    client_names: list[str],
+    train_sample_counts: dict[str, int],
+    model_size_bytes: int,
+) -> tuple[list[dict[str, object]], dict[str, object]]:
+    round_client_costs = []
+    total_upload_bytes = 0
+    total_download_bytes = 0
+    for client_name in client_names:
+        train_samples = int(train_sample_counts[client_name])
+        download_bytes = int(model_size_bytes)
+        upload_bytes = int(model_size_bytes)
+        total_download_bytes += download_bytes
+        total_upload_bytes += upload_bytes
+        round_client_costs.append(
+            {
+                "client_name": client_name,
+                "train_samples": train_samples,
+                "server_to_client_bytes": download_bytes,
+                "client_to_server_bytes": upload_bytes,
+                "total_bytes": download_bytes + upload_bytes,
+            }
+        )
+    total_bytes = total_download_bytes + total_upload_bytes
+    summary = {
+        "assumption": "Each round sends the full global model to every client and receives one full updated model back from every client.",
+        "clients_per_round": len(client_names),
+        "server_to_client_bytes": total_download_bytes,
+        "client_to_server_bytes": total_upload_bytes,
+        "total_bytes": total_bytes,
+        "total_mb": total_bytes / (1024**2),
+    }
+    return round_client_costs, summary
+
+
+def measure_numpy_inference(model: NumpyMLP, x_test: np.ndarray) -> tuple[np.ndarray, dict[str, float]]:
+    started_at = time.perf_counter()
+    probabilities = model.predict_proba(x_test)
+    elapsed_seconds = time.perf_counter() - started_at
+    sample_count = max(len(x_test), 1)
+    samples_per_second = len(x_test) / elapsed_seconds if elapsed_seconds > 0 else 0.0
+    return probabilities, {
+        "total_seconds": elapsed_seconds,
+        "total_milliseconds": elapsed_seconds * 1000.0,
+        "samples": int(len(x_test)),
+        "milliseconds_per_sample": (elapsed_seconds * 1000.0) / sample_count,
+        "samples_per_second": samples_per_second,
+    }
+
+
+def measure_torch_inference(torch_module, model, x_test: np.ndarray, y_test: np.ndarray, batch_size: int, device: str):
+    started_at = time.perf_counter()
+    _, probabilities = evaluate_torch_model(torch_module, model, x_test, y_test, batch_size, device)
+    elapsed_seconds = time.perf_counter() - started_at
+    sample_count = max(len(x_test), 1)
+    samples_per_second = len(x_test) / elapsed_seconds if elapsed_seconds > 0 else 0.0
+    return probabilities, {
+        "total_seconds": elapsed_seconds,
+        "total_milliseconds": elapsed_seconds * 1000.0,
+        "samples": int(len(x_test)),
+        "milliseconds_per_sample": (elapsed_seconds * 1000.0) / sample_count,
+        "samples_per_second": samples_per_second,
+    }
+
+
+def build_binary_distribution_plot(
+    client_summaries: list[dict[str, object]],
+    output_path: Path,
+) -> str | None:
+    try:
+        import matplotlib.pyplot as plt
+    except Exception:
+        return None
+
+    client_names = [str(summary["client_name"]) for summary in client_summaries]
+    benign_counts = []
+    attack_counts = []
+    for summary in client_summaries:
+        train_distribution = summary["train_distribution"]["distribution"]
+        val_distribution = summary["val_distribution"]["distribution"]
+        benign_counts.append(int(train_distribution["0"]) + int(val_distribution["0"]))
+        attack_counts.append(int(train_distribution["1"]) + int(val_distribution["1"]))
+
+    positions = np.arange(len(client_names))
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.bar(positions, benign_counts, label="Benign", color="#4C956C")
+    ax.bar(positions, attack_counts, bottom=benign_counts, label="Attack", color="#D1495B")
+    ax.set_xticks(positions)
+    ax.set_xticklabels(client_names, rotation=0)
+    ax.set_ylabel("Samples")
+    ax.set_title("Client Class Distribution")
+    ax.legend()
+    ax.grid(axis="y", linestyle="--", alpha=0.3)
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=200)
+    plt.close(fig)
+    return str(output_path)
+
+
+def finalize_binary_metrics(metrics: dict[str, object], inference_time: dict[str, float]) -> dict[str, object]:
+    finalized = dict(metrics)
+    finalized["inference_time"] = inference_time
+    finalized["test_confusion_matrix"] = finalized.get("confusion_matrix")
+    return finalized
+
+
 def average_mlp_parameters(weighted_params: list[tuple[int, list[np.ndarray]]]) -> list[np.ndarray]:
     total_examples = sum(num_examples for num_examples, _ in weighted_params)
     averaged: list[np.ndarray] = []
@@ -214,6 +379,7 @@ def run_federated_mlp(args: argparse.Namespace) -> dict[str, object]:
         test_split.x_test = standardizer.transform(test_split.x_test)
 
     prepared_clients = prepare_clients(args)
+    train_sample_counts = {client_name: int(len(y_train)) for client_name, x_train, y_train, x_val, y_val in prepared_clients}
     global_model = NumpyMLP(
         input_dim=test_split.x_train.shape[1],
         hidden_dims=tuple(args.hidden_dims),
@@ -221,6 +387,12 @@ def run_federated_mlp(args: argparse.Namespace) -> dict[str, object]:
         learning_rate=args.learning_rate,
         weight_decay=args.weight_decay,
         seed=args.seed,
+    )
+    model_stats = count_numpy_parameters(global_model.get_parameters())
+    per_client_round_costs, per_round_communication = estimate_round_communication_cost(
+        client_names=[client_name for client_name, *_ in prepared_clients],
+        train_sample_counts=train_sample_counts,
+        model_size_bytes=int(model_stats["model_size_bytes"]),
     )
 
     round_history: list[dict[str, object]] = []
@@ -276,10 +448,27 @@ def run_federated_mlp(args: argparse.Namespace) -> dict[str, object]:
                 )
 
         global_model.set_parameters(average_mlp_parameters(client_updates))
-        test_metrics = evaluate_classification_detailed(test_split.y_test, global_model.predict_proba(test_split.x_test))
+        round_probabilities, round_inference_time = measure_numpy_inference(global_model, test_split.x_test)
+        test_metrics = finalize_binary_metrics(
+            evaluate_classification_detailed(test_split.y_test, round_probabilities),
+            round_inference_time,
+        )
         test_metrics["round"] = float(round_idx)
+        test_metrics["communication_cost"] = {
+            "round_bytes": per_round_communication["total_bytes"],
+            "round_mb": per_round_communication["total_mb"],
+            "per_client": per_client_round_costs,
+        }
         round_history.append(test_metrics)
         print(json.dumps({"round": round_idx, "metrics": test_metrics}))
+
+    artifact_path = RESULTS_DIR / f"federated_binary_{args.model}_client_class_distribution.png"
+    client_distribution_plot = build_binary_distribution_plot(client_summaries, artifact_path)
+    final_probabilities, final_inference_time = measure_numpy_inference(global_model, test_split.x_test)
+    final_metrics = finalize_binary_metrics(
+        evaluate_classification_detailed(test_split.y_test, final_probabilities),
+        final_inference_time,
+    )
 
     return build_output(
         args=args,
@@ -295,6 +484,14 @@ def run_federated_mlp(args: argparse.Namespace) -> dict[str, object]:
         client_summaries=client_summaries,
         training_time=time.time() - start_time,
         round_history=round_history,
+        model_stats=model_stats,
+        per_round_communication=per_round_communication,
+        total_communication={
+            "total_bytes": per_round_communication["total_bytes"] * len(round_history),
+            "total_mb": per_round_communication["total_mb"] * len(round_history),
+            "evaluated_rounds": len(round_history),
+        },
+        client_distribution_plot=client_distribution_plot,
         training_config={
             "input_dim": int(test_split.x_train.shape[1]),
             "output_dim": 2,
@@ -316,6 +513,7 @@ def run_federated_mlp(args: argparse.Namespace) -> dict[str, object]:
             "class_weighted": class_weighting_enabled,
             "patience": args.patience,
         },
+        final_metrics=final_metrics,
     )
 
 
@@ -474,6 +672,7 @@ def run_federated_tabtransformer(args: argparse.Namespace) -> dict[str, object]:
         mlp_hidden_dim=args.mlp_hidden_dim,
     )
     global_model = TabTransformerClassifier(model_config).to(device)
+    model_stats = count_torch_parameters(global_model)
 
     prepared_clients = []
     for client_index, (client_name, x_train, y_train, x_val, y_val) in enumerate(prepare_clients(args)):
@@ -492,6 +691,11 @@ def run_federated_tabtransformer(args: argparse.Namespace) -> dict[str, object]:
                 "class_weights": compute_class_weights(y_train, 2) if class_weighting_enabled else None,
             }
         )
+    per_client_round_costs, per_round_communication = estimate_round_communication_cost(
+        client_names=[str(client_data["client_name"]) for client_data in prepared_clients],
+        train_sample_counts={str(client_data["client_name"]): int(len(client_data["y_train"])) for client_data in prepared_clients},
+        model_size_bytes=int(model_stats["model_size_bytes"]),
+    )
 
     round_history: list[dict[str, object]] = []
     client_summaries: list[dict[str, object]] = []
@@ -543,11 +747,19 @@ def run_federated_tabtransformer(args: argparse.Namespace) -> dict[str, object]:
         global_model.load_state_dict(average_state_dicts(torch, client_updates, args.fedavg_weighting))
         should_eval = (round_idx % args.round_eval_every == 0) or (round_idx == args.rounds)
         if should_eval:
-            _, test_probabilities = evaluate_torch_model(
+            test_probabilities, round_inference_time = measure_torch_inference(
                 torch, global_model, test_split.x_test, test_split.y_test, args.batch_size, device
             )
-            test_metrics = evaluate_classification_detailed(test_split.y_test, test_probabilities)
+            test_metrics = finalize_binary_metrics(
+                evaluate_classification_detailed(test_split.y_test, test_probabilities),
+                round_inference_time,
+            )
             round_result: dict[str, object] = {"round": float(round_idx), **test_metrics}
+            round_result["communication_cost"] = {
+                "round_bytes": per_round_communication["total_bytes"],
+                "round_mb": per_round_communication["total_mb"],
+                "per_client": per_client_round_costs,
+            }
             if not args.skip_train_loss:
                 round_result["client_histories"] = round_client_histories
             round_history.append(round_result)
@@ -570,9 +782,16 @@ def run_federated_tabtransformer(args: argparse.Namespace) -> dict[str, object]:
 
     training_time = time.time() - start_time
     global_model.load_state_dict(best_global_state)
-    _, final_probabilities = evaluate_torch_model(torch, global_model, test_split.x_test, test_split.y_test, args.batch_size, device)
-    final_metrics = evaluate_classification_detailed(test_split.y_test, final_probabilities)
+    final_probabilities, final_inference_time = measure_torch_inference(
+        torch, global_model, test_split.x_test, test_split.y_test, args.batch_size, device
+    )
+    final_metrics = finalize_binary_metrics(
+        evaluate_classification_detailed(test_split.y_test, final_probabilities),
+        final_inference_time,
+    )
     final_metrics["round"] = float(best_round)
+    artifact_path = RESULTS_DIR / f"federated_binary_{args.model}_client_class_distribution.png"
+    client_distribution_plot = build_binary_distribution_plot(client_summaries, artifact_path)
 
     return build_output(
         args=args,
@@ -588,6 +807,15 @@ def run_federated_tabtransformer(args: argparse.Namespace) -> dict[str, object]:
         client_summaries=client_summaries,
         training_time=training_time,
         round_history=round_history,
+        model_stats=model_stats,
+        per_round_communication=per_round_communication,
+        total_communication={
+            "total_bytes": per_round_communication["total_bytes"] * len(round_history),
+            "total_mb": per_round_communication["total_mb"] * len(round_history),
+            "configured_rounds": args.rounds,
+            "executed_rounds": len(round_history),
+        },
+        client_distribution_plot=client_distribution_plot,
         training_config={
             "input_dim": int(model_config.num_features),
             "output_dim": 2,
@@ -638,6 +866,10 @@ def build_output(
     client_summaries: list[dict[str, object]],
     training_time: float,
     round_history: list[dict[str, object]],
+    model_stats: dict[str, object],
+    per_round_communication: dict[str, object],
+    total_communication: dict[str, object],
+    client_distribution_plot: str | None,
     training_config: dict[str, object],
     preprocessing: dict[str, object],
     final_metrics: dict[str, object] | None = None,
@@ -655,6 +887,24 @@ def build_output(
         "preprocessing": preprocessing,
         "split_summary": split_summary,
         "client_summaries": client_summaries,
+        "artifacts": {
+            "client_class_distribution_plot": client_distribution_plot,
+        },
+        "model_details": {
+            "parameter_summary": {
+                "total_parameters": model_stats["total_parameters"],
+                "trainable_parameters": model_stats["trainable_parameters"],
+            },
+            "model_size": {
+                "bytes": model_stats["model_size_bytes"],
+                "mb": model_stats["model_size_mb"],
+            },
+            "parameter_tensors": model_stats["parameter_tensors"],
+        },
+        "communication": {
+            "per_round": per_round_communication,
+            "total": total_communication,
+        },
         "training_time_seconds": training_time,
         "round_history": round_history,
         "final_test_metrics": final_metrics if final_metrics is not None else (round_history[-1] if round_history else {}),
