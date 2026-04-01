@@ -1,0 +1,4836 @@
+{
+  "mode": "federated_binary",
+  "model": "mlp",
+  "task": {
+    "name": "thesis_binary_benign_vs_attack",
+    "problem_type": "binary_classification",
+    "label_space": "0=benign, all other original labels=attack",
+    "expected_num_classes": 2,
+    "class_names": [
+      "benign",
+      "attack"
+    ],
+    "notes": [
+      "Derived from the prepared multiclass CICIoT2023 CSV files used elsewhere in this repository.",
+      "By default this maps original label 0 to benign and labels 1..N to attack."
+    ]
+  },
+  "global_data_path": "/Users/gwd/Documents/projects/thesis_project/data/global.csv",
+  "client_dir": "/Users/gwd/Documents/projects/thesis_project/data/federated_clients",
+  "test_rows": 100000,
+  "client_max_rows": 500000,
+  "training_config": {
+    "input_dim": 39,
+    "output_dim": 2,
+    "hidden_dims": [
+      512,
+      256,
+      128
+    ],
+    "learning_rate": 0.001,
+    "batch_size": 256,
+    "weight_decay": 0.0001,
+    "focal_gamma": 0.0,
+    "gradient_clip_norm": 5.0,
+    "eval_every": 1,
+    "local_epochs": 2,
+    "rounds": 50,
+    "seed": 42
+  },
+  "preprocessing": {
+    "random_sample": true,
+    "stratified_split": true,
+    "standardize": true,
+    "class_weighted": true,
+    "patience": 3
+  },
+  "split_summary": {
+    "train_samples": 69995,
+    "val_samples": 14997,
+    "test_samples": 15008,
+    "train_distribution": {
+      "distribution": {
+        "0": 3504,
+        "1": 66491
+      },
+      "attack_rate": 0.9499392813772413
+    },
+    "val_distribution": {
+      "distribution": {
+        "0": 751,
+        "1": 14246
+      },
+      "attack_rate": 0.9499233179969327
+    },
+    "test_distribution": {
+      "distribution": {
+        "0": 752,
+        "1": 14256
+      },
+      "attack_rate": 0.9498933901918977
+    }
+  },
+  "client_summaries": [
+    {
+      "client_name": "client_1",
+      "client_index": 1,
+      "train_samples": 424999,
+      "val_samples": 75001,
+      "train_distribution": {
+        "distribution": {
+          "0": 12342,
+          "1": 412657
+        },
+        "attack_rate": 0.9709599316704275
+      },
+      "val_distribution": {
+        "distribution": {
+          "0": 2179,
+          "1": 72822
+        },
+        "attack_rate": 0.9709470540392795
+      }
+    },
+    {
+      "client_name": "client_2",
+      "client_index": 2,
+      "train_samples": 425000,
+      "val_samples": 75000,
+      "train_distribution": {
+        "distribution": {
+          "0": 51136,
+          "1": 373864
+        },
+        "attack_rate": 0.87968
+      },
+      "val_distribution": {
+        "distribution": {
+          "0": 9024,
+          "1": 65976
+        },
+        "attack_rate": 0.87968
+      }
+    },
+    {
+      "client_name": "client_3",
+      "client_index": 3,
+      "train_samples": 424999,
+      "val_samples": 75001,
+      "train_distribution": {
+        "distribution": {
+          "0": 392,
+          "1": 424607
+        },
+        "attack_rate": 0.9990776448885762
+      },
+      "val_distribution": {
+        "distribution": {
+          "0": 70,
+          "1": 74931
+        },
+        "attack_rate": 0.9990666791109452
+      }
+    },
+    {
+      "client_name": "client_4",
+      "client_index": 4,
+      "train_samples": 424999,
+      "val_samples": 75001,
+      "train_distribution": {
+        "distribution": {
+          "0": 2131,
+          "1": 422868
+        },
+        "attack_rate": 0.9949858705549895
+      },
+      "val_distribution": {
+        "distribution": {
+          "0": 377,
+          "1": 74624
+        },
+        "attack_rate": 0.994973400354662
+      }
+    },
+    {
+      "client_name": "client_5",
+      "client_index": 5,
+      "train_samples": 424999,
+      "val_samples": 75001,
+      "train_distribution": {
+        "distribution": {
+          "0": 48332,
+          "1": 376667
+        },
+        "attack_rate": 0.886277379476187
+      },
+      "val_distribution": {
+        "distribution": {
+          "0": 8530,
+          "1": 66471
+        },
+        "attack_rate": 0.8862681830908922
+      }
+    }
+  ],
+  "artifacts": {
+    "client_class_distribution_plot": null
+  },
+  "model_details": {
+    "parameter_summary": {
+      "total_parameters": 184962,
+      "trainable_parameters": 184962
+    },
+    "model_size": {
+      "bytes": 739848,
+      "mb": 0.7055740356445312
+    },
+    "parameter_tensors": [
+      {
+        "name": "param_0",
+        "shape": [
+          39,
+          512
+        ],
+        "count": 19968,
+        "bytes": 79872,
+        "dtype": "float32"
+      },
+      {
+        "name": "param_1",
+        "shape": [
+          1,
+          512
+        ],
+        "count": 512,
+        "bytes": 2048,
+        "dtype": "float32"
+      },
+      {
+        "name": "param_2",
+        "shape": [
+          512,
+          256
+        ],
+        "count": 131072,
+        "bytes": 524288,
+        "dtype": "float32"
+      },
+      {
+        "name": "param_3",
+        "shape": [
+          1,
+          256
+        ],
+        "count": 256,
+        "bytes": 1024,
+        "dtype": "float32"
+      },
+      {
+        "name": "param_4",
+        "shape": [
+          256,
+          128
+        ],
+        "count": 32768,
+        "bytes": 131072,
+        "dtype": "float32"
+      },
+      {
+        "name": "param_5",
+        "shape": [
+          1,
+          128
+        ],
+        "count": 128,
+        "bytes": 512,
+        "dtype": "float32"
+      },
+      {
+        "name": "param_6",
+        "shape": [
+          128,
+          2
+        ],
+        "count": 256,
+        "bytes": 1024,
+        "dtype": "float32"
+      },
+      {
+        "name": "param_7",
+        "shape": [
+          1,
+          2
+        ],
+        "count": 2,
+        "bytes": 8,
+        "dtype": "float32"
+      }
+    ]
+  },
+  "communication": {
+    "per_round": {
+      "assumption": "Each round sends the full global model to every client and receives one full updated model back from every client.",
+      "clients_per_round": 5,
+      "server_to_client_bytes": 3699240,
+      "client_to_server_bytes": 3699240,
+      "total_bytes": 7398480,
+      "total_mb": 7.0557403564453125
+    },
+    "total": {
+      "total_bytes": 369924000,
+      "total_mb": 352.7870178222656,
+      "evaluated_rounds": 50
+    }
+  },
+  "training_time_seconds": 1141.5193829536438,
+  "round_history": [
+    {
+      "accuracy": 0.9428304904051172,
+      "precision_macro": 0.7327276753993375,
+      "recall_macro": 0.9610899180934642,
+      "f1_macro": 0.8006979375942234,
+      "auc_macro_ovr": 0.9808934498650811,
+      "confusion_matrix": [
+        [
+          738,
+          14
+        ],
+        [
+          844,
+          13412
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.4664981036662453,
+          "recall": 0.9813829787234043,
+          "f1": 0.6323907455012854,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9989572471324296,
+          "recall": 0.9407968574635241,
+          "f1": 0.9690051296871613,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01533783320337534,
+        "total_milliseconds": 15.33783320337534,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0010219771590735168,
+        "samples_per_second": 978495.4498460216
+      },
+      "test_confusion_matrix": [
+        [
+          738,
+          14
+        ],
+        [
+          844,
+          13412
+        ]
+      ],
+      "round": 1.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9473614072494669,
+      "precision_macro": 0.7436134406239658,
+      "recall_macro": 0.9691432647992931,
+      "f1_macro": 0.8128143201011029,
+      "auc_macro_ovr": 0.9853691689352151,
+      "confusion_matrix": [
+        [
+          747,
+          5
+        ],
+        [
+          785,
+          13471
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.48759791122715407,
+          "recall": 0.9933510638297872,
+          "f1": 0.6541155866900176,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9996289700207777,
+          "recall": 0.944935465768799,
+          "f1": 0.9715130535121882,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01617162534967065,
+        "total_milliseconds": 16.17162534967065,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0010775336720196327,
+        "samples_per_second": 928045.2444012162
+      },
+      "test_confusion_matrix": [
+        [
+          747,
+          5
+        ],
+        [
+          785,
+          13471
+        ]
+      ],
+      "round": 2.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9494269722814499,
+      "precision_macro": 0.7486104808639175,
+      "recall_macro": 0.9696007056379397,
+      "f1_macro": 0.8177399755820152,
+      "auc_macro_ovr": 0.9864478487594622,
+      "confusion_matrix": [
+        [
+          746,
+          6
+        ],
+        [
+          753,
+          13503
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.49766511007338227,
+          "recall": 0.9920212765957447,
+          "f1": 0.6628165259884495,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9995558516544526,
+          "recall": 0.9471801346801347,
+          "f1": 0.9726634251755809,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.014749333262443542,
+        "total_milliseconds": 14.749333262443542,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.000982764742966654,
+        "samples_per_second": 1017537.5207105195
+      },
+      "test_confusion_matrix": [
+        [
+          746,
+          6
+        ],
+        [
+          753,
+          13503
+        ]
+      ],
+      "round": 3.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9502931769722814,
+      "precision_macro": 0.7508231532735254,
+      "recall_macro": 0.9706864746758364,
+      "f1_macro": 0.8200532834101384,
+      "auc_macro_ovr": 0.9870995900195811,
+      "confusion_matrix": [
+        [
+          747,
+          5
+        ],
+        [
+          741,
+          13515
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5020161290322581,
+          "recall": 0.9933510638297872,
+          "f1": 0.6669642857142858,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9996301775147929,
+          "recall": 0.9480218855218855,
+          "f1": 0.9731422811059909,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.015233458019793034,
+        "total_milliseconds": 15.233458019793034,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.001015022522640794,
+        "samples_per_second": 985199.8134960497
+      },
+      "test_confusion_matrix": [
+        [
+          747,
+          5
+        ],
+        [
+          741,
+          13515
+        ]
+      ],
+      "round": 4.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9506263326226013,
+      "precision_macro": 0.7516695064084267,
+      "recall_macro": 0.9708618394345345,
+      "f1_macro": 0.8208917349480078,
+      "auc_macro_ovr": 0.9876191547567877,
+      "confusion_matrix": [
+        [
+          747,
+          5
+        ],
+        [
+          736,
+          13520
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5037086985839514,
+          "recall": 0.9933510638297872,
+          "f1": 0.6684563758389261,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.999630314232902,
+          "recall": 0.9483726150392817,
+          "f1": 0.9733270940570894,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.015441165771335363,
+        "total_milliseconds": 15.441165771335363,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0010288623248491046,
+        "samples_per_second": 971947.3401328621
+      },
+      "test_confusion_matrix": [
+        [
+          747,
+          5
+        ],
+        [
+          736,
+          13520
+        ]
+      ],
+      "round": 5.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9506263326226013,
+      "precision_macro": 0.7517039556749681,
+      "recall_macro": 0.9714916600998161,
+      "f1_macro": 0.8210389838063934,
+      "auc_macro_ovr": 0.9880957178164625,
+      "confusion_matrix": [
+        [
+          748,
+          4
+        ],
+        [
+          737,
+          13519
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5037037037037037,
+          "recall": 0.9946808510638298,
+          "f1": 0.6687527939204291,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9997042076462324,
+          "recall": 0.9483024691358025,
+          "f1": 0.9733251736923577,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01636900007724762,
+        "total_milliseconds": 16.36900007724762,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0010906849731641538,
+        "samples_per_second": 916855.0265242306
+      },
+      "test_confusion_matrix": [
+        [
+          748,
+          4
+        ],
+        [
+          737,
+          13519
+        ]
+      ],
+      "round": 6.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9506263326226013,
+      "precision_macro": 0.7517039556749681,
+      "recall_macro": 0.9714916600998161,
+      "f1_macro": 0.8210389838063934,
+      "auc_macro_ovr": 0.9884963516667861,
+      "confusion_matrix": [
+        [
+          748,
+          4
+        ],
+        [
+          737,
+          13519
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5037037037037037,
+          "recall": 0.9946808510638298,
+          "f1": 0.6687527939204291,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9997042076462324,
+          "recall": 0.9483024691358025,
+          "f1": 0.9733251736923577,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01617133291438222,
+        "total_milliseconds": 16.17133291438222,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0010775141867258942,
+        "samples_per_second": 928062.0267641889
+      },
+      "test_confusion_matrix": [
+        [
+          748,
+          4
+        ],
+        [
+          737,
+          13519
+        ]
+      ],
+      "round": 7.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9508262260127932,
+      "precision_macro": 0.7522475766352481,
+      "recall_macro": 0.9722266996203166,
+      "f1_macro": 0.8216902290035044,
+      "auc_macro_ovr": 0.9887904607541133,
+      "confusion_matrix": [
+        [
+          749,
+          3
+        ],
+        [
+          735,
+          13521
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5047169811320755,
+          "recall": 0.9960106382978723,
+          "f1": 0.6699463327370305,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9997781721384206,
+          "recall": 0.9484427609427609,
+          "f1": 0.9734341252699784,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01819995790719986,
+        "total_milliseconds": 18.19995790719986,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0012126837624733381,
+        "samples_per_second": 824617.2917830141
+      },
+      "test_confusion_matrix": [
+        [
+          749,
+          3
+        ],
+        [
+          735,
+          13521
+        ]
+      ],
+      "round": 8.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9513592750533049,
+      "precision_macro": 0.7536154389034283,
+      "recall_macro": 0.9725072832342336,
+      "f1_macro": 0.8230407762905549,
+      "auc_macro_ovr": 0.9890619030135874,
+      "confusion_matrix": [
+        [
+          749,
+          3
+        ],
+        [
+          727,
+          13529
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5074525745257452,
+          "recall": 0.9960106382978723,
+          "f1": 0.6723518850987433,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9997783032811114,
+          "recall": 0.9490039281705949,
+          "f1": 0.9737296674823664,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01712391572073102,
+        "total_milliseconds": 17.12391572073102,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0011409858555924187,
+        "samples_per_second": 876435.0540356028
+      },
+      "test_confusion_matrix": [
+        [
+          749,
+          3
+        ],
+        [
+          727,
+          13529
+        ]
+      ],
+      "round": 9.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9513592750533049,
+      "precision_macro": 0.7536473350955677,
+      "recall_macro": 0.9731371038995152,
+      "f1_macro": 0.8231867582442235,
+      "auc_macro_ovr": 0.9892720608866442,
+      "confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          728,
+          13528
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5074424898511503,
+          "recall": 0.9973404255319149,
+          "f1": 0.6726457399103141,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9998521803399852,
+          "recall": 0.9489337822671156,
+          "f1": 0.9737277765781329,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.018353292252868414,
+        "total_milliseconds": 18.353292252868414,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0012229006032028528,
+        "samples_per_second": 817727.94729264
+      },
+      "test_confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          728,
+          13528
+        ]
+      ],
+      "round": 10.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9514925373134329,
+      "precision_macro": 0.7539911417441103,
+      "recall_macro": 0.9732072498029944,
+      "f1_macro": 0.8235255960815397,
+      "auc_macro_ovr": 0.9894732639635122,
+      "confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          726,
+          13530
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.508130081300813,
+          "recall": 0.9973404255319149,
+          "f1": 0.6732495511669659,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9998522021874077,
+          "recall": 0.9490740740740741,
+          "f1": 0.9738016409961134,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.017834290862083435,
+        "total_milliseconds": 17.834290862083435,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0011883189540300796,
+        "samples_per_second": 841524.909291893
+      },
+      "test_confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          726,
+          13530
+        ]
+      ],
+      "round": 11.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9514259061833689,
+      "precision_macro": 0.7538191220371266,
+      "recall_macro": 0.9731721768512549,
+      "f1_macro": 0.823356110105227,
+      "auc_macro_ovr": 0.9896193390763426,
+      "confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          727,
+          13529
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5077860528097495,
+          "recall": 0.9973404255319149,
+          "f1": 0.6729475100942126,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9998521912645038,
+          "recall": 0.9490039281705949,
+          "f1": 0.9737647101162414,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01803941698744893,
+        "total_milliseconds": 18.03941698744893,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0012019867395688254,
+        "samples_per_second": 831955.9335227926
+      },
+      "test_confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          727,
+          13529
+        ]
+      ],
+      "round": 12.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9520255863539445,
+      "precision_macro": 0.7553757360369316,
+      "recall_macro": 0.9734878334169115,
+      "f1_macro": 0.8248863340243395,
+      "auc_macro_ovr": 0.9897325332969171,
+      "confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          718,
+          13538
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.510899182561308,
+          "recall": 0.9973404255319149,
+          "f1": 0.6756756756756757,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9998522895125553,
+          "recall": 0.949635241301908,
+          "f1": 0.9740969923730033,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.018431957811117172,
+        "total_milliseconds": 18.431957811117172,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0012281421782460802,
+        "samples_per_second": 814237.9748150235
+      },
+      "test_confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          718,
+          13538
+        ]
+      ],
+      "round": 13.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9518256929637526,
+      "precision_macro": 0.7548547483752639,
+      "recall_macro": 0.9733826145616926,
+      "f1_macro": 0.8243750440952691,
+      "auc_macro_ovr": 0.989822127898369,
+      "confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          721,
+          13535
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5098572399728076,
+          "recall": 0.9973404255319149,
+          "f1": 0.6747638326585697,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9998522567777203,
+          "recall": 0.9494248035914703,
+          "f1": 0.9739862555319686,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.017170000355690718,
+        "total_milliseconds": 17.170000355690718,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0011440565268983688,
+        "samples_per_second": 874082.6842805418
+      },
+      "test_confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          721,
+          13535
+        ]
+      ],
+      "round": 14.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9518923240938166,
+      "precision_macro": 0.7550281746617986,
+      "recall_macro": 0.9734176875134322,
+      "f1_macro": 0.8245453386095607,
+      "auc_macro_ovr": 0.9899124220932731,
+      "confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          720,
+          13536
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5102040816326531,
+          "recall": 0.9973404255319149,
+          "f1": 0.6750675067506751,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.999852267690944,
+          "recall": 0.9494949494949495,
+          "f1": 0.9740231704684464,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01793908327817917,
+        "total_milliseconds": 17.93908327817917,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0011953013911366716,
+        "samples_per_second": 836609.0823746554
+      },
+      "test_confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          720,
+          13536
+        ]
+      ],
+      "round": 15.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9524920042643923,
+      "precision_macro": 0.7565996942123618,
+      "recall_macro": 0.9737333440790887,
+      "f1_macro": 0.8260841045169667,
+      "auc_macro_ovr": 0.9900014570199632,
+      "confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          711,
+          13545
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5133470225872689,
+          "recall": 0.9973404255319149,
+          "f1": 0.6778129236330773,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9998523658374547,
+          "recall": 0.9501262626262627,
+          "f1": 0.9743552854008561,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.016667749732732773,
+        "total_milliseconds": 16.667749732732773,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.00111059100031535,
+        "samples_per_second": 900421.4870425315
+      },
+      "test_confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          711,
+          13545
+        ]
+      ],
+      "round": 16.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9525586353944563,
+      "precision_macro": 0.7567755034357799,
+      "recall_macro": 0.9737684170308284,
+      "f1_macro": 0.8262557613966846,
+      "auc_macro_ovr": 0.9900743080181245,
+      "confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          710,
+          13546
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5136986301369864,
+          "recall": 0.9973404255319149,
+          "f1": 0.678119349005425,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9998523767345734,
+          "recall": 0.9501964085297419,
+          "f1": 0.9743921737879442,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01724970806390047,
+        "total_milliseconds": 17.24970806390047,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0011493675415711934,
+        "samples_per_second": 870043.7099807021
+      },
+      "test_confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          710,
+          13546
+        ]
+      ],
+      "round": 17.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9526918976545842,
+      "precision_macro": 0.7571278453525276,
+      "recall_macro": 0.9738385629343076,
+      "f1_macro": 0.826599487138262,
+      "auc_macro_ovr": 0.9901199681507749,
+      "confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          708,
+          13548
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.51440329218107,
+          "recall": 0.9973404255319149,
+          "f1": 0.6787330316742081,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9998523985239852,
+          "recall": 0.9503367003367004,
+          "f1": 0.974465942602316,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01769095892086625,
+        "total_milliseconds": 17.69095892086625,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0011787685848125167,
+        "samples_per_second": 848342.934214734
+      },
+      "test_confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          708,
+          13548
+        ]
+      ],
+      "round": 18.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9528251599147122,
+      "precision_macro": 0.757481155208428,
+      "recall_macro": 0.9739087088377869,
+      "f1_macro": 0.82694376344624,
+      "auc_macro_ovr": 0.9902003747582205,
+      "confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          706,
+          13550
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5151098901098901,
+          "recall": 0.9973404255319149,
+          "f1": 0.6793478260869564,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9998524203069658,
+          "recall": 0.9504769921436588,
+          "f1": 0.9745397008055235,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01823254209011793,
+        "total_milliseconds": 18.23254209011793,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0012148548834033802,
+        "samples_per_second": 823143.5817243697
+      },
+      "test_confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          706,
+          13550
+        ]
+      ],
+      "round": 19.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9528917910447762,
+      "precision_macro": 0.7576581743609092,
+      "recall_macro": 0.9739437817895265,
+      "f1_macro": 0.8271161085352388,
+      "auc_macro_ovr": 0.9902702408243188,
+      "confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          705,
+          13551
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5154639175257731,
+          "recall": 0.9973404255319149,
+          "f1": 0.6796556411418214,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9998524311960452,
+          "recall": 0.9505471380471381,
+          "f1": 0.9745765759286562,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01766020804643631,
+        "total_milliseconds": 17.66020804643631,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0011767196192987947,
+        "samples_per_second": 849820.1131344257
+      },
+      "test_confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          705,
+          13551
+        ]
+      ],
+      "round": 20.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9528917910447762,
+      "precision_macro": 0.7576581743609092,
+      "recall_macro": 0.9739437817895265,
+      "f1_macro": 0.8271161085352388,
+      "auc_macro_ovr": 0.9903253687883564,
+      "confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          705,
+          13551
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5154639175257731,
+          "recall": 0.9973404255319149,
+          "f1": 0.6796556411418214,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9998524311960452,
+          "recall": 0.9505471380471381,
+          "f1": 0.9745765759286562,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.017555667087435722,
+        "total_milliseconds": 17.555667087435722,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0011697539370626147,
+        "samples_per_second": 854880.644822717
+      },
+      "test_confusion_matrix": [
+        [
+          750,
+          2
+        ],
+        [
+          705,
+          13551
+        ]
+      ],
+      "round": 21.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9530250533049041,
+      "precision_macro": 0.7580387091735817,
+      "recall_macro": 0.9746437483582874,
+      "f1_macro": 0.8276051718774305,
+      "auc_macro_ovr": 0.9903741537717602,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          704,
+          13552
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.516151202749141,
+          "recall": 0.9986702127659575,
+          "f1": 0.680561848663344,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262155980225,
+          "recall": 0.9506172839506173,
+          "f1": 0.9746484950915171,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.016203749924898148,
+        "total_milliseconds": 16.203749924898148,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.001079674168769866,
+        "samples_per_second": 926205.3579918067
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          704,
+          13552
+        ]
+      ],
+      "round": 22.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9530916844349681,
+      "precision_macro": 0.758216205431471,
+      "recall_macro": 0.974678821310027,
+      "f1_macro": 0.8277778592788847,
+      "auc_macro_ovr": 0.9903873994077895,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          703,
+          13553
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5165061898211829,
+          "recall": 0.9986702127659575,
+          "f1": 0.6808703535811423,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262210417589,
+          "recall": 0.9506874298540965,
+          "f1": 0.9746853649766271,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.017144083976745605,
+        "total_milliseconds": 17.144083976745605,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0011423296892820898,
+        "samples_per_second": 875404.0181065953
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          703,
+          13553
+        ]
+      ],
+      "round": 23.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9530916844349681,
+      "precision_macro": 0.758216205431471,
+      "recall_macro": 0.974678821310027,
+      "f1_macro": 0.8277778592788847,
+      "auc_macro_ovr": 0.990414077238102,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          703,
+          13553
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5165061898211829,
+          "recall": 0.9986702127659575,
+          "f1": 0.6808703535811423,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262210417589,
+          "recall": 0.9506874298540965,
+          "f1": 0.9746853649766271,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01833920879289508,
+        "total_milliseconds": 18.33920879289508,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0012219622063496189,
+        "samples_per_second": 818355.9154315509
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          703,
+          13553
+        ]
+      ],
+      "round": 24.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9530916844349681,
+      "precision_macro": 0.758216205431471,
+      "recall_macro": 0.974678821310027,
+      "f1_macro": 0.8277778592788847,
+      "auc_macro_ovr": 0.9904807718138835,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          703,
+          13553
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5165061898211829,
+          "recall": 0.9986702127659575,
+          "f1": 0.6808703535811423,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262210417589,
+          "recall": 0.9506874298540965,
+          "f1": 0.9746853649766271,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.017299999948590994,
+        "total_milliseconds": 17.299999948590994,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0011527185466811696,
+        "samples_per_second": 867514.4534449744
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          703,
+          13553
+        ]
+      ],
+      "round": 25.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9530250533049041,
+      "precision_macro": 0.7580387091735817,
+      "recall_macro": 0.9746437483582874,
+      "f1_macro": 0.8276051718774305,
+      "auc_macro_ovr": 0.9905210683967333,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          704,
+          13552
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.516151202749141,
+          "recall": 0.9986702127659575,
+          "f1": 0.680561848663344,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262155980225,
+          "recall": 0.9506172839506173,
+          "f1": 0.9746484950915171,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01775245787575841,
+        "total_milliseconds": 17.75245787575841,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0011828663296747342,
+        "samples_per_second": 845404.062076043
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          704,
+          13552
+        ]
+      ],
+      "round": 26.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9529584221748401,
+      "precision_macro": 0.7578614567250932,
+      "recall_macro": 0.9746086754065477,
+      "f1_macro": 0.8274326228715332,
+      "auc_macro_ovr": 0.9905351069053419,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          705,
+          13551
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5157967032967034,
+          "recall": 0.9986702127659575,
+          "f1": 0.6802536231884058,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262101534829,
+          "recall": 0.9505471380471381,
+          "f1": 0.9746116225546606,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.02132120868191123,
+        "total_milliseconds": 21.32120868191123,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0014206562288053858,
+        "samples_per_second": 703900.056694848
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          705,
+          13551
+        ]
+      ],
+      "round": 27.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9531583155650319,
+      "precision_macro": 0.7583939460021533,
+      "recall_macro": 0.9747138942617666,
+      "f1_macro": 0.8279506852661359,
+      "auc_macro_ovr": 0.9905580069310123,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          702,
+          13554
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5168616655196145,
+          "recall": 0.9986702127659575,
+          "f1": 0.6811791383219954,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.999926226484692,
+          "recall": 0.9507575757575758,
+          "f1": 0.9747222322102764,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.017476334236562252,
+        "total_milliseconds": 17.476334236562252,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0011644678995577193,
+        "samples_per_second": 858761.3281394992
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          702,
+          13554
+        ]
+      ],
+      "round": 28.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9532249466950959,
+      "precision_macro": 0.7585719313904082,
+      "recall_macro": 0.9747489672135062,
+      "f1_macro": 0.8281236500297695,
+      "auc_macro_ovr": 0.9905804872006113,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          701,
+          13555
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5172176308539945,
+          "recall": 0.9986702127659575,
+          "f1": 0.6814882032667877,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262319268221,
+          "recall": 0.950827721661055,
+          "f1": 0.9747590967927514,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01888816710561514,
+        "total_milliseconds": 18.88816710561514,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0012585399190841644,
+        "samples_per_second": 794571.5386824574
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          701,
+          13555
+        ]
+      ],
+      "round": 29.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9532249466950959,
+      "precision_macro": 0.7585719313904082,
+      "recall_macro": 0.9747489672135062,
+      "f1_macro": 0.8281236500297695,
+      "auc_macro_ovr": 0.9905945723487833,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          701,
+          13555
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5172176308539945,
+          "recall": 0.9986702127659575,
+          "f1": 0.6814882032667877,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262319268221,
+          "recall": 0.950827721661055,
+          "f1": 0.9747590967927514,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.018678917083889246,
+        "total_milliseconds": 18.678917083889246,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0012445973536706588,
+        "samples_per_second": 803472.7030800169
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          701,
+          13555
+        ]
+      ],
+      "round": 30.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9533582089552238,
+      "precision_macro": 0.7589286386457161,
+      "recall_macro": 0.9748191131169854,
+      "f1_macro": 0.8284699966502536,
+      "auc_macro_ovr": 0.9905992363051317,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          699,
+          13557
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5179310344827586,
+          "recall": 0.9986702127659575,
+          "f1": 0.6821071752951862,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262428086738,
+          "recall": 0.9509680134680135,
+          "f1": 0.9748328180053211,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.019361374899744987,
+        "total_milliseconds": 19.361374899744987,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0012900702891621128,
+        "samples_per_second": 775151.5622063428
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          699,
+          13557
+        ]
+      ],
+      "round": 31.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9534914712153518,
+      "precision_macro": 0.7592863312635473,
+      "recall_macro": 0.9748892590204647,
+      "f1_macro": 0.8288169006719481,
+      "auc_macro_ovr": 0.9906248880650477,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          697,
+          13559
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.518646408839779,
+          "recall": 0.9986702127659575,
+          "f1": 0.6827272727272727,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262536873156,
+          "recall": 0.9511083052749719,
+          "f1": 0.9749065286166235,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01821879204362631,
+        "total_milliseconds": 18.21879204362631,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0012139387022672113,
+        "samples_per_second": 823764.8228303052
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          697,
+          13559
+        ]
+      ],
+      "round": 32.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9534248400852878,
+      "precision_macro": 0.7591073615293049,
+      "recall_macro": 0.9748541860687251,
+      "f1_macro": 0.8286433788900067,
+      "auc_macro_ovr": 0.9906698952438093,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          698,
+          13558
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5182884748102139,
+          "recall": 0.9986702127659575,
+          "f1": 0.6824170831440255,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262482483959,
+          "recall": 0.9510381593714927,
+          "f1": 0.9748696746359878,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01786575000733137,
+        "total_milliseconds": 17.86575000733137,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.001190415112428796,
+        "samples_per_second": 840043.0988814537
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          698,
+          13558
+        ]
+      ],
+      "round": 33.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9534914712153518,
+      "precision_macro": 0.7592863312635473,
+      "recall_macro": 0.9748892590204647,
+      "f1_macro": 0.8288169006719481,
+      "auc_macro_ovr": 0.9906925154320988,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          697,
+          13559
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.518646408839779,
+          "recall": 0.9986702127659575,
+          "f1": 0.6827272727272727,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262536873156,
+          "recall": 0.9511083052749719,
+          "f1": 0.9749065286166235,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.018057791981846094,
+        "total_milliseconds": 18.057791981846094,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0012032110862104273,
+        "samples_per_second": 831109.3634862934
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          697,
+          13559
+        ]
+      ],
+      "round": 34.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9534914712153518,
+      "precision_macro": 0.7592863312635473,
+      "recall_macro": 0.9748892590204647,
+      "f1_macro": 0.8288169006719481,
+      "auc_macro_ovr": 0.9907159284929675,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          697,
+          13559
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.518646408839779,
+          "recall": 0.9986702127659575,
+          "f1": 0.6827272727272727,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262536873156,
+          "recall": 0.9511083052749719,
+          "f1": 0.9749065286166235,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.018450541887432337,
+        "total_milliseconds": 18.450541887432337,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0012293804562521547,
+        "samples_per_second": 813417.8438532888
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          697,
+          13559
+        ]
+      ],
+      "round": 35.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9537579957356077,
+      "precision_macro": 0.7600046889640248,
+      "recall_macro": 0.9750295508274232,
+      "f1_macro": 0.8295123870732879,
+      "auc_macro_ovr": 0.9907058543472551,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          693,
+          13563
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5200831024930748,
+          "recall": 0.9986702127659575,
+          "f1": 0.6839708561020036,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262754349749,
+          "recall": 0.9513888888888888,
+          "f1": 0.9750539180445722,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.017397250048816204,
+        "total_milliseconds": 17.397250048816204,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0011591984307580093,
+        "samples_per_second": 862665.0739563992
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          693,
+          13563
+        ]
+      ],
+      "round": 36.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9538246268656716,
+      "precision_macro": 0.7601849006567032,
+      "recall_macro": 0.9750646237791628,
+      "f1_macro": 0.8296866094580069,
+      "auc_macro_ovr": 0.990751094723834,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          692,
+          13564
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5204435204435205,
+          "recall": 0.9986702127659575,
+          "f1": 0.6842824601366743,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262808698858,
+          "recall": 0.9514590347923682,
+          "f1": 0.9750907587793395,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.017935500014573336,
+        "total_milliseconds": 17.935500014573336,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.001195062634233298,
+        "samples_per_second": 836776.2252407449
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          692,
+          13564
+        ]
+      ],
+      "round": 37.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9538912579957356,
+      "precision_macro": 0.7603653622920808,
+      "recall_macro": 0.9750996967309025,
+      "f1_macro": 0.8298609725441073,
+      "auc_macro_ovr": 0.9907743212264489,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          691,
+          13565
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5208044382801664,
+          "recall": 0.9986702127659575,
+          "f1": 0.6845943482224248,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262863039953,
+          "recall": 0.9515291806958474,
+          "f1": 0.9751275968657896,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.017445458099246025,
+        "total_milliseconds": 17.445458099246025,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.001162410587636329,
+        "samples_per_second": 860281.2213139093
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          691,
+          13565
+        ]
+      ],
+      "round": 38.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9538912579957356,
+      "precision_macro": 0.7603653622920808,
+      "recall_macro": 0.9750996967309025,
+      "f1_macro": 0.8298609725441073,
+      "auc_macro_ovr": 0.9908076218747761,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          691,
+          13565
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5208044382801664,
+          "recall": 0.9986702127659575,
+          "f1": 0.6845943482224248,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262863039953,
+          "recall": 0.9515291806958474,
+          "f1": 0.9751275968657896,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01714295893907547,
+        "total_milliseconds": 17.14295893907547,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0011422547267507643,
+        "samples_per_second": 875461.4680777735
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          691,
+          13565
+        ]
+      ],
+      "round": 39.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9538912579957356,
+      "precision_macro": 0.7603653622920808,
+      "recall_macro": 0.9750996967309025,
+      "f1_macro": 0.8298609725441073,
+      "auc_macro_ovr": 0.9908398964527068,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          691,
+          13565
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5208044382801664,
+          "recall": 0.9986702127659575,
+          "f1": 0.6845943482224248,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262863039953,
+          "recall": 0.9515291806958474,
+          "f1": 0.9751275968657896,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.017680125311017036,
+        "total_milliseconds": 17.680125311017036,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0011780467291455914,
+        "samples_per_second": 848862.7617728505
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          691,
+          13565
+        ]
+      ],
+      "round": 40.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9538912579957356,
+      "precision_macro": 0.7603653622920808,
+      "recall_macro": 0.9750996967309025,
+      "f1_macro": 0.8298609725441073,
+      "auc_macro_ovr": 0.9908514164248872,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          691,
+          13565
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5208044382801664,
+          "recall": 0.9986702127659575,
+          "f1": 0.6845943482224248,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262863039953,
+          "recall": 0.9515291806958474,
+          "f1": 0.9751275968657896,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01795745873823762,
+        "total_milliseconds": 17.95745873823762,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0011965257688058115,
+        "samples_per_second": 835752.9992839574
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          691,
+          13565
+        ]
+      ],
+      "round": 41.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9539578891257996,
+      "precision_macro": 0.7605460743905117,
+      "recall_macro": 0.975134769682642,
+      "f1_macro": 0.8300354765260214,
+      "auc_macro_ovr": 0.9908606976980204,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          690,
+          13566
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5211658570437196,
+          "recall": 0.9986702127659575,
+          "f1": 0.6849065207478341,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262917373037,
+          "recall": 0.9515993265993266,
+          "f1": 0.9751644323042087,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01745074987411499,
+        "total_milliseconds": 17.45074987411499,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0011627631845758921,
+        "samples_per_second": 860020.3491691572
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          690,
+          13566
+        ]
+      ],
+      "round": 42.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9540911513859275,
+      "precision_macro": 0.7609082520651789,
+      "recall_macro": 0.9752049155861213,
+      "f1_macro": 0.830384907956793,
+      "auc_macro_ovr": 0.9908564068581799,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          688,
+          13568
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5218902015288395,
+          "recall": 0.9986702127659575,
+          "f1": 0.6855317206754907,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999263026015182,
+          "recall": 0.9517396184062851,
+          "f1": 0.9752380952380952,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01840629056096077,
+        "total_milliseconds": 18.40629056096077,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0012264319403625247,
+        "samples_per_second": 815373.4154252433
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          688,
+          13568
+        ]
+      ],
+      "round": 43.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9539578891257996,
+      "precision_macro": 0.7605460743905117,
+      "recall_macro": 0.975134769682642,
+      "f1_macro": 0.8300354765260214,
+      "auc_macro_ovr": 0.9909061246328533,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          690,
+          13566
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5211658570437196,
+          "recall": 0.9986702127659575,
+          "f1": 0.6849065207478341,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262917373037,
+          "recall": 0.9515993265993266,
+          "f1": 0.9751644323042087,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.018773999996483326,
+        "total_milliseconds": 18.773999996483326,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0012509328355865756,
+        "samples_per_second": 799403.4304256547
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          690,
+          13566
+        ]
+      ],
+      "round": 44.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9540911513859275,
+      "precision_macro": 0.7609082520651789,
+      "recall_macro": 0.9752049155861213,
+      "f1_macro": 0.830384907956793,
+      "auc_macro_ovr": 0.99089992157091,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          688,
+          13568
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5218902015288395,
+          "recall": 0.9986702127659575,
+          "f1": 0.6855317206754907,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999263026015182,
+          "recall": 0.9517396184062851,
+          "f1": 0.9752380952380952,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.017699084244668484,
+        "total_milliseconds": 17.699084244668484,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0011793099843195951,
+        "samples_per_second": 847953.4755884829
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          688,
+          13568
+        ]
+      ],
+      "round": 45.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9540911513859275,
+      "precision_macro": 0.7609082520651789,
+      "recall_macro": 0.9752049155861213,
+      "f1_macro": 0.830384907956793,
+      "auc_macro_ovr": 0.9909081301340832,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          688,
+          13568
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5218902015288395,
+          "recall": 0.9986702127659575,
+          "f1": 0.6855317206754907,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999263026015182,
+          "recall": 0.9517396184062851,
+          "f1": 0.9752380952380952,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01802083384245634,
+        "total_milliseconds": 18.02083384245634,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0012007485236178266,
+        "samples_per_second": 832813.849303786
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          688,
+          13568
+        ]
+      ],
+      "round": 46.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9540911513859275,
+      "precision_macro": 0.7609082520651789,
+      "recall_macro": 0.9752049155861213,
+      "f1_macro": 0.830384907956793,
+      "auc_macro_ovr": 0.990918624035867,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          688,
+          13568
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5218902015288395,
+          "recall": 0.9986702127659575,
+          "f1": 0.6855317206754907,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999263026015182,
+          "recall": 0.9517396184062851,
+          "f1": 0.9752380952380952,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.017899292055517435,
+        "total_milliseconds": 17.899292055517435,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0011926500570040935,
+        "samples_per_second": 838468.9156113189
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          688,
+          13568
+        ]
+      ],
+      "round": 47.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9540911513859275,
+      "precision_macro": 0.7609082520651789,
+      "recall_macro": 0.9752049155861213,
+      "f1_macro": 0.830384907956793,
+      "auc_macro_ovr": 0.990952577638083,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          688,
+          13568
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5218902015288395,
+          "recall": 0.9986702127659575,
+          "f1": 0.6855317206754907,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999263026015182,
+          "recall": 0.9517396184062851,
+          "f1": 0.9752380952380952,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01940345810726285,
+        "total_milliseconds": 19.40345810726285,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0012928743408357442,
+        "samples_per_second": 773470.3740454596
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          688,
+          13568
+        ]
+      ],
+      "round": 48.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9540911513859275,
+      "precision_macro": 0.7609082520651789,
+      "recall_macro": 0.9752049155861213,
+      "f1_macro": 0.830384907956793,
+      "auc_macro_ovr": 0.9909621387485972,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          688,
+          13568
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5218902015288395,
+          "recall": 0.9986702127659575,
+          "f1": 0.6855317206754907,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999263026015182,
+          "recall": 0.9517396184062851,
+          "f1": 0.9752380952380952,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.017441750038415194,
+        "total_milliseconds": 17.441750038415194,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0011621635153528248,
+        "samples_per_second": 860464.1143775771
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          688,
+          13568
+        ]
+      ],
+      "round": 49.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    },
+    {
+      "accuracy": 0.9540245202558635,
+      "precision_macro": 0.7607270374737946,
+      "recall_macro": 0.9751698426343817,
+      "f1_macro": 0.830210121598536,
+      "auc_macro_ovr": 0.99099511291998,
+      "confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          689,
+          13567
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.5215277777777778,
+          "recall": 0.9986702127659575,
+          "f1": 0.6852189781021899,
+          "support": 752
+        },
+        "1": {
+          "precision": 0.9999262971698113,
+          "recall": 0.9516694725028059,
+          "f1": 0.9752012650948821,
+          "support": 14256
+        }
+      },
+      "inference_time": {
+        "total_seconds": 0.01946724997833371,
+        "total_milliseconds": 19.46724997833371,
+        "samples": 15008,
+        "milliseconds_per_sample": 0.0012971248652940907,
+        "samples_per_second": 770935.8032954484
+      },
+      "test_confusion_matrix": [
+        [
+          751,
+          1
+        ],
+        [
+          689,
+          13567
+        ]
+      ],
+      "round": 50.0,
+      "communication_cost": {
+        "round_bytes": 7398480,
+        "round_mb": 7.0557403564453125,
+        "per_client": [
+          {
+            "client_name": "client_1",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_2",
+            "train_samples": 425000,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_3",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_4",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          },
+          {
+            "client_name": "client_5",
+            "train_samples": 424999,
+            "server_to_client_bytes": 739848,
+            "client_to_server_bytes": 739848,
+            "total_bytes": 1479696
+          }
+        ]
+      }
+    }
+  ],
+  "final_test_metrics": {
+    "accuracy": 0.9540245202558635,
+    "precision_macro": 0.7607270374737946,
+    "recall_macro": 0.9751698426343817,
+    "f1_macro": 0.830210121598536,
+    "auc_macro_ovr": 0.99099511291998,
+    "confusion_matrix": [
+      [
+        751,
+        1
+      ],
+      [
+        689,
+        13567
+      ]
+    ],
+    "per_class": {
+      "0": {
+        "precision": 0.5215277777777778,
+        "recall": 0.9986702127659575,
+        "f1": 0.6852189781021899,
+        "support": 752
+      },
+      "1": {
+        "precision": 0.9999262971698113,
+        "recall": 0.9516694725028059,
+        "f1": 0.9752012650948821,
+        "support": 14256
+      }
+    },
+    "inference_time": {
+      "total_seconds": 0.020217999815940857,
+      "total_milliseconds": 20.217999815940857,
+      "samples": 15008,
+      "milliseconds_per_sample": 0.0013471481753691936,
+      "samples_per_second": 742308.8404703101
+    },
+    "test_confusion_matrix": [
+      [
+        751,
+        1
+      ],
+      [
+        689,
+        13567
+      ]
+    ]
+  }
+}
