@@ -7,7 +7,15 @@ This project provides a first runnable baseline for the thesis workflow:
 - Centralized TabTransformer-style training for the proposal's transformer baseline
 - Shared evaluation with accuracy, precision, recall, F1, and macro AUC
 
-The core baseline uses only `numpy` and `pandas` so it can run in the current environment without installing heavy deep learning frameworks first. The TabTransformer path requires `torch`.
+The core baseline uses only `numpy` and `pandas` so it can run in a lightweight environment. The Torch-based training paths require `torch`, and the CNN scripts also require `scikit-learn`, `matplotlib`, and Flower with the simulation extra (`flwr[simulation]`).
+
+## Install dependencies
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+If you plan to run the Flower simulation scripts (`train_1dcnn.py`, `train_cnn.py`), use Python 3.13 or earlier for the virtual environment. The simulation backend depends on `ray`, and that dependency may not yet be available for Python 3.14 in your environment.
 
 ## Project structure
 

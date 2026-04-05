@@ -1,4 +1,8 @@
 numpy>=2.0
 pandas>=2.0
-# Optional for TabTransformer training
+# Required for CNN training and evaluation utilities
+scikit-learn>=1.5
+matplotlib>=3.9
+flwr[simulation]>=1.9
+# Optional for Torch-based training paths
 torch>=2.2

@@ -49,6 +49,7 @@ LEARNING_RATE = 0.001
 WEIGHT_DECAY = 1e-4
 RANDOM_STATE = 42
 DECISION_THRESHOLD = 0.5
+QUANTIZATION_MODE = "float16"
 
 # Globals initialized in main
 global_clients = None
@@ -71,7 +72,7 @@ def format_bytes(size_in_bytes: float) -> str:
 # ============================================================
 
 def load_data() -> Tuple[np.ndarray, np.ndarray]:
-    df = pd.read_csv("iot_dataset_undersampled_mapped1.csv")
+    df = pd.read_csv("data/iot_dataset_undersampled_mapped1.csv")
 
     df.drop_duplicates(inplace=True)
     df.fillna(0, inplace=True)
@@ -293,6 +294,39 @@ def get_parameter_bytes(parameters: List[np.ndarray]) -> int:
     return int(sum(array.nbytes for array in parameters))
 
 
+def quantize_parameter_for_transport(array: np.ndarray) -> np.ndarray:
+    if QUANTIZATION_MODE == "float16" and np.issubdtype(array.dtype, np.floating):
+        return array.astype(np.float16, copy=False)
+    return array
+
+
+def dequantize_parameter_for_model(
+    parameter_name: str, array: np.ndarray, reference_tensor: torch.Tensor
+) -> torch.Tensor:
+    target_dtype = reference_tensor.dtype
+
+    if torch.is_floating_point(reference_tensor):
+        array = array.astype(np.float32, copy=False)
+    elif np.issubdtype(array.dtype, np.floating):
+        array = np.rint(array).astype(np.int64, copy=False)
+
+    return torch.tensor(array, dtype=target_dtype, device=DEVICE)
+
+
+def get_quantized_model_size_bytes(model: nn.Module) -> int:
+    total_bytes = 0
+    for parameter in model.state_dict().values():
+        array = parameter.detach().cpu().numpy()
+        total_bytes += quantize_parameter_for_transport(array).nbytes
+    return int(total_bytes)
+
+
+def get_quantization_label() -> str:
+    if QUANTIZATION_MODE == "float16":
+        return "FP16 transport"
+    return "Disabled"
+
+
 # ============================================================
 # 4. TRAIN + TEST
 # ============================================================
@@ -426,6 +460,7 @@ def fit_metrics_aggregation(metrics: List[Tuple[int, Metrics]]) -> Metrics:
     scalar_keys = [
         "train_time_sec",
         "model_size_bytes",
+        "quantized_model_size_bytes",
         "parameter_count",
         "train_loss",
         "val_loss",
@@ -442,6 +477,9 @@ def fit_metrics_aggregation(metrics: List[Tuple[int, Metrics]]) -> Metrics:
 
     aggregated["parameter_count"] = float(metrics[0][1].get("parameter_count", 0.0))
     aggregated["model_size_bytes"] = float(metrics[0][1].get("model_size_bytes", 0.0))
+    aggregated["quantized_model_size_bytes"] = float(
+        metrics[0][1].get("quantized_model_size_bytes", 0.0)
+    )
     return aggregated
 
 
@@ -499,12 +537,19 @@ class FLClient(fl.client.NumPyClient):
         self.model_stats = model_stats
 
     def get_parameters(self, config):
-        return [value.detach().cpu().numpy() for _, value in self.model.state_dict().items()]
+        return [
+            quantize_parameter_for_transport(value.detach().cpu().numpy())
+            for _, value in self.model.state_dict().items()
+        ]
 
     def set_parameters(self, parameters) -> None:
-        state_dict = dict(zip(self.model.state_dict().keys(), parameters))
+        current_state = self.model.state_dict()
+        state_dict = dict(zip(current_state.keys(), parameters))
         self.model.load_state_dict(
-            {key: torch.tensor(value, device=DEVICE) for key, value in state_dict.items()},
+            {
+                key: dequantize_parameter_for_model(key, value, current_state[key])
+                for key, value in state_dict.items()
+            },
             strict=True,
         )
 
@@ -526,6 +571,9 @@ class FLClient(fl.client.NumPyClient):
             "val_loss": float(train_stats["val_loss"]),
             "communication_bytes": float(parameter_bytes * 2),
             "model_size_bytes": float(self.model_stats["model_size_bytes"]),
+            "quantized_model_size_bytes": float(
+                self.model_stats["quantized_model_size_bytes"]
+            ),
             "parameter_count": float(self.model_stats["parameters"]),
             "training_flops": float(
                 len(self.X_train)
@@ -682,11 +730,20 @@ if __name__ == "__main__":
     X, y = load_data()
     global_clients = create_clients(X, y, num_clients=NUM_CLIENTS)
     global_input_dim = X.shape[1]
-    global_model_stats = get_model_stats(ImprovedCNN1D(global_input_dim), global_input_dim)
+    base_model = ImprovedCNN1D(global_input_dim)
+    global_model_stats = get_model_stats(base_model, global_input_dim)
+    global_model_stats["quantized_model_size_bytes"] = float(
+        get_quantized_model_size_bytes(base_model)
+    )
 
     print("================ MODEL PROFILE ================")
     print(f"Parameters           : {int(global_model_stats['parameters'])}")
     print(f"Model Size           : {format_bytes(global_model_stats['model_size_bytes'])}")
+    print(
+        f"Transport Size       : "
+        f"{format_bytes(global_model_stats['quantized_model_size_bytes'])}"
+    )
+    print(f"Quantization         : {get_quantization_label()}")
     print(f"Forward FLOPs/sample : {int(global_model_stats['forward_flops_per_sample'])}")
     print(f"Training FLOPs/sample: {int(global_model_stats['training_flops_per_sample'])}")
     print("================================================\n")
