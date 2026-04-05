@@ -1,0 +1,121 @@
+===== ATTACK TYPES IN CLASS 1 AFTER UNDERSAMPLING =====
+Attack_Category
+BRUTE_FORCE      2930
+DDOS           247920
+DOS            296474
+MIRAI          236188
+RECON          155117
+SPOOFING       103107
+WEB_ATTACK       5560
+Name: count, dtype: int64
+=======================================================
+
+================ DATA SUMMARY ================
+Attack_Category
+1    1047296
+0    1047296
+Name: count, dtype: int64
+
+============== CLIENT DISTRIBUTION ==============
+Client 0: total=279280 | benign=209460 | attack=69820 | train=195496 | val=27928 | test=55856
+Client 1: total=279278 | benign=69819 | attack=209459 | train=195494 | val=27928 | test=55856
+Client 2: total=279278 | benign=209459 | attack=69819 | train=195494 | val=27928 | test=55856
+Client 3: total=279278 | benign=69819 | attack=209459 | train=195494 | val=27928 | test=55856
+Client 4: total=279278 | benign=209459 | attack=69819 | train=195494 | val=27928 | test=55856
+=================================================
+
+================ MODEL PROFILE ================
+Parameters           : 39873
+Model Size           : 155.75 KB
+Transport Size       : 78.78 KB
+Quantization         : FP16 transport
+Forward FLOPs/sample : 721761
+Training FLOPs/sample: 2165283
+================================================
+
+============== FEDERATED TRAINING ==============
+Clients=5 | Rounds=30 | Local Epochs=5 | Batch Size=64
+================================================
+
+Round 01 | Acc=0.9019 | Prec=0.8665 | Rec=0.8732 | F1=0.8677 | AUC=0.9607 | TrainLoss=0.1677 | ValLoss=0.1671 | Comm=1.15 MB
+Round 02 | Acc=0.9198 | Prec=0.9745 | Rec=0.8350 | F1=0.8993 | AUC=0.9692 | TrainLoss=0.1646 | ValLoss=0.1643 | Comm=1.15 MB
+Round 03 | Acc=0.9222 | Prec=0.9711 | Rec=0.8426 | F1=0.9022 | AUC=0.9707 | TrainLoss=0.1623 | ValLoss=0.1622 | Comm=1.15 MB
+Round 04 | Acc=0.9242 | Prec=0.9615 | Rec=0.8532 | F1=0.9040 | AUC=0.9714 | TrainLoss=0.1609 | ValLoss=0.1598 | Comm=1.15 MB
+Round 05 | Acc=0.9251 | Prec=0.9561 | Rec=0.8586 | F1=0.9045 | AUC=0.9718 | TrainLoss=0.1599 | ValLoss=0.1608 | Comm=1.15 MB
+Round 06 | Acc=0.9253 | Prec=0.9624 | Rec=0.8552 | F1=0.9055 | AUC=0.9722 | TrainLoss=0.1590 | ValLoss=0.1596 | Comm=1.15 MB
+Round 07 | Acc=0.9263 | Prec=0.9630 | Rec=0.8571 | F1=0.9068 | AUC=0.9724 | TrainLoss=0.1584 | ValLoss=0.1593 | Comm=1.15 MB
+Round 08 | Acc=0.9262 | Prec=0.9659 | Rec=0.8550 | F1=0.9069 | AUC=0.9725 | TrainLoss=0.1579 | ValLoss=0.1585 | Comm=1.15 MB
+Round 09 | Acc=0.9257 | Prec=0.9677 | Rec=0.8525 | F1=0.9063 | AUC=0.9724 | TrainLoss=0.1573 | ValLoss=0.1582 | Comm=1.15 MB
+Round 10 | Acc=0.9264 | Prec=0.9718 | Rec=0.8515 | F1=0.9076 | AUC=0.9729 | TrainLoss=0.1567 | ValLoss=0.1571 | Comm=1.15 MB
+Round 11 | Acc=0.9276 | Prec=0.9639 | Rec=0.8594 | F1=0.9086 | AUC=0.9732 | TrainLoss=0.1561 | ValLoss=0.1555 | Comm=1.15 MB
+Round 12 | Acc=0.9280 | Prec=0.9667 | Rec=0.8585 | F1=0.9093 | AUC=0.9733 | TrainLoss=0.1555 | ValLoss=0.1560 | Comm=1.15 MB
+Round 13 | Acc=0.9278 | Prec=0.9694 | Rec=0.8563 | F1=0.9092 | AUC=0.9734 | TrainLoss=0.1552 | ValLoss=0.1558 | Comm=1.15 MB
+Round 14 | Acc=0.9280 | Prec=0.9623 | Rec=0.8614 | F1=0.9089 | AUC=0.9733 | TrainLoss=0.1547 | ValLoss=0.1555 | Comm=1.15 MB
+Round 15 | Acc=0.9281 | Prec=0.9633 | Rec=0.8604 | F1=0.9088 | AUC=0.9734 | TrainLoss=0.1545 | ValLoss=0.1557 | Comm=1.15 MB
+Round 16 | Acc=0.9286 | Prec=0.9674 | Rec=0.8594 | F1=0.9101 | AUC=0.9736 | TrainLoss=0.1542 | ValLoss=0.1545 | Comm=1.15 MB
+Round 17 | Acc=0.9287 | Prec=0.9644 | Rec=0.8615 | F1=0.9099 | AUC=0.9735 | TrainLoss=0.1538 | ValLoss=0.1560 | Comm=1.15 MB
+Round 18 | Acc=0.9286 | Prec=0.9718 | Rec=0.8567 | F1=0.9106 | AUC=0.9738 | TrainLoss=0.1537 | ValLoss=0.1536 | Comm=1.15 MB
+Round 19 | Acc=0.9287 | Prec=0.9709 | Rec=0.8576 | F1=0.9106 | AUC=0.9738 | TrainLoss=0.1535 | ValLoss=0.1540 | Comm=1.15 MB
+Round 20 | Acc=0.9283 | Prec=0.9743 | Rec=0.8547 | F1=0.9105 | AUC=0.9738 | TrainLoss=0.1532 | ValLoss=0.1548 | Comm=1.15 MB
+Round 21 | Acc=0.9296 | Prec=0.9680 | Rec=0.8613 | F1=0.9114 | AUC=0.9741 | TrainLoss=0.1530 | ValLoss=0.1525 | Comm=1.15 MB
+Round 22 | Acc=0.9293 | Prec=0.9672 | Rec=0.8614 | F1=0.9112 | AUC=0.9740 | TrainLoss=0.1526 | ValLoss=0.1536 | Comm=1.15 MB
+Round 23 | Acc=0.9295 | Prec=0.9650 | Rec=0.8628 | F1=0.9110 | AUC=0.9741 | TrainLoss=0.1525 | ValLoss=0.1530 | Comm=1.15 MB
+Round 24 | Acc=0.9300 | Prec=0.9646 | Rec=0.8642 | F1=0.9115 | AUC=0.9743 | TrainLoss=0.1524 | ValLoss=0.1523 | Comm=1.15 MB
+Round 25 | Acc=0.9305 | Prec=0.9642 | Rec=0.8660 | F1=0.9123 | AUC=0.9743 | TrainLoss=0.1521 | ValLoss=0.1518 | Comm=1.15 MB
+Round 26 | Acc=0.9300 | Prec=0.9695 | Rec=0.8615 | F1=0.9122 | AUC=0.9741 | TrainLoss=0.1521 | ValLoss=0.1532 | Comm=1.15 MB
+Round 27 | Acc=0.9309 | Prec=0.9659 | Rec=0.8657 | F1=0.9129 | AUC=0.9745 | TrainLoss=0.1520 | ValLoss=0.1518 | Comm=1.15 MB
+Round 28 | Acc=0.9303 | Prec=0.9689 | Rec=0.8625 | F1=0.9125 | AUC=0.9744 | TrainLoss=0.1520 | ValLoss=0.1518 | Comm=1.15 MB
+Round 29 | Acc=0.9307 | Prec=0.9614 | Rec=0.8684 | F1=0.9124 | AUC=0.9743 | TrainLoss=0.1518 | ValLoss=0.1520 | Comm=1.15 MB
+Round 30 | Acc=0.9292 | Prec=0.9708 | Rec=0.8589 | F1=0.9113 | AUC=0.9742 | TrainLoss=0.1518 | ValLoss=0.1520 | Comm=1.15 MB
+
+================ FINAL RESULTS ================
+Final Accuracy       : 0.9292
+Final Precision      : 0.9708
+Final Recall         : 0.8589
+Final F1-score       : 0.9113
+Final AUC-ROC        : 0.9742
+Final Train Loss     : 0.1518
+Final Validation Loss: 0.1520
+Training Time        : 219.3617 s
+Inference Time       : 9.9895 s
+Final Communication  : 1.15 MB
+Total Runtime        : 7034.22 s
+================================================
+
+========== FINAL AGGREGATED CONFUSION MATRIX ==========
+TN: 151514    FP: 2090
+FN: 17689    TP: 107987
+=======================================================
+
+Round-wise Results (copy into thesis table):
+Round   Accuracy        Precision       Recall  F1      AUC
+1       0.9019  0.8665  0.8732  0.8677  0.9607
+2       0.9198  0.9745  0.8350  0.8993  0.9692
+3       0.9222  0.9711  0.8426  0.9022  0.9707
+4       0.9242  0.9615  0.8532  0.9040  0.9714
+5       0.9251  0.9561  0.8586  0.9045  0.9718
+6       0.9253  0.9624  0.8552  0.9055  0.9722
+7       0.9263  0.9630  0.8571  0.9068  0.9724
+8       0.9262  0.9659  0.8550  0.9069  0.9725
+9       0.9257  0.9677  0.8525  0.9063  0.9724
+10      0.9264  0.9718  0.8515  0.9076  0.9729
+11      0.9276  0.9639  0.8594  0.9086  0.9732
+12      0.9280  0.9667  0.8585  0.9093  0.9733
+13      0.9278  0.9694  0.8563  0.9092  0.9734
+14      0.9280  0.9623  0.8614  0.9089  0.9733
+15      0.9281  0.9633  0.8604  0.9088  0.9734
+16      0.9286  0.9674  0.8594  0.9101  0.9736
+17      0.9287  0.9644  0.8615  0.9099  0.9735
+18      0.9286  0.9718  0.8567  0.9106  0.9738
+19      0.9287  0.9709  0.8576  0.9106  0.9738
+20      0.9283  0.9743  0.8547  0.9105  0.9738
+21      0.9296  0.9680  0.8613  0.9114  0.9741
+22      0.9293  0.9672  0.8614  0.9112  0.9740
+23      0.9295  0.9650  0.8628  0.9110  0.9741
+24      0.9300  0.9646  0.8642  0.9115  0.9743
+25      0.9305  0.9642  0.8660  0.9123  0.9743
+26      0.9300  0.9695  0.8615  0.9122  0.9741
+27      0.9309  0.9659  0.8657  0.9129  0.9745
+28      0.9303  0.9689  0.8625  0.9125  0.9744
+29      0.9307  0.9614  0.8684  0.9124  0.9743
+30      0.9292  0.9708  0.8589  0.9113  0.9742
