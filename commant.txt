@@ -1,2 +1,4 @@
 C:\Users\kk199\AppData\Local\Programs\Python\Python313\python.exe train_federated_binary.py --model mlp --client-max-rows 10000
-C:\Users\kk199\AppData\Local\Programs\Python\Python313\python.exe train_federated_binary.py --model mlp --client-max-rows 10000
+C:\Users\kk199\AppData\Local\Programs\Python\Python313\python.exe train_federated_binary.py --model mlp --client-max-rows 10000 --test-rows 10000
+
+python train_cnn.py
