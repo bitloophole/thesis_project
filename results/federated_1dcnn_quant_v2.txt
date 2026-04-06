@@ -1,0 +1,444 @@
+===== ATTACK TYPES IN CLASS 1 AFTER UNDERSAMPLING =====
+Attack_Category
+BRUTE_FORCE      2930
+DDOS           247920
+DOS            296474
+MIRAI          236188
+RECON          155117
+SPOOFING       103107
+WEB_ATTACK       5560
+Name: count, dtype: int64
+=======================================================
+
+================ DATA SUMMARY ================
+Attack_Category
+1    1047296
+0    1047296
+Name: count, dtype: int64
+
+============== CLIENT DISTRIBUTION ==============
+Client 0: total=279280 | benign=209460 | attack=69820 | train=195496 | val=27928 | test=55856
+Client 1: total=279278 | benign=69819 | attack=209459 | train=195494 | val=27928 | test=55856
+Client 2: total=279278 | benign=209459 | attack=69819 | train=195494 | val=27928 | test=55856
+Client 3: total=279278 | benign=69819 | attack=209459 | train=195494 | val=27928 | test=55856
+Client 4: total=279278 | benign=209459 | attack=69819 | train=195494 | val=27928 | test=55856
+=================================================
+
+================ MODEL PROFILE ================
+Parameters           : 39873
+Model Size           : 155.75 KB
+Quantization         : Dynamic INT8 (Linear layers)
+Forward FLOPs/sample : 721761
+Training FLOPs/sample: 2165283
+================================================
+
+============== FEDERATED TRAINING ==============
+Clients=5 | Rounds=30 | Local Epochs=5 | Batch Size=64
+================================================
+
+WARNING :   DEPRECATED FEATURE: flwr.simulation.start_simulation() is deprecated.
+        Instead, use the `flwr run` CLI command to start a local simulation in your Flower app, as shown for example below:
+
+                $ flwr new  # Create a new Flower app from a template
+
+                $ flwr run  # Run the Flower app in Simulation Mode
+
+        Using `start_simulation()` is deprecated.
+
+            This is a deprecated feature. It will be removed
+            entirely in future versions of Flower.
+        
+2026-04-06 11:07:48,360 INFO worker.py:2012 -- Started a local Ray instance.
+/Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/ray/_private/worker.py:2051: FutureWarning: Tip: In future versions of Ray, Ray will no longer override accelerator visible devices env var if num_gpus=0 or num_gpus=None (default). To enable this behavior and turn off this error message, set RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO=0
+  warnings.warn(
+(pid=gcs_server) [2026-04-06 11:08:17,832 E 48817 145754990] (gcs_server) gcs_server.cc:302: Failed to establish connection to the event+metrics exporter agent. Events and metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14
+(raylet) [2026-04-06 11:08:18,329 E 48822 145755146] (raylet) main.cc:975: Failed to establish connection to the metrics exporter agent. Metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14
+(ClientAppActor pid=48825) [2026-04-06 11:08:18,869 E 48825 145755428] core_worker_process.cc:825: Failed to establish connection to the metrics exporter agent. Metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14
+[2026-04-06 11:08:19,198 E 48736 145755222] core_worker_process.cc:825: Failed to establish connection to the metrics exporter agent. Metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14
+(ClientAppActor pid=48834) /Users//Documents/projects/thesis_project/train_1dcnn_dynamic.py:670: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10. 
+(ClientAppActor pid=48834) For migrations of users: 
+(ClientAppActor pid=48834) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead 
+(ClientAppActor pid=48834) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e) 
+(ClientAppActor pid=48834) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e) 
+(ClientAppActor pid=48834) see https://github.com/pytorch/ao/issues/2259 for more details
+(ClientAppActor pid=48834)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48834) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10. 
+(ClientAppActor pid=48834) For migrations of users: 
+(ClientAppActor pid=48834) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead 
+(ClientAppActor pid=48834) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e) 
+(ClientAppActor pid=48834) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e) 
+(ClientAppActor pid=48834) see https://github.com/pytorch/ao/issues/2259 for more details
+(ClientAppActor pid=48834)   convert(model, mapping, inplace=True)
+(ClientAppActor pid=48838) [2026-04-06 11:08:19,198 E 48838 145756388] core_worker_process.cc:825: Failed to establish connection to the metrics exporter agent. Metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14 [repeated 15x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)
+(ClientAppActor pid=48834) [W406 11:11:40.524143000 qlinear_dynamic.cpp:251] Warning: Currently, qnnpack incorrectly ignores reduce_range when it is set to true; this may change in a future release. (function operator())
+(ClientAppActor pid=48837) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 8x across cluster]
+(ClientAppActor pid=48837) For migrations of users:  [repeated 8x across cluster]
+(ClientAppActor pid=48837) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 8x across cluster]
+(ClientAppActor pid=48837) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 8x across cluster]
+(ClientAppActor pid=48837) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 8x across cluster]
+(ClientAppActor pid=48837) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 8x across cluster]
+(ClientAppActor pid=48837)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 4x across cluster]
+(ClientAppActor pid=48837)   convert(model, mapping, inplace=True) [repeated 4x across cluster]
+Round 01 | Acc=0.8688 | Prec=0.7679 | Rec=0.9064 | F1=0.8243 | AUC=0.9546 | TrainLoss=0.1679 | ValLoss=0.1664 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48837) [W406 11:11:44.562619000 qlinear_dynamic.cpp:251] Warning: Currently, qnnpack incorrectly ignores reduce_range when it is set to true; this may change in a future release. (function operator()) [repeated 4x across cluster]
+(ClientAppActor pid=48834) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 2x across cluster]
+(ClientAppActor pid=48834) For migrations of users:  [repeated 2x across cluster]
+(ClientAppActor pid=48834) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 2x across cluster]
+(ClientAppActor pid=48834) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48834) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48834) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 2x across cluster]
+(ClientAppActor pid=48834)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48834)   convert(model, mapping, inplace=True)
+(ClientAppActor pid=48830)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48830)   convert(model, mapping, inplace=True)
+(raylet) Spilled 2131 MiB, 7 objects, write throughput 1658 MiB/s. Set RAY_verbose_spill_logs=0 to disable this message.
+Round 02 | Acc=0.9191 | Prec=0.9792 | Rec=0.8308 | F1=0.8989 | AUC=0.9693 | TrainLoss=0.1650 | ValLoss=0.1642 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48838) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 10x across cluster]
+(ClientAppActor pid=48838) For migrations of users:  [repeated 10x across cluster]
+(ClientAppActor pid=48838) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 10x across cluster]
+(ClientAppActor pid=48838) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 10x across cluster]
+(ClientAppActor pid=48838) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 10x across cluster]
+(ClientAppActor pid=48838) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 10x across cluster]
+(ClientAppActor pid=48838)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 4x across cluster]
+(ClientAppActor pid=48838)   convert(model, mapping, inplace=True) [repeated 4x across cluster]
+(ClientAppActor pid=48830) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 6x across cluster]
+(ClientAppActor pid=48830) For migrations of users:  [repeated 6x across cluster]
+(ClientAppActor pid=48830) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 6x across cluster]
+(ClientAppActor pid=48830) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 6x across cluster]
+(ClientAppActor pid=48830) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 6x across cluster]
+(ClientAppActor pid=48830) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 6x across cluster]
+(ClientAppActor pid=48830)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 3x across cluster]
+(ClientAppActor pid=48830)   convert(model, mapping, inplace=True) [repeated 3x across cluster]
+Round 03 | Acc=0.9227 | Prec=0.9630 | Rec=0.8488 | F1=0.9022 | AUC=0.9706 | TrainLoss=0.1629 | ValLoss=0.1624 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48838) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 4x across cluster]
+(ClientAppActor pid=48838) For migrations of users:  [repeated 4x across cluster]
+(ClientAppActor pid=48838) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 4x across cluster]
+(ClientAppActor pid=48838) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 4x across cluster]
+(ClientAppActor pid=48838) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 4x across cluster]
+(ClientAppActor pid=48838) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 4x across cluster]
+(ClientAppActor pid=48838)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 2x across cluster]
+(ClientAppActor pid=48838)   convert(model, mapping, inplace=True) [repeated 2x across cluster]
+Round 04 | Acc=0.9230 | Prec=0.9727 | Rec=0.8435 | F1=0.9034 | AUC=0.9711 | TrainLoss=0.1615 | ValLoss=0.1612 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48834) /Users//Documents/projects/thesis_project/train_1dcnn_dynamic.py:670: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 9x across cluster]
+(ClientAppActor pid=48834) For migrations of users:  [repeated 9x across cluster]
+(ClientAppActor pid=48834) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 9x across cluster]
+(ClientAppActor pid=48834) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 9x across cluster]
+(ClientAppActor pid=48834) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 9x across cluster]
+(ClientAppActor pid=48834) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 9x across cluster]
+(ClientAppActor pid=48834)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 5x across cluster]
+(ClientAppActor pid=48830)   convert(model, mapping, inplace=True) [repeated 4x across cluster]
+(ClientAppActor pid=48837) /Users//Documents/projects/thesis_project/train_1dcnn_dynamic.py:670: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 6x across cluster]
+(ClientAppActor pid=48837) For migrations of users:  [repeated 6x across cluster]
+(ClientAppActor pid=48837) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 6x across cluster]
+(ClientAppActor pid=48837) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 6x across cluster]
+(ClientAppActor pid=48837) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 6x across cluster]
+(ClientAppActor pid=48837) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 6x across cluster]
+(ClientAppActor pid=48837)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 3x across cluster]
+(ClientAppActor pid=48836)   convert(model, mapping, inplace=True) [repeated 3x across cluster]
+Round 05 | Acc=0.9238 | Prec=0.9729 | Rec=0.8453 | F1=0.9045 | AUC=0.9714 | TrainLoss=0.1606 | ValLoss=0.1607 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48834) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 5x across cluster]
+(ClientAppActor pid=48834) For migrations of users:  [repeated 5x across cluster]
+(ClientAppActor pid=48834) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 5x across cluster]
+(ClientAppActor pid=48834) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 5x across cluster]
+(ClientAppActor pid=48834) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 5x across cluster]
+(ClientAppActor pid=48834) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 5x across cluster]
+(ClientAppActor pid=48834)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 2x across cluster]
+(ClientAppActor pid=48834)   convert(model, mapping, inplace=True) [repeated 3x across cluster]
+(raylet) Spilled 4261 MiB, 12 objects, write throughput 1785 MiB/s.
+Round 06 | Acc=0.9248 | Prec=0.9597 | Rec=0.8555 | F1=0.9045 | AUC=0.9718 | TrainLoss=0.1599 | ValLoss=0.1597 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48834) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 10x across cluster]
+(ClientAppActor pid=48834) For migrations of users:  [repeated 10x across cluster]
+(ClientAppActor pid=48834) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 10x across cluster]
+(ClientAppActor pid=48834) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 10x across cluster]
+(ClientAppActor pid=48834) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 10x across cluster]
+(ClientAppActor pid=48834) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 10x across cluster]
+(ClientAppActor pid=48834)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 5x across cluster]
+(ClientAppActor pid=48834)   convert(model, mapping, inplace=True) [repeated 5x across cluster]
+Round 07 | Acc=0.9247 | Prec=0.9643 | Rec=0.8526 | F1=0.9049 | AUC=0.9718 | TrainLoss=0.1594 | ValLoss=0.1590 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48834) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 10x across cluster]
+(ClientAppActor pid=48834) For migrations of users:  [repeated 10x across cluster]
+(ClientAppActor pid=48834) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 10x across cluster]
+(ClientAppActor pid=48834) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 10x across cluster]
+(ClientAppActor pid=48834) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 10x across cluster]
+(ClientAppActor pid=48834) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 10x across cluster]
+(ClientAppActor pid=48834)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 5x across cluster]
+(ClientAppActor pid=48834)   convert(model, mapping, inplace=True) [repeated 5x across cluster]
+Round 08 | Acc=0.9253 | Prec=0.9663 | Rec=0.8526 | F1=0.9058 | AUC=0.9721 | TrainLoss=0.1590 | ValLoss=0.1584 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48834) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 10x across cluster]
+(ClientAppActor pid=48834) For migrations of users:  [repeated 10x across cluster]
+(ClientAppActor pid=48834) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 10x across cluster]
+(ClientAppActor pid=48834) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 10x across cluster]
+(ClientAppActor pid=48834) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 10x across cluster]
+(ClientAppActor pid=48834) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 10x across cluster]
+(ClientAppActor pid=48834)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 5x across cluster]
+(ClientAppActor pid=48834)   convert(model, mapping, inplace=True) [repeated 5x across cluster]
+Round 09 | Acc=0.9254 | Prec=0.9670 | Rec=0.8524 | F1=0.9060 | AUC=0.9721 | TrainLoss=0.1585 | ValLoss=0.1590 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48834) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 10x across cluster]
+(ClientAppActor pid=48834) For migrations of users:  [repeated 10x across cluster]
+(ClientAppActor pid=48834) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 10x across cluster]
+(ClientAppActor pid=48834) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 10x across cluster]
+(ClientAppActor pid=48834) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 10x across cluster]
+(ClientAppActor pid=48834) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 10x across cluster]
+(ClientAppActor pid=48834)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 5x across cluster]
+(ClientAppActor pid=48834)   convert(model, mapping, inplace=True) [repeated 5x across cluster]
+(ClientAppActor pid=48838) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 6x across cluster]
+(ClientAppActor pid=48838) For migrations of users:  [repeated 6x across cluster]
+(ClientAppActor pid=48838) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 6x across cluster]
+(ClientAppActor pid=48838) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 6x across cluster]
+(ClientAppActor pid=48838) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 6x across cluster]
+(ClientAppActor pid=48838) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 6x across cluster]
+(ClientAppActor pid=48838)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 3x across cluster]
+(ClientAppActor pid=48838)   convert(model, mapping, inplace=True) [repeated 3x across cluster]
+Round 10 | Acc=0.9254 | Prec=0.9687 | Rec=0.8516 | F1=0.9063 | AUC=0.9721 | TrainLoss=0.1583 | ValLoss=0.1591 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(raylet) Spilled 8949 MiB, 24 objects, write throughput 1981 MiB/s.
+(ClientAppActor pid=48836) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 2x across cluster]
+(ClientAppActor pid=48836) For migrations of users:  [repeated 2x across cluster]
+(ClientAppActor pid=48836) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 2x across cluster]
+(ClientAppActor pid=48836) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48836) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48836) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 2x across cluster]
+(ClientAppActor pid=48836)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48836)   convert(model, mapping, inplace=True)
+(ClientAppActor pid=48834)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48834)   convert(model, mapping, inplace=True)
+(ClientAppActor pid=48834) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 2x across cluster]
+(ClientAppActor pid=48834) For migrations of users:  [repeated 2x across cluster]
+(ClientAppActor pid=48834) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 2x across cluster]
+(ClientAppActor pid=48834) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48834) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48834) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 2x across cluster]
+Round 11 | Acc=0.9252 | Prec=0.9733 | Rec=0.8482 | F1=0.9064 | AUC=0.9724 | TrainLoss=0.1576 | ValLoss=0.1588 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48837)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 5x across cluster]
+(ClientAppActor pid=48837)   convert(model, mapping, inplace=True) [repeated 5x across cluster]
+(ClientAppActor pid=48837) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 10x across cluster]
+(ClientAppActor pid=48837) For migrations of users:  [repeated 10x across cluster]
+(ClientAppActor pid=48837) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 10x across cluster]
+(ClientAppActor pid=48837) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 10x across cluster]
+(ClientAppActor pid=48837) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 10x across cluster]
+(ClientAppActor pid=48837) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 10x across cluster]
+Round 12 | Acc=0.9247 | Prec=0.9766 | Rec=0.8455 | F1=0.9063 | AUC=0.9722 | TrainLoss=0.1574 | ValLoss=0.1590 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48834)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 5x across cluster]
+(ClientAppActor pid=48834)   convert(model, mapping, inplace=True) [repeated 5x across cluster]
+(ClientAppActor pid=48834) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 10x across cluster]
+(ClientAppActor pid=48834) For migrations of users:  [repeated 10x across cluster]
+(ClientAppActor pid=48834) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 10x across cluster]
+(ClientAppActor pid=48834) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 10x across cluster]
+(ClientAppActor pid=48834) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 10x across cluster]
+(ClientAppActor pid=48834) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 10x across cluster]
+Round 13 | Acc=0.9252 | Prec=0.9759 | Rec=0.8468 | F1=0.9067 | AUC=0.9726 | TrainLoss=0.1571 | ValLoss=0.1579 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48834)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 5x across cluster]
+(ClientAppActor pid=48834)   convert(model, mapping, inplace=True) [repeated 5x across cluster]
+(ClientAppActor pid=48834) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 10x across cluster]
+(ClientAppActor pid=48834) For migrations of users:  [repeated 10x across cluster]
+(ClientAppActor pid=48834) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 10x across cluster]
+(ClientAppActor pid=48834) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 10x across cluster]
+(ClientAppActor pid=48834) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 10x across cluster]
+(ClientAppActor pid=48834) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 10x across cluster]
+(ClientAppActor pid=48830)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 4x across cluster]
+(ClientAppActor pid=48830)   convert(model, mapping, inplace=True) [repeated 4x across cluster]
+(ClientAppActor pid=48830) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 8x across cluster]
+(ClientAppActor pid=48830) For migrations of users:  [repeated 8x across cluster]
+(ClientAppActor pid=48830) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 8x across cluster]
+(ClientAppActor pid=48830) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 8x across cluster]
+(ClientAppActor pid=48830) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 8x across cluster]
+(ClientAppActor pid=48830) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 8x across cluster]
+Round 14 | Acc=0.9252 | Prec=0.9785 | Rec=0.8455 | F1=0.9071 | AUC=0.9728 | TrainLoss=0.1568 | ValLoss=0.1568 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48834)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48834)   convert(model, mapping, inplace=True)
+(ClientAppActor pid=48834) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 2x across cluster]
+(ClientAppActor pid=48834) For migrations of users:  [repeated 2x across cluster]
+(ClientAppActor pid=48834) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 2x across cluster]
+(ClientAppActor pid=48834) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48834) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48834) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 2x across cluster]
+(ClientAppActor pid=48838)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48838)   convert(model, mapping, inplace=True)
+Round 15 | Acc=0.9257 | Prec=0.9751 | Rec=0.8484 | F1=0.9073 | AUC=0.9725 | TrainLoss=0.1565 | ValLoss=0.1576 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48834) /Users//Documents/projects/thesis_project/train_1dcnn_dynamic.py:670: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 9x across cluster]
+(ClientAppActor pid=48834) For migrations of users:  [repeated 9x across cluster]
+(ClientAppActor pid=48834) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 9x across cluster]
+(ClientAppActor pid=48834) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 9x across cluster]
+(ClientAppActor pid=48834) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 9x across cluster]
+(ClientAppActor pid=48834) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 9x across cluster]
+(ClientAppActor pid=48834)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 4x across cluster]
+(ClientAppActor pid=48830)   convert(model, mapping, inplace=True) [repeated 3x across cluster]
+(ClientAppActor pid=48830) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 9x across cluster]
+(ClientAppActor pid=48830) For migrations of users:  [repeated 9x across cluster]
+(ClientAppActor pid=48830) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 9x across cluster]
+(ClientAppActor pid=48830) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 9x across cluster]
+(ClientAppActor pid=48830) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 9x across cluster]
+(ClientAppActor pid=48830) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 9x across cluster]
+(ClientAppActor pid=48830)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 4x across cluster]
+(ClientAppActor pid=48830)   convert(model, mapping, inplace=True) [repeated 5x across cluster]
+Round 16 | Acc=0.9263 | Prec=0.9734 | Rec=0.8508 | F1=0.9079 | AUC=0.9729 | TrainLoss=0.1561 | ValLoss=0.1564 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48837) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 2x across cluster]
+(ClientAppActor pid=48837) For migrations of users:  [repeated 2x across cluster]
+(ClientAppActor pid=48837) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 2x across cluster]
+(ClientAppActor pid=48837) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48837) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48837) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 2x across cluster]
+(ClientAppActor pid=48837)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48837)   convert(model, mapping, inplace=True)
+(ClientAppActor pid=48834)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48834)   convert(model, mapping, inplace=True)
+Round 17 | Acc=0.9267 | Prec=0.9695 | Rec=0.8541 | F1=0.9081 | AUC=0.9731 | TrainLoss=0.1559 | ValLoss=0.1558 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(raylet) Spilled 16621 MiB, 46 objects, write throughput 1926 MiB/s.
+(ClientAppActor pid=48830) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 8x across cluster]
+(ClientAppActor pid=48830) For migrations of users:  [repeated 8x across cluster]
+(ClientAppActor pid=48830) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 8x across cluster]
+(ClientAppActor pid=48830) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 8x across cluster]
+(ClientAppActor pid=48830) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 8x across cluster]
+(ClientAppActor pid=48830) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 8x across cluster]
+(ClientAppActor pid=48830)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 3x across cluster]
+(ClientAppActor pid=48830)   convert(model, mapping, inplace=True) [repeated 3x across cluster]
+(ClientAppActor pid=48837) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 2x across cluster]
+(ClientAppActor pid=48837) For migrations of users:  [repeated 2x across cluster]
+(ClientAppActor pid=48837) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 2x across cluster]
+(ClientAppActor pid=48837) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48837) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48837) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 2x across cluster]
+(ClientAppActor pid=48837)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48837)   convert(model, mapping, inplace=True)
+(ClientAppActor pid=48834)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48834)   convert(model, mapping, inplace=True)
+(ClientAppActor pid=48838) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 6x across cluster]
+(ClientAppActor pid=48838) For migrations of users:  [repeated 6x across cluster]
+(ClientAppActor pid=48838) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 6x across cluster]
+(ClientAppActor pid=48838) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 6x across cluster]
+(ClientAppActor pid=48838) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 6x across cluster]
+(ClientAppActor pid=48838) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 6x across cluster]
+(ClientAppActor pid=48836)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 3x across cluster]
+(ClientAppActor pid=48836)   convert(model, mapping, inplace=True) [repeated 3x across cluster]
+Round 18 | Acc=0.9269 | Prec=0.9707 | Rec=0.8535 | F1=0.9082 | AUC=0.9734 | TrainLoss=0.1556 | ValLoss=0.1555 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48837) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 4x across cluster]
+(ClientAppActor pid=48837) For migrations of users:  [repeated 4x across cluster]
+(ClientAppActor pid=48837) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 4x across cluster]
+(ClientAppActor pid=48837) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 4x across cluster]
+(ClientAppActor pid=48837) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 4x across cluster]
+(ClientAppActor pid=48837) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 4x across cluster]
+(ClientAppActor pid=48837)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48837)   convert(model, mapping, inplace=True)
+(ClientAppActor pid=48834)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48834)   convert(model, mapping, inplace=True)
+(ClientAppActor pid=48836) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 8x across cluster]
+(ClientAppActor pid=48836) For migrations of users:  [repeated 8x across cluster]
+(ClientAppActor pid=48836) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 8x across cluster]
+(ClientAppActor pid=48836) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 8x across cluster]
+(ClientAppActor pid=48836) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 8x across cluster]
+(ClientAppActor pid=48836) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 8x across cluster]
+(ClientAppActor pid=48836)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 3x across cluster]
+(ClientAppActor pid=48836)   convert(model, mapping, inplace=True) [repeated 3x across cluster]
+Round 19 | Acc=0.9262 | Prec=0.9792 | Rec=0.8473 | F1=0.9084 | AUC=0.9735 | TrainLoss=0.1552 | ValLoss=0.1559 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48837) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 2x across cluster]
+(ClientAppActor pid=48837) For migrations of users:  [repeated 2x across cluster]
+(ClientAppActor pid=48837) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 2x across cluster]
+(ClientAppActor pid=48837) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48837) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48837) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 2x across cluster]
+(ClientAppActor pid=48837)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48837)   convert(model, mapping, inplace=True)
+(ClientAppActor pid=48834)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48834)   convert(model, mapping, inplace=True)
+Round 20 | Acc=0.9277 | Prec=0.9673 | Rec=0.8581 | F1=0.9093 | AUC=0.9735 | TrainLoss=0.1548 | ValLoss=0.1546 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48834) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 10x across cluster]
+(ClientAppActor pid=48834) For migrations of users:  [repeated 10x across cluster]
+(ClientAppActor pid=48834) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 10x across cluster]
+(ClientAppActor pid=48834) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 10x across cluster]
+(ClientAppActor pid=48834) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 10x across cluster]
+(ClientAppActor pid=48834) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 10x across cluster]
+(ClientAppActor pid=48834)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 4x across cluster]
+(ClientAppActor pid=48834)   convert(model, mapping, inplace=True) [repeated 4x across cluster]
+(ClientAppActor pid=48836) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 8x across cluster]
+(ClientAppActor pid=48836) For migrations of users:  [repeated 8x across cluster]
+(ClientAppActor pid=48836) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 8x across cluster]
+(ClientAppActor pid=48836) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 8x across cluster]
+(ClientAppActor pid=48836) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 8x across cluster]
+(ClientAppActor pid=48836) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 8x across cluster]
+(ClientAppActor pid=48836)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 4x across cluster]
+(ClientAppActor pid=48836)   convert(model, mapping, inplace=True) [repeated 4x across cluster]
+Round 21 | Acc=0.9276 | Prec=0.9714 | Rec=0.8552 | F1=0.9095 | AUC=0.9736 | TrainLoss=0.1543 | ValLoss=0.1554 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48834) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 2x across cluster]
+(ClientAppActor pid=48834) For migrations of users:  [repeated 2x across cluster]
+(ClientAppActor pid=48834) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 2x across cluster]
+(ClientAppActor pid=48834) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48834) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48834) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 2x across cluster]
+(ClientAppActor pid=48834)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48834)   convert(model, mapping, inplace=True)
+(ClientAppActor pid=48830)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48830)   convert(model, mapping, inplace=True)
+(ClientAppActor pid=48836) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 8x across cluster]
+(ClientAppActor pid=48836) For migrations of users:  [repeated 8x across cluster]
+(ClientAppActor pid=48836) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 8x across cluster]
+(ClientAppActor pid=48836) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 8x across cluster]
+(ClientAppActor pid=48836) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 8x across cluster]
+(ClientAppActor pid=48836) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 8x across cluster]
+(ClientAppActor pid=48836)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 3x across cluster]
+(ClientAppActor pid=48836)   convert(model, mapping, inplace=True) [repeated 3x across cluster]
+Round 22 | Acc=0.9280 | Prec=0.9690 | Rec=0.8575 | F1=0.9097 | AUC=0.9738 | TrainLoss=0.1539 | ValLoss=0.1541 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48830) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 2x across cluster]
+(ClientAppActor pid=48830) For migrations of users:  [repeated 2x across cluster]
+(ClientAppActor pid=48830) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 2x across cluster]
+(ClientAppActor pid=48830) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48830) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48830) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 2x across cluster]
+(ClientAppActor pid=48830)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48830)   convert(model, mapping, inplace=True)
+(ClientAppActor pid=48834)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48834)   convert(model, mapping, inplace=True)
+(ClientAppActor pid=48836) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 8x across cluster]
+(ClientAppActor pid=48836) For migrations of users:  [repeated 8x across cluster]
+(ClientAppActor pid=48836) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 8x across cluster]
+(ClientAppActor pid=48836) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 8x across cluster]
+(ClientAppActor pid=48836) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 8x across cluster]
+(ClientAppActor pid=48836) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 8x across cluster]
+(ClientAppActor pid=48836)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 3x across cluster]
+(ClientAppActor pid=48836)   convert(model, mapping, inplace=True) [repeated 3x across cluster]
+Round 23 | Acc=0.9287 | Prec=0.9682 | Rec=0.8594 | F1=0.9105 | AUC=0.9740 | TrainLoss=0.1535 | ValLoss=0.1536 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48830) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 2x across cluster]
+(ClientAppActor pid=48830) For migrations of users:  [repeated 2x across cluster]
+(ClientAppActor pid=48830) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 2x across cluster]
+(ClientAppActor pid=48830) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48830) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48830) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 2x across cluster]
+(ClientAppActor pid=48830)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48830)   convert(model, mapping, inplace=True)
+(ClientAppActor pid=48834)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48834)   convert(model, mapping, inplace=True)
+Round 24 | Acc=0.9283 | Prec=0.9652 | Rec=0.8603 | F1=0.9096 | AUC=0.9738 | TrainLoss=0.1529 | ValLoss=0.1536 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48837) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 10x across cluster]
+(ClientAppActor pid=48837) For migrations of users:  [repeated 10x across cluster]
+(ClientAppActor pid=48837) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 10x across cluster]
+(ClientAppActor pid=48837) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 10x across cluster]
+(ClientAppActor pid=48837) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 10x across cluster]
+(ClientAppActor pid=48837) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 10x across cluster]
+(ClientAppActor pid=48837)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 4x across cluster]
+(ClientAppActor pid=48837)   convert(model, mapping, inplace=True) [repeated 4x across cluster]
+(ClientAppActor pid=48836) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 8x across cluster]
+(ClientAppActor pid=48836) For migrations of users:  [repeated 8x across cluster]
+(ClientAppActor pid=48836) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 8x across cluster]
+(ClientAppActor pid=48836) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 8x across cluster]
+(ClientAppActor pid=48836) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 8x across cluster]
+(ClientAppActor pid=48836) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 8x across cluster]
+(ClientAppActor pid=48836)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 4x across cluster]
+(ClientAppActor pid=48836)   convert(model, mapping, inplace=True) [repeated 4x across cluster]
+Round 25 | Acc=0.9288 | Prec=0.9697 | Rec=0.8586 | F1=0.9107 | AUC=0.9740 | TrainLoss=0.1525 | ValLoss=0.1536 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
+(ClientAppActor pid=48830) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 2x across cluster]
+(ClientAppActor pid=48830) For migrations of users:  [repeated 2x across cluster]
+(ClientAppActor pid=48830) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 2x across cluster]
+(ClientAppActor pid=48830) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48830) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 2x across cluster]
+(ClientAppActor pid=48830) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 2x across cluster]
+(ClientAppActor pid=48830)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48830)   convert(model, mapping, inplace=True)
+(ClientAppActor pid=48838)   model_to_eval = _torch.ao.quantization.quantize_dynamic(
+(ClientAppActor pid=48838)   convert(model, mapping, inplace=True)
+(ClientAppActor pid=48836) /Users//Documents/projects/thesis_project/.venv313/lib/python3.13/site-packages/torch/ao/quantization/quantize.py:570: DeprecationWarning: torch.ao.quantization is deprecated and will be removed in 2.10.  [repeated 8x across cluster]
+(ClientAppActor pid=48836) For migrations of users:  [repeated 8x across cluster]
+(ClientAppActor pid=48836) 1. Eager mode quantization (torch.ao.quantization.quantize, torch.ao.quantization.quantize_dynamic), please migrate to use torchao eager mode quantize_ API instead  [repeated 8x across cluster]
+(ClientAppActor pid=48836) 2. FX graph mode quantization (torch.ao.quantization.quantize_fx.prepare_fx,torch.ao.quantization.quantize_fx.convert_fx, please migrate to use torchao pt2e quantization API instead (prepare_pt2e, convert_pt2e)  [repeated 8x across cluster]
+(ClientAppActor pid=48836) 3. pt2e quantization has been migrated to torchao (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e)  [repeated 8x across cluster]
+(ClientAppActor pid=48836) see https://github.com/pytorch/ao/issues/2259 for more details [repeated 8x across cluster]
+(ClientAppActor pid=48836)   model_to_eval = _torch.ao.quantization.quantize_dynamic( [repeated 3x across cluster]
+(ClientAppActor pid=48836)   convert(model, mapping, inplace=True) [repeated 3x across cluster]
+Round 26 | Acc=0.9263 | Prec=0.9772 | Rec=0.8485 | F1=0.9083 | AUC=0.9730 | TrainLoss=0.1523 | ValLoss=0.1594 | Comm=2.31 MB | Model=0.00 B | DynModel=142.51 KB | DynParams=31552 | DynQ=on
