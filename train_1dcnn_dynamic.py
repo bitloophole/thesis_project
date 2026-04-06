@@ -331,6 +331,10 @@ def get_dynamic_quantized_model_size_bytes(model: nn.Module) -> int:
     return get_serialized_model_size_bytes(quantized_model)
 
 
+def get_parameter_count(model: nn.Module) -> int:
+    return int(sum(parameter.numel() for parameter in model.parameters()))
+
+
 def get_quantization_label() -> str:
     if QUANTIZATION_MODE == "dynamic_int8":
         return "Dynamic INT8 (Linear layers)"
@@ -412,6 +416,7 @@ def test(model: nn.Module, X: np.ndarray, y: np.ndarray) -> Dict[str, float]:
     model_to_eval = model
     eval_device = DEVICE
     dynamic_quantized_model_size_bytes = 0.0
+    dynamic_quantized_parameter_count = 0.0
     quantization_applied = 0.0
 
     if QUANTIZATION_MODE == "dynamic_int8":
@@ -430,6 +435,7 @@ def test(model: nn.Module, X: np.ndarray, y: np.ndarray) -> Dict[str, float]:
                 dynamic_quantized_model_size_bytes = float(
                     get_serialized_model_size_bytes(model_to_eval)
                 )
+                dynamic_quantized_parameter_count = float(get_parameter_count(model_to_eval))
                 quantization_applied = 1.0
             except Exception:
                 model_to_eval = deepcopy(model).to("cpu").eval()
@@ -460,6 +466,7 @@ def test(model: nn.Module, X: np.ndarray, y: np.ndarray) -> Dict[str, float]:
         "f1_score": float(f1_score(y, preds, zero_division=0)),
         "inference_time_sec": float(inference_time),
         "dynamic_quantized_model_size_bytes": float(dynamic_quantized_model_size_bytes),
+        "dynamic_quantized_parameter_count": float(dynamic_quantized_parameter_count),
         "quantization_applied": float(quantization_applied),
         "tn": float(tn),
         "fp": float(fp),
@@ -536,6 +543,7 @@ def evaluate_metrics_aggregation(metrics: List[Tuple[int, Metrics]]) -> Metrics:
         "auc_roc",
         "inference_time_sec",
         "dynamic_quantized_model_size_bytes",
+        "dynamic_quantized_parameter_count",
         "quantization_applied",
     ]
     aggregated = weighted_average(metrics, scalar_keys)
@@ -642,6 +650,7 @@ class FLClient(fl.client.NumPyClient):
         model_to_eval = self.model
         eval_device = DEVICE
         dynamic_quantized_model_size_bytes = 0.0
+        dynamic_quantized_parameter_count = 0.0
         quantization_applied = 0.0
         quantization_backend = "none"
         quantization_error = ""
@@ -666,6 +675,7 @@ class FLClient(fl.client.NumPyClient):
                     buffer = io.BytesIO()
                     _torch.save(model_to_eval.state_dict(), buffer)
                     dynamic_quantized_model_size_bytes = float(buffer.getbuffer().nbytes)
+                    dynamic_quantized_parameter_count = float(get_parameter_count(model_to_eval))
                     quantization_applied = 1.0
                     quantization_backend = preferred_engine
                     eval_device = _torch.device("cpu")
@@ -701,6 +711,7 @@ class FLClient(fl.client.NumPyClient):
             "f1_score": float(_f1_score(self.y_test, preds, zero_division=0)),
             "inference_time_sec": float(inference_time),
             "dynamic_quantized_model_size_bytes": float(dynamic_quantized_model_size_bytes),
+            "dynamic_quantized_parameter_count": float(dynamic_quantized_parameter_count),
             "quantization_applied": float(quantization_applied),
             "tn": float(tn),
             "fp": float(fp),
@@ -780,8 +791,12 @@ class MetricsFedAvg(fl.server.strategy.FedAvg):
                 "val_loss": float(fit_metrics.get("val_loss", 0.0)),
                 "inference_time_sec": float(aggregated_metrics.get("inference_time_sec", 0.0)),
                 "communication_bytes": float(total_comm),
+                "model_size_bytes": float(aggregated_metrics.get("model_size_bytes", 0.0)),
                 "dynamic_quantized_model_size_bytes": float(
                     aggregated_metrics.get("dynamic_quantized_model_size_bytes", 0.0)
+                ),
+                "dynamic_quantized_parameter_count": float(
+                    aggregated_metrics.get("dynamic_quantized_parameter_count", 0.0)
                 ),
                 "quantization_applied": float(
                     aggregated_metrics.get("quantization_applied", 0.0)
@@ -805,6 +820,9 @@ class MetricsFedAvg(fl.server.strategy.FedAvg):
                 f"TrainLoss={row['train_loss']:.4f} | "
                 f"ValLoss={row['val_loss']:.4f} | "
                 f"Comm={format_bytes(row['communication_bytes'])} | "
+                f"Model={format_bytes(row['model_size_bytes'])} | "
+                f"DynModel={format_bytes(row['dynamic_quantized_model_size_bytes'])} | "
+                f"DynParams={int(row['dynamic_quantized_parameter_count'])} | "
                 f"DynQ={'on' if row['quantization_applied'] >= 0.5 else 'fallback'}"
             )
 
@@ -915,6 +933,15 @@ if __name__ == "__main__":
     print(f"Training Time        : {final.get('train_time_sec', 0.0):.4f} s")
     print(f"Inference Time       : {final.get('inference_time_sec', 0.0):.4f} s")
     print(f"Final Communication  : {format_bytes(final.get('communication_bytes', 0.0))}")
+    print(f"Model Size           : {format_bytes(final.get('model_size_bytes', 0.0))}")
+    print(
+        f"Dynamic QModel Size  : "
+        f"{format_bytes(final.get('dynamic_quantized_model_size_bytes', 0.0))}"
+    )
+    print(
+        f"Dynamic Q Parameters : "
+        f"{int(final.get('dynamic_quantized_parameter_count', 0.0))}"
+    )
     print(f"Total Runtime        : {total_runtime:.2f} s")
     print("================================================")
 
