@@ -1,5 +1,5 @@
 # ============================================================
-# Improved Federated IDS Binary Classifier with 1D CNN
+# Federated IDS Binary Classifier
 # Non-IID + Clean Round Logs + Final Summary + Confusion Matrix
 # ============================================================
 
@@ -7,7 +7,7 @@ import logging
 import io
 import platform
 import time
-from copy import deepcopy
+import warnings
 from typing import Dict, List, Tuple
 
 import flwr as fl
@@ -17,8 +17,9 @@ import pandas as pd
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from torch.ao.quantization import quantize_dynamic
 
-from flwr.common import Context, Metrics
+from flwr.common import Context, Metrics, parameters_to_ndarrays
 from sklearn.metrics import (
     accuracy_score,
     confusion_matrix,
@@ -43,21 +44,101 @@ logging.getLogger("flwr.client").setLevel(logging.WARNING)
 # Global config
 # ------------------------------
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+INFERENCE_DEVICE = torch.device("cpu")
 
 NUM_CLIENTS = 5
-NUM_ROUNDS = 30
-LOCAL_EPOCHS = 5
-BATCH_SIZE = 64
+NUM_ROUNDS = 44
+LOCAL_EPOCHS = 3
+BATCH_SIZE = 32
 LEARNING_RATE = 0.001
-WEIGHT_DECAY = 1e-4
 RANDOM_STATE = 42
-DECISION_THRESHOLD = 0.5
-QUANTIZATION_MODE = "dynamic_int8"
-
+#TARGET_ATTACK_SAMPLES = 1200000
 # Globals initialized in main
 global_clients = None
 global_input_dim = None
 global_model_stats = None
+
+
+def is_windows() -> bool:
+    return platform.system() == "Windows"
+
+
+def configure_ray_windows_compatibility() -> None:
+    if not is_windows():
+        return
+
+    try:
+        import ray._private.utils as ray_utils
+    except ImportError:
+        return
+
+    original_set_kill_child = ray_utils.set_kill_child_on_death_win32
+
+    def safe_set_kill_child_on_death_win32(child_proc):
+        try:
+            original_set_kill_child(child_proc)
+        except OSError as error:
+            if getattr(error, "errno", None) == 2:
+                warnings.warn(
+                    "Ray Windows compatibility workaround applied: "
+                    "AssignProcessToJobObject failed, so process fate-sharing was disabled.",
+                    RuntimeWarning,
+                    stacklevel=2,
+                )
+                return
+            raise
+
+    ray_utils.set_kill_child_on_death_win32 = safe_set_kill_child_on_death_win32
+
+
+def get_simulation_resources() -> Tuple[Dict[str, float], Dict[str, object]]:
+    client_resources: Dict[str, float] = {
+        "num_cpus": 1,
+        "num_gpus": 0.0,
+    }
+    ray_init_args: Dict[str, object] = {
+        "ignore_reinit_error": True,
+        "include_dashboard": False,
+    }
+
+    if is_windows():
+        ray_init_args.update(
+            {
+                "num_cpus": 1,
+                "local_mode": True,
+            }
+        )
+
+    return client_resources, ray_init_args
+
+
+def clone_model_to_cpu(model: nn.Module, input_dim: int) -> nn.Module:
+    cloned_model = MLP(input_dim)
+    cloned_model.load_state_dict(
+        {key: value.detach().cpu() for key, value in model.state_dict().items()},
+        strict=True,
+    )
+    cloned_model.eval()
+    return cloned_model
+
+
+def get_dynamic_quantized_model(model: nn.Module, input_dim: int) -> nn.Module:
+    cpu_model = clone_model_to_cpu(model, input_dim)
+    with warnings.catch_warnings():
+        warnings.filterwarnings(
+            "ignore",
+            message="torch.ao.quantization is deprecated.*",
+            category=DeprecationWarning,
+        )
+        quantized_model = quantize_dynamic(cpu_model, {nn.Linear}, dtype=torch.qint8)
+    quantized_model.eval()
+    return quantized_model
+
+
+def get_serialized_model_size_bytes(model: nn.Module) -> int:
+    buffer = io.BytesIO()
+    torch.save(model.state_dict(), buffer)
+    return buffer.tell()
 
 
 def format_bytes(size_in_bytes: float) -> str:
@@ -87,14 +168,31 @@ def load_data() -> Tuple[np.ndarray, np.ndarray]:
 
     df_benign = df[df["Attack_Category"] == 0]
     df_attack = df[df["Attack_Category"] == 1]
-
+    
     df_attack_undersampled = resample(
         df_attack,
         replace=False,
         n_samples=len(df_benign),
         random_state=RANDOM_STATE,
     )
-
+    """
+    if len(df_attack) >= TARGET_ATTACK_SAMPLES:
+        # If enough attack samples exist, randomly take 1,200,000
+        df_attack_undersampled = resample(
+            df_attack,
+            replace=False,
+            n_samples=TARGET_ATTACK_SAMPLES,
+            random_state=RANDOM_STATE,
+        )
+    else:
+        # If not enough attack samples exist, oversample with replacement
+        df_attack_resampled = resample(
+            df_attack,
+            replace=True,
+            n_samples=TARGET_ATTACK_SAMPLES,
+            random_state=RANDOM_STATE,
+        )
+    """
     df_balanced = pd.concat([df_attack_undersampled, df_benign])
     df_balanced = df_balanced.sample(frac=1, random_state=RANDOM_STATE)
 
@@ -206,35 +304,18 @@ def create_clients(
 # 3. MODEL
 # ============================================================
 
-class ImprovedCNN1D(nn.Module):
+class MLP(nn.Module):
     def __init__(self, input_dim: int) -> None:
         super().__init__()
-        self.features = nn.Sequential(
-            nn.Conv1d(1, 32, kernel_size=5, padding=2),
-            nn.BatchNorm1d(32),
+        self.net = nn.Sequential(
+            nn.Linear(input_dim, 64),
             nn.ReLU(),
-            nn.MaxPool1d(kernel_size=2, stride=2),
-            nn.Conv1d(32, 64, kernel_size=3, padding=1),
-            nn.BatchNorm1d(64),
-            nn.ReLU(),
-            nn.MaxPool1d(kernel_size=2, stride=2),
-            nn.Conv1d(64, 128, kernel_size=3, padding=1),
-            nn.BatchNorm1d(128),
-            nn.ReLU(),
-            nn.AdaptiveAvgPool1d(1),
-        )
-        self.classifier = nn.Sequential(
-            nn.Flatten(),
-            nn.Linear(128, 64),
-            nn.ReLU(),
-            nn.Dropout(0.3),
             nn.Linear(64, 1),
+            nn.Sigmoid(),
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        x = x.unsqueeze(1)
-        x = self.features(x)
-        return self.classifier(x)
+        return self.net(x)
 
 
 def get_model_stats(model: nn.Module, input_dim: int) -> Dict[str, float]:
@@ -242,52 +323,17 @@ def get_model_stats(model: nn.Module, input_dim: int) -> Dict[str, float]:
     total_bytes = sum(
         parameter.numel() * parameter.element_size() for parameter in model.parameters()
     )
+    quantized_model = get_dynamic_quantized_model(model, input_dim)
+    quantized_bytes = get_serialized_model_size_bytes(quantized_model)
 
-    length_1 = input_dim
-    length_2 = max(length_1 // 2, 1)
-    length_3 = max(length_2 // 2, 1)
-
-    conv1_flops = length_1 * 32 * ((2 * 1 * 5) + 1)
-    bn1_flops = length_1 * 32 * 2
-    relu1_flops = length_1 * 32
-    pool1_flops = length_2 * 32
-
-    conv2_flops = length_2 * 64 * ((2 * 32 * 3) + 1)
-    bn2_flops = length_2 * 64 * 2
-    relu2_flops = length_2 * 64
-    pool2_flops = length_3 * 64
-
-    conv3_flops = length_3 * 128 * ((2 * 64 * 3) + 1)
-    bn3_flops = length_3 * 128 * 2
-    relu3_flops = length_3 * 128
-    gap_flops = length_3 * 128
-
-    linear1_flops = (2 * 128 * 64) + 64
-    relu4_flops = 64
-    linear2_flops = (2 * 64 * 1) + 1
-
-    forward_flops = (
-        conv1_flops
-        + bn1_flops
-        + relu1_flops
-        + pool1_flops
-        + conv2_flops
-        + bn2_flops
-        + relu2_flops
-        + pool2_flops
-        + conv3_flops
-        + bn3_flops
-        + relu3_flops
-        + gap_flops
-        + linear1_flops
-        + relu4_flops
-        + linear2_flops
-    )
-    training_flops = forward_flops * 3
+    # Approximate FLOPs
+    forward_flops = (2 * input_dim * 64) + (2 * 64 * 1) + 64 + 1
+    training_flops = forward_flops * 3  # rough approximation
 
     return {
         "parameters": float(total_params),
         "model_size_bytes": float(total_bytes),
+        "quantized_model_size_bytes": float(quantized_bytes),
         "forward_flops_per_sample": float(forward_flops),
         "training_flops_per_sample": float(training_flops),
     }
@@ -295,191 +341,6 @@ def get_model_stats(model: nn.Module, input_dim: int) -> Dict[str, float]:
 
 def get_parameter_bytes(parameters: List[np.ndarray]) -> int:
     return int(sum(array.nbytes for array in parameters))
-
-
-def get_serialized_model_size_bytes(model: nn.Module) -> int:
-    buffer = io.BytesIO()
-    torch.save(model.state_dict(), buffer)
-    return buffer.getbuffer().nbytes
-
-
-def quantize_model_dynamically(model: nn.Module) -> nn.Module:
-    supported_engines = [str(engine) for engine in torch.backends.quantized.supported_engines]
-    if not supported_engines:
-        raise RuntimeError("No PyTorch quantization engine is available on this runtime.")
-
-    previous_engine = str(torch.backends.quantized.engine)
-    preferred_engine = "qnnpack" if "qnnpack" in supported_engines else supported_engines[0]
-
-    try:
-        torch.backends.quantized.engine = preferred_engine
-        return torch.ao.quantization.quantize_dynamic(
-            deepcopy(model).to("cpu").eval(),
-            {nn.Linear},
-            dtype=torch.qint8,
-        )
-    finally:
-        if previous_engine in supported_engines:
-            torch.backends.quantized.engine = previous_engine
-
-
-def build_dynamic_quantized_model(model: nn.Module) -> nn.Module:
-    return quantize_model_dynamically(model)
-
-
-def get_dynamic_quantized_model_size_bytes(model: nn.Module) -> int:
-    quantized_model = build_dynamic_quantized_model(model)
-    return get_serialized_model_size_bytes(quantized_model)
-
-
-def get_parameter_count(model: nn.Module) -> int:
-    return int(sum(parameter.numel() for parameter in model.parameters()))
-
-
-def get_quantization_label() -> str:
-    if QUANTIZATION_MODE == "dynamic_int8":
-        return "Dynamic INT8 (Linear layers)"
-    return "Disabled"
-
-
-def aggregate_client_parameters(
-    client_results: List[Tuple[List[np.ndarray], int]]
-) -> List[np.ndarray]:
-    total_examples = sum(num_examples for _, num_examples in client_results)
-    if total_examples == 0:
-        return []
-
-    aggregated_parameters: List[np.ndarray] = []
-    for layer_values in zip(*(parameters for parameters, _ in client_results)):
-        reference = layer_values[0]
-        weighted_sum = np.zeros(reference.shape, dtype=np.float64)
-
-        for layer, num_examples in zip(layer_values, (count for _, count in client_results)):
-            weighted_sum += layer.astype(np.float64) * num_examples
-
-        averaged = weighted_sum / total_examples
-        if np.issubdtype(reference.dtype, np.integer):
-            aggregated_parameters.append(np.rint(averaged).astype(reference.dtype))
-        else:
-            aggregated_parameters.append(averaged.astype(reference.dtype))
-
-    return aggregated_parameters
-
-
-def build_clients() -> List["FLClient"]:
-    clients: List["FLClient"] = []
-    for cid in range(NUM_CLIENTS):
-        X_train, X_val, X_test, y_train, y_val, y_test = global_clients[cid]
-        model = ImprovedCNN1D(input_dim=global_input_dim).to(DEVICE)
-        clients.append(
-            FLClient(
-                model=model,
-                X_train=X_train,
-                X_val=X_val,
-                y_train=y_train,
-                y_val=y_val,
-                X_test=X_test,
-                y_test=y_test,
-                client_id=cid,
-                model_stats=global_model_stats,
-            )
-        )
-    return clients
-
-
-def start_sequential_simulation(strategy: "MetricsFedAvg") -> None:
-    clients = build_clients()
-    global_model = ImprovedCNN1D(input_dim=global_input_dim).to(DEVICE)
-    global_parameters = [
-        value.detach().cpu().numpy() for _, value in global_model.state_dict().items()
-    ]
-
-    print(
-        "Ray startup is not available in this environment. "
-        "Running sequential federated simulation without Ray."
-    )
-
-    for server_round in range(1, NUM_ROUNDS + 1):
-        fit_results: List[Tuple[List[np.ndarray], int, Metrics]] = []
-        evaluate_results: List[Tuple[int, Metrics]] = []
-
-        for client in clients:
-            updated_parameters, num_examples, fit_metrics = client.fit(
-                global_parameters, {}
-            )
-            fit_results.append((updated_parameters, num_examples, fit_metrics))
-
-        global_parameters = aggregate_client_parameters(
-            [(parameters, num_examples) for parameters, num_examples, _ in fit_results]
-        )
-        aggregated_fit_metrics = fit_metrics_aggregation(
-            [(num_examples, metrics) for _, num_examples, metrics in fit_results]
-        )
-        strategy.fit_metrics_cache[server_round] = {
-            "communication_bytes": float(
-                aggregated_fit_metrics.get("communication_bytes", 0.0)
-            ),
-            "train_time_sec": float(aggregated_fit_metrics.get("train_time_sec", 0.0)),
-            "train_loss": float(aggregated_fit_metrics.get("train_loss", 0.0)),
-            "val_loss": float(aggregated_fit_metrics.get("val_loss", 0.0)),
-        }
-
-        for client in clients:
-            _, num_examples, eval_metrics = client.evaluate(global_parameters, {})
-            evaluate_results.append((num_examples, eval_metrics))
-
-        aggregated_eval_metrics = evaluate_metrics_aggregation(evaluate_results)
-        fit_metrics = strategy.fit_metrics_cache.get(server_round, {})
-        total_comm = (
-            aggregated_eval_metrics.get("communication_bytes", 0.0)
-            + fit_metrics.get("communication_bytes", 0.0)
-        )
-
-        row = {
-            "round": float(server_round),
-            "accuracy": float(aggregated_eval_metrics.get("accuracy", 0.0)),
-            "precision": float(aggregated_eval_metrics.get("precision", 0.0)),
-            "recall": float(aggregated_eval_metrics.get("recall", 0.0)),
-            "f1_score": float(aggregated_eval_metrics.get("f1_score", 0.0)),
-            "auc_roc": float(aggregated_eval_metrics.get("auc_roc", 0.0)),
-            "train_time_sec": float(fit_metrics.get("train_time_sec", 0.0)),
-            "train_loss": float(fit_metrics.get("train_loss", 0.0)),
-            "val_loss": float(fit_metrics.get("val_loss", 0.0)),
-            "inference_time_sec": float(
-                aggregated_eval_metrics.get("inference_time_sec", 0.0)
-            ),
-            "communication_bytes": float(total_comm),
-            "model_size_bytes": float(
-                aggregated_fit_metrics.get(
-                    "model_size_bytes", global_model_stats["model_size_bytes"]
-                )
-            ),
-            "dynamic_quantized_model_size_bytes": float(
-                aggregated_eval_metrics.get("dynamic_quantized_model_size_bytes", 0.0)
-            ),
-            "dynamic_quantized_parameter_count": float(
-                aggregated_eval_metrics.get("dynamic_quantized_parameter_count", 0.0)
-            ),
-            "tn": float(aggregated_eval_metrics.get("tn", 0.0)),
-            "fp": float(aggregated_eval_metrics.get("fp", 0.0)),
-            "fn": float(aggregated_eval_metrics.get("fn", 0.0)),
-            "tp": float(aggregated_eval_metrics.get("tp", 0.0)),
-        }
-
-        strategy.round_logs.append(row)
-        strategy.final_metrics = row
-
-        print(
-            f"Round {server_round:02d} | "
-            f"Acc={row['accuracy']:.4f} | "
-            f"Prec={row['precision']:.4f} | "
-            f"Rec={row['recall']:.4f} | "
-            f"F1={row['f1_score']:.4f} | "
-            f"AUC={row['auc_roc']:.4f} | "
-            f"TrainLoss={row['train_loss']:.4f} | "
-            f"ValLoss={row['val_loss']:.4f} | "
-            f"Comm={format_bytes(row['communication_bytes'])}"
-        )
 
 
 # ============================================================
@@ -502,13 +363,8 @@ def train(
     )
     loader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True)
 
-    optimizer = optim.Adam(
-        model.parameters(),
-        lr=LEARNING_RATE,
-        weight_decay=WEIGHT_DECAY,
-    )
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=2, gamma=0.7)
-    criterion = nn.BCEWithLogitsLoss()
+    optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
+    criterion = nn.BCELoss()
     train_losses: List[float] = []
     val_losses: List[float] = []
 
@@ -526,8 +382,8 @@ def train(
             batch_y = batch_y.to(DEVICE)
 
             optimizer.zero_grad()
-            logits = model(batch_X)
-            loss = criterion(logits, batch_y)
+            output = model(batch_X)
+            loss = criterion(output, batch_y)
             loss.backward()
             optimizer.step()
 
@@ -539,11 +395,10 @@ def train(
 
         model.eval()
         with torch.no_grad():
-            val_logits = model(X_val_tensor)
-            val_loss = criterion(val_logits, y_val_tensor).item()
+            val_output = model(X_val_tensor)
+            val_loss = criterion(val_output, y_val_tensor).item()
         val_losses.append(float(val_loss))
         model.train()
-        scheduler.step()
 
     training_time = time.perf_counter() - start_time
     return {
@@ -553,51 +408,30 @@ def train(
     }
 
 
-def test(model: nn.Module, X: np.ndarray, y: np.ndarray) -> Dict[str, float]:
-    model_to_eval = model
-    eval_device = DEVICE
-    dynamic_quantized_model_size_bytes = 0.0
-    dynamic_quantized_parameter_count = 0.0
-    quantization_applied = 0.0
+def test(
+    model: nn.Module,
+    X: np.ndarray,
+    y: np.ndarray,
+    use_dynamic_quantization: bool = False,
+) -> Dict[str, float]:
+    inference_model = model
+    inference_device = DEVICE
 
-    if QUANTIZATION_MODE == "dynamic_int8":
-        supported_engines = [str(engine) for engine in torch.backends.quantized.supported_engines]
-        if supported_engines:
-            previous_engine = str(torch.backends.quantized.engine)
-            preferred_engine = "qnnpack" if "qnnpack" in supported_engines else supported_engines[0]
-            try:
-                torch.backends.quantized.engine = preferred_engine
-                model_to_eval = torch.ao.quantization.quantize_dynamic(
-                    deepcopy(model).to("cpu").eval(),
-                    {nn.Linear},
-                    dtype=torch.qint8,
-                )
-                eval_device = torch.device("cpu")
-                dynamic_quantized_model_size_bytes = float(
-                    get_serialized_model_size_bytes(model_to_eval)
-                )
-                dynamic_quantized_parameter_count = float(get_parameter_count(model_to_eval))
-                quantization_applied = 1.0
-            except Exception:
-                model_to_eval = deepcopy(model).to("cpu").eval()
-                eval_device = torch.device("cpu")
-            finally:
-                if previous_engine in supported_engines:
-                    torch.backends.quantized.engine = previous_engine
-        else:
-            model_to_eval = deepcopy(model).to("cpu").eval()
-            eval_device = torch.device("cpu")
+    if use_dynamic_quantization:
+        inference_model = get_dynamic_quantized_model(model, global_input_dim)
+        inference_device = INFERENCE_DEVICE
+    else:
+        inference_model.eval()
 
-    model_to_eval.eval()
-    X_tensor = torch.tensor(X, dtype=torch.float32).to(eval_device)
+    X_tensor = torch.tensor(X, dtype=torch.float32).to(inference_device)
 
     start_time = time.perf_counter()
     with torch.no_grad():
-        logits = model_to_eval(X_tensor)
-        probs = torch.sigmoid(logits).cpu().numpy().ravel()
+        probs = inference_model(X_tensor).cpu().numpy().ravel()
     inference_time = time.perf_counter() - start_time
 
-    preds = (probs >= DECISION_THRESHOLD).astype(int)
+    preds = (probs >= 0.5).astype(int)
+
     tn, fp, fn, tp = confusion_matrix(y, preds, labels=[0, 1]).ravel()
 
     metrics = {
@@ -606,9 +440,6 @@ def test(model: nn.Module, X: np.ndarray, y: np.ndarray) -> Dict[str, float]:
         "recall": float(recall_score(y, preds, zero_division=0)),
         "f1_score": float(f1_score(y, preds, zero_division=0)),
         "inference_time_sec": float(inference_time),
-        "dynamic_quantized_model_size_bytes": float(dynamic_quantized_model_size_bytes),
-        "dynamic_quantized_parameter_count": float(dynamic_quantized_parameter_count),
-        "quantization_applied": float(quantization_applied),
         "tn": float(tn),
         "fp": float(fp),
         "fn": float(fn),
@@ -652,7 +483,7 @@ def fit_metrics_aggregation(metrics: List[Tuple[int, Metrics]]) -> Metrics:
     scalar_keys = [
         "train_time_sec",
         "model_size_bytes",
-        "dynamic_quantized_model_size_bytes",
+        "quantized_model_size_bytes",
         "parameter_count",
         "train_loss",
         "val_loss",
@@ -669,8 +500,8 @@ def fit_metrics_aggregation(metrics: List[Tuple[int, Metrics]]) -> Metrics:
 
     aggregated["parameter_count"] = float(metrics[0][1].get("parameter_count", 0.0))
     aggregated["model_size_bytes"] = float(metrics[0][1].get("model_size_bytes", 0.0))
-    aggregated["dynamic_quantized_model_size_bytes"] = float(
-        metrics[0][1].get("dynamic_quantized_model_size_bytes", 0.0)
+    aggregated["quantized_model_size_bytes"] = float(
+        metrics[0][1].get("quantized_model_size_bytes", 0.0)
     )
     return aggregated
 
@@ -683,9 +514,6 @@ def evaluate_metrics_aggregation(metrics: List[Tuple[int, Metrics]]) -> Metrics:
         "f1_score",
         "auc_roc",
         "inference_time_sec",
-        "dynamic_quantized_model_size_bytes",
-        "dynamic_quantized_parameter_count",
-        "quantization_applied",
     ]
     aggregated = weighted_average(metrics, scalar_keys)
 
@@ -696,12 +524,11 @@ def evaluate_metrics_aggregation(metrics: List[Tuple[int, Metrics]]) -> Metrics:
         sum(metric.get("inference_flops", 0.0) for _, metric in metrics)
     )
 
+    # Sum confusion matrix entries across clients
     aggregated["tn"] = float(sum(metric.get("tn", 0.0) for _, metric in metrics))
     aggregated["fp"] = float(sum(metric.get("fp", 0.0) for _, metric in metrics))
     aggregated["fn"] = float(sum(metric.get("fn", 0.0) for _, metric in metrics))
     aggregated["tp"] = float(sum(metric.get("tp", 0.0) for _, metric in metrics))
-    aggregated["quantization_backend"] = str(metrics[0][1].get("quantization_backend", "none"))
-    aggregated["quantization_error"] = str(metrics[0][1].get("quantization_error", ""))
 
     return aggregated
 
@@ -759,10 +586,10 @@ class FLClient(fl.client.NumPyClient):
             "train_time_sec": float(train_stats["train_time_sec"]),
             "train_loss": float(train_stats["train_loss"]),
             "val_loss": float(train_stats["val_loss"]),
-            "communication_bytes": float(parameter_bytes * 2),
+            "communication_bytes": float(parameter_bytes * 2),  # receive + send
             "model_size_bytes": float(self.model_stats["model_size_bytes"]),
-            "dynamic_quantized_model_size_bytes": float(
-                self.model_stats["dynamic_quantized_model_size_bytes"]
+            "quantized_model_size_bytes": float(
+                self.model_stats["quantized_model_size_bytes"]
             ),
             "parameter_count": float(self.model_stats["parameters"]),
             "training_flops": float(
@@ -775,95 +602,8 @@ class FLClient(fl.client.NumPyClient):
         return self.get_parameters(config), len(self.X_train), metrics
 
     def evaluate(self, parameters, config):
-        import numpy as _np
-        import torch as _torch
-        from sklearn.metrics import (
-            accuracy_score as _accuracy_score,
-            confusion_matrix as _confusion_matrix,
-            f1_score as _f1_score,
-            precision_score as _precision_score,
-            recall_score as _recall_score,
-            roc_auc_score as _roc_auc_score,
-        )
-
         self.set_parameters(parameters)
-
-        model_to_eval = self.model
-        eval_device = DEVICE
-        dynamic_quantized_model_size_bytes = 0.0
-        dynamic_quantized_parameter_count = 0.0
-        quantization_applied = 0.0
-        quantization_backend = "none"
-        quantization_error = ""
-
-        if self.model_stats.get("quantization_mode") == "dynamic_int8":
-            supported_engines = [
-                str(engine) for engine in _torch.backends.quantized.supported_engines
-            ]
-            if supported_engines:
-                previous_engine = str(_torch.backends.quantized.engine)
-                preferred_engine = (
-                    "qnnpack" if "qnnpack" in supported_engines else supported_engines[0]
-                )
-
-                try:
-                    _torch.backends.quantized.engine = preferred_engine
-                    model_to_eval = _torch.ao.quantization.quantize_dynamic(
-                        deepcopy(self.model).to("cpu").eval(),
-                        {_torch.nn.Linear},
-                        dtype=_torch.qint8,
-                    )
-                    buffer = io.BytesIO()
-                    _torch.save(model_to_eval.state_dict(), buffer)
-                    dynamic_quantized_model_size_bytes = float(buffer.getbuffer().nbytes)
-                    dynamic_quantized_parameter_count = float(get_parameter_count(model_to_eval))
-                    quantization_applied = 1.0
-                    quantization_backend = preferred_engine
-                    eval_device = _torch.device("cpu")
-                except Exception as exc:
-                    model_to_eval = deepcopy(self.model).to("cpu").eval()
-                    eval_device = _torch.device("cpu")
-                    quantization_error = str(exc)
-                    quantization_backend = preferred_engine
-                finally:
-                    if previous_engine in supported_engines:
-                        _torch.backends.quantized.engine = previous_engine
-            else:
-                model_to_eval = deepcopy(self.model).to("cpu").eval()
-                eval_device = _torch.device("cpu")
-                quantization_error = "No supported quantization backend"
-
-        model_to_eval.eval()
-        X_tensor = _torch.tensor(self.X_test, dtype=_torch.float32).to(eval_device)
-
-        start_time = time.perf_counter()
-        with _torch.no_grad():
-            logits = model_to_eval(X_tensor)
-            probs = _torch.sigmoid(logits).cpu().numpy().ravel()
-        inference_time = time.perf_counter() - start_time
-
-        preds = (probs >= DECISION_THRESHOLD).astype(int)
-        tn, fp, fn, tp = _confusion_matrix(self.y_test, preds, labels=[0, 1]).ravel()
-
-        eval_metrics = {
-            "accuracy": float(_accuracy_score(self.y_test, preds)),
-            "precision": float(_precision_score(self.y_test, preds, zero_division=0)),
-            "recall": float(_recall_score(self.y_test, preds, zero_division=0)),
-            "f1_score": float(_f1_score(self.y_test, preds, zero_division=0)),
-            "inference_time_sec": float(inference_time),
-            "dynamic_quantized_model_size_bytes": float(dynamic_quantized_model_size_bytes),
-            "dynamic_quantized_parameter_count": float(dynamic_quantized_parameter_count),
-            "quantization_applied": float(quantization_applied),
-            "tn": float(tn),
-            "fp": float(fp),
-            "fn": float(fn),
-            "tp": float(tp),
-        }
-
-        try:
-            eval_metrics["auc_roc"] = float(_roc_auc_score(self.y_test, probs))
-        except ValueError:
-            eval_metrics["auc_roc"] = float("nan")
+        eval_metrics = test(self.model, self.X_test, self.y_test)
 
         eval_metrics.update(
             {
@@ -871,8 +611,6 @@ class FLClient(fl.client.NumPyClient):
                 "inference_flops": float(
                     len(self.X_test) * self.model_stats["forward_flops_per_sample"]
                 ),
-                "quantization_backend": quantization_backend,
-                "quantization_error": quantization_error,
             }
         )
 
@@ -890,6 +628,7 @@ class MetricsFedAvg(fl.server.strategy.FedAvg):
         self.fit_metrics_cache: Dict[int, Dict[str, float]] = {}
         self.round_logs: List[Dict[str, float]] = []
         self.final_metrics: Dict[str, float] = {}
+        self.final_parameters = None
 
     def aggregate_fit(self, server_round, results, failures):
         aggregated_parameters, aggregated_metrics = super().aggregate_fit(
@@ -905,6 +644,8 @@ class MetricsFedAvg(fl.server.strategy.FedAvg):
                 "train_loss": float(aggregated_metrics.get("train_loss", 0.0)),
                 "val_loss": float(aggregated_metrics.get("val_loss", 0.0)),
             }
+        if aggregated_parameters is not None:
+            self.final_parameters = aggregated_parameters
 
         return aggregated_parameters, aggregated_metrics
 
@@ -932,16 +673,6 @@ class MetricsFedAvg(fl.server.strategy.FedAvg):
                 "val_loss": float(fit_metrics.get("val_loss", 0.0)),
                 "inference_time_sec": float(aggregated_metrics.get("inference_time_sec", 0.0)),
                 "communication_bytes": float(total_comm),
-                "model_size_bytes": float(aggregated_metrics.get("model_size_bytes", 0.0)),
-                "dynamic_quantized_model_size_bytes": float(
-                    aggregated_metrics.get("dynamic_quantized_model_size_bytes", 0.0)
-                ),
-                "dynamic_quantized_parameter_count": float(
-                    aggregated_metrics.get("dynamic_quantized_parameter_count", 0.0)
-                ),
-                "quantization_applied": float(
-                    aggregated_metrics.get("quantization_applied", 0.0)
-                ),
                 "tn": float(aggregated_metrics.get("tn", 0.0)),
                 "fp": float(aggregated_metrics.get("fp", 0.0)),
                 "fn": float(aggregated_metrics.get("fn", 0.0)),
@@ -960,24 +691,20 @@ class MetricsFedAvg(fl.server.strategy.FedAvg):
                 f"AUC={row['auc_roc']:.4f} | "
                 f"TrainLoss={row['train_loss']:.4f} | "
                 f"ValLoss={row['val_loss']:.4f} | "
-                f"Comm={format_bytes(row['communication_bytes'])} | "
-                f"Model={format_bytes(row['model_size_bytes'])} | "
-                f"DynModel={format_bytes(row['dynamic_quantized_model_size_bytes'])} | "
-                f"DynParams={int(row['dynamic_quantized_parameter_count'])} | "
-                f"DynQ={'on' if row['quantization_applied'] >= 0.5 else 'fallback'}"
+                f"Comm={format_bytes(row['communication_bytes'])}"
             )
 
         return aggregated_loss, aggregated_metrics
 
 
 # ============================================================
-# 8. CLIENT FUNCTION
+# 8. CLIENT FUNCTION (NEW FLOWER STYLE)
 # ============================================================
 
 def client_fn(context: Context):
     cid = int(context.node_config["partition-id"])
     X_train, X_val, X_test, y_train, y_val, y_test = global_clients[cid]
-    model = ImprovedCNN1D(input_dim=global_input_dim).to(DEVICE)
+    model = MLP(input_dim=global_input_dim).to(DEVICE)
 
     client = FLClient(
         model=model,
@@ -1013,29 +740,90 @@ def plot_loss_curves(round_logs: List[Dict[str, float]]) -> None:
     plt.show()
 
 
-# ============================================================
-# 9. MAIN
-# ============================================================
+def collect_global_test_data(
+    clients: List[
+        Tuple[
+            np.ndarray,
+            np.ndarray,
+            np.ndarray,
+            np.ndarray,
+            np.ndarray,
+            np.ndarray,
+        ]
+    ]
+) -> Tuple[np.ndarray, np.ndarray]:
+    X_tests = [client_data[2] for client_data in clients]
+    y_tests = [client_data[5] for client_data in clients]
+    return np.concatenate(X_tests, axis=0), np.concatenate(y_tests, axis=0)
 
-if __name__ == "__main__":
-    total_start = time.perf_counter()
 
-    X, y = load_data()
-    global_clients = create_clients(X, y, num_clients=NUM_CLIENTS)
-    global_input_dim = X.shape[1]
-    base_model = ImprovedCNN1D(global_input_dim)
-    global_model_stats = get_model_stats(base_model, global_input_dim)
-    global_model_stats["dynamic_quantized_model_size_bytes"] = 0.0
-    global_model_stats["quantization_mode"] = QUANTIZATION_MODE
+def aggregate_parameters(
+    client_results: List[Tuple[List[np.ndarray], int, Metrics]]
+) -> List[np.ndarray]:
+    total_examples = sum(num_examples for _, num_examples, _ in client_results)
+    aggregated: List[np.ndarray] = []
 
-    print("================ MODEL PROFILE ================")
-    print(f"Parameters           : {int(global_model_stats['parameters'])}")
-    print(f"Model Size           : {format_bytes(global_model_stats['model_size_bytes'])}")
-    print(f"Quantization         : {get_quantization_label()}")
-    print(f"Forward FLOPs/sample : {int(global_model_stats['forward_flops_per_sample'])}")
-    print(f"Training FLOPs/sample: {int(global_model_stats['training_flops_per_sample'])}")
-    print("================================================\n")
+    for layer_idx in range(len(client_results[0][0])):
+        weighted_sum = sum(
+            parameters[layer_idx] * (num_examples / total_examples)
+            for parameters, num_examples, _ in client_results
+        )
+        aggregated.append(weighted_sum)
 
+    return aggregated
+
+
+def log_round_metrics(
+    strategy: MetricsFedAvg,
+    server_round: int,
+    fit_metrics: Metrics,
+    eval_metrics: Metrics,
+) -> None:
+    total_comm = (
+        float(fit_metrics.get("communication_bytes", 0.0))
+        + float(eval_metrics.get("communication_bytes", 0.0))
+    )
+    row = {
+        "round": float(server_round),
+        "accuracy": float(eval_metrics.get("accuracy", 0.0)),
+        "precision": float(eval_metrics.get("precision", 0.0)),
+        "recall": float(eval_metrics.get("recall", 0.0)),
+        "f1_score": float(eval_metrics.get("f1_score", 0.0)),
+        "auc_roc": float(eval_metrics.get("auc_roc", 0.0)),
+        "train_time_sec": float(fit_metrics.get("train_time_sec", 0.0)),
+        "train_loss": float(fit_metrics.get("train_loss", 0.0)),
+        "val_loss": float(fit_metrics.get("val_loss", 0.0)),
+        "inference_time_sec": float(eval_metrics.get("inference_time_sec", 0.0)),
+        "communication_bytes": float(total_comm),
+        "tn": float(eval_metrics.get("tn", 0.0)),
+        "fp": float(eval_metrics.get("fp", 0.0)),
+        "fn": float(eval_metrics.get("fn", 0.0)),
+        "tp": float(eval_metrics.get("tp", 0.0)),
+    }
+
+    strategy.fit_metrics_cache[server_round] = {
+        "communication_bytes": float(fit_metrics.get("communication_bytes", 0.0)),
+        "train_time_sec": float(fit_metrics.get("train_time_sec", 0.0)),
+        "train_loss": float(fit_metrics.get("train_loss", 0.0)),
+        "val_loss": float(fit_metrics.get("val_loss", 0.0)),
+    }
+    strategy.round_logs.append(row)
+    strategy.final_metrics = row
+
+    print(
+        f"Round {server_round:02d} | "
+        f"Acc={row['accuracy']:.4f} | "
+        f"Prec={row['precision']:.4f} | "
+        f"Rec={row['recall']:.4f} | "
+        f"F1={row['f1_score']:.4f} | "
+        f"AUC={row['auc_roc']:.4f} | "
+        f"TrainLoss={row['train_loss']:.4f} | "
+        f"ValLoss={row['val_loss']:.4f} | "
+        f"Comm={format_bytes(row['communication_bytes'])}"
+    )
+
+
+def run_local_federated_simulation() -> MetricsFedAvg:
     strategy = MetricsFedAvg(
         fraction_fit=1.0,
         fraction_evaluate=1.0,
@@ -1046,32 +834,124 @@ if __name__ == "__main__":
         evaluate_metrics_aggregation_fn=evaluate_metrics_aggregation,
     )
 
+    clients: List[FLClient] = []
+    for cid, client_data in enumerate(global_clients):
+        X_train, X_val, X_test, y_train, y_val, y_test = client_data
+        clients.append(
+            FLClient(
+                model=MLP(input_dim=global_input_dim).to(DEVICE),
+                X_train=X_train,
+                X_val=X_val,
+                y_train=y_train,
+                y_val=y_val,
+                X_test=X_test,
+                y_test=y_test,
+                client_id=cid,
+                model_stats=global_model_stats,
+            )
+        )
+
+    global_parameters = [
+        value.detach().cpu().numpy() for _, value in MLP(global_input_dim).state_dict().items()
+    ]
+
+    for server_round in range(1, NUM_ROUNDS + 1):
+        fit_results = [client.fit(global_parameters, {}) for client in clients]
+        fit_metrics = fit_metrics_aggregation(
+            [(num_examples, metrics) for _, num_examples, metrics in fit_results]
+        )
+        global_parameters = aggregate_parameters(fit_results)
+
+        evaluate_results = [client.evaluate(global_parameters, {}) for client in clients]
+        eval_metrics = evaluate_metrics_aggregation(
+            [(num_examples, metrics) for _, num_examples, metrics in evaluate_results]
+        )
+        strategy.final_parameters = global_parameters
+        log_round_metrics(strategy, server_round, fit_metrics, eval_metrics)
+
+    return strategy
+
+
+# ============================================================
+# 9. MAIN
+# ============================================================
+
+if __name__ == "__main__":
+    total_start = time.perf_counter()
+    configure_ray_windows_compatibility()
+
+    X, y = load_data()
+    global_clients = create_clients(X, y, num_clients=NUM_CLIENTS)
+    global_input_dim = X.shape[1]
+    global_model_stats = get_model_stats(MLP(global_input_dim), global_input_dim)
+
+    print("================ MODEL PROFILE ================")
+    print(f"Parameters           : {int(global_model_stats['parameters'])}")
+    print(f"Model Size           : {format_bytes(global_model_stats['model_size_bytes'])}")
+    print(
+        f"Quantized Model Size : "
+        f"{format_bytes(global_model_stats['quantized_model_size_bytes'])}"
+    )
+    print("Quantization         : Dynamic INT8 (Linear layers)")
+    print(f"Forward FLOPs/sample : {int(global_model_stats['forward_flops_per_sample'])}")
+    print(f"Training FLOPs/sample: {int(global_model_stats['training_flops_per_sample'])}")
+    print("================================================\n")
+
     print("============== FEDERATED TRAINING ==============")
     print(
         f"Clients={NUM_CLIENTS} | Rounds={NUM_ROUNDS} | "
         f"Local Epochs={LOCAL_EPOCHS} | Batch Size={BATCH_SIZE}"
     )
-    print("================================================\n")
+    if is_windows():
+        print("Simulation Mode      : Native local fallback (no Ray)")
+        print("================================================\n")
+        strategy = run_local_federated_simulation()
+    else:
+        client_resources, ray_init_args = get_simulation_resources()
+        strategy = MetricsFedAvg(
+            fraction_fit=1.0,
+            fraction_evaluate=1.0,
+            min_fit_clients=NUM_CLIENTS,
+            min_evaluate_clients=NUM_CLIENTS,
+            min_available_clients=NUM_CLIENTS,
+            fit_metrics_aggregation_fn=fit_metrics_aggregation,
+            evaluate_metrics_aggregation_fn=evaluate_metrics_aggregation,
+        )
+        print("================================================\n")
 
-    try:
         fl.simulation.start_simulation(
             client_fn=client_fn,
             num_clients=NUM_CLIENTS,
+            client_resources=client_resources,
             config=fl.server.ServerConfig(num_rounds=NUM_ROUNDS),
             strategy=strategy,
+            ray_init_args=ray_init_args,
         )
-    except (OSError, FileNotFoundError) as exc:
-        is_windows_job_object_failure = (
-            platform.system() == "Windows"
-            and "AssignProcessToJobObject" in str(exc)
-        )
-        if not is_windows_job_object_failure:
-            raise
-        print(f"Flower/Ray startup failed on Windows: {exc}")
-        start_sequential_simulation(strategy)
 
     total_runtime = time.perf_counter() - total_start
+
     final = strategy.final_metrics
+    final_quantized_metrics: Dict[str, float] = {}
+
+    if strategy.final_parameters is not None:
+        final_model = MLP(global_input_dim).to(DEVICE)
+        if isinstance(strategy.final_parameters, list):
+            final_ndarrays = strategy.final_parameters
+        else:
+            final_ndarrays = parameters_to_ndarrays(strategy.final_parameters)
+        final_state = dict(zip(final_model.state_dict().keys(), final_ndarrays))
+        final_model.load_state_dict(
+            {key: torch.tensor(value, device=DEVICE) for key, value in final_state.items()},
+            strict=True,
+        )
+
+        X_test_global, y_test_global = collect_global_test_data(global_clients)
+        final_quantized_metrics = test(
+            final_model,
+            X_test_global,
+            y_test_global,
+            use_dynamic_quantization=True,
+        )
 
     print("\n================ FINAL RESULTS ================")
     print(f"Final Accuracy       : {final.get('accuracy', 0.0):.4f}")
@@ -1084,16 +964,19 @@ if __name__ == "__main__":
     print(f"Training Time        : {final.get('train_time_sec', 0.0):.4f} s")
     print(f"Inference Time       : {final.get('inference_time_sec', 0.0):.4f} s")
     print(f"Final Communication  : {format_bytes(final.get('communication_bytes', 0.0))}")
-    print(f"Model Size           : {format_bytes(final.get('model_size_bytes', 0.0))}")
-    print(
-        f"Dynamic QModel Size  : "
-        f"{format_bytes(final.get('dynamic_quantized_model_size_bytes', 0.0))}"
-    )
-    print(
-        f"Dynamic Q Parameters : "
-        f"{int(final.get('dynamic_quantized_parameter_count', 0.0))}"
-    )
     print(f"Total Runtime        : {total_runtime:.2f} s")
+    if final_quantized_metrics:
+        print("\n========= FINAL DYNAMIC QUANTIZATION TEST =========")
+        print(f"Quantized Accuracy   : {final_quantized_metrics.get('accuracy', 0.0):.4f}")
+        print(f"Quantized Precision  : {final_quantized_metrics.get('precision', 0.0):.4f}")
+        print(f"Quantized Recall     : {final_quantized_metrics.get('recall', 0.0):.4f}")
+        print(f"Quantized F1-score   : {final_quantized_metrics.get('f1_score', 0.0):.4f}")
+        print(f"Quantized AUC-ROC    : {final_quantized_metrics.get('auc_roc', 0.0):.4f}")
+        print(
+            f"Quantized Infer Time : "
+            f"{final_quantized_metrics.get('inference_time_sec', 0.0):.4f} s"
+        )
+        print("================================================")
     print("================================================")
 
     print("\n========== FINAL AGGREGATED CONFUSION MATRIX ==========")
