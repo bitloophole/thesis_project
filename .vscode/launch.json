@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run train_ttf_dynamic",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}\\train_ttf_dynamic.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "python": "C:\\Users\\kk199\\AppData\\Local\\Programs\\Python\\Python313\\python.exe"
+    }
+  ]
+}

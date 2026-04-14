@@ -5,11 +5,16 @@
 
 import logging
 import io
+import importlib.util
 import time
 from copy import deepcopy
+from pathlib import Path
 from typing import Dict, List, Tuple 
 
 import flwr as fl
+import matplotlib
+
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -228,7 +233,7 @@ class TabTransformer(nn.Module):
             dropout=dropout,
             activation="gelu",
             batch_first=True,
-            norm_first=True,
+            norm_first=False,
         )
         self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
 
@@ -753,60 +758,61 @@ class MetricsFedAvg(fl.server.strategy.FedAvg):
         )
 
         if aggregated_metrics:
-            fit_metrics = self.fit_metrics_cache.get(server_round, {})
-            total_comm = (
-                aggregated_metrics.get("communication_bytes", 0.0)
-                + fit_metrics.get("communication_bytes", 0.0)
-            )
-
-            row = {
-                "round": float(server_round),
-                "accuracy": float(aggregated_metrics.get("accuracy", 0.0)),
-                "precision": float(aggregated_metrics.get("precision", 0.0)),
-                "recall": float(aggregated_metrics.get("recall", 0.0)),
-                "f1_score": float(aggregated_metrics.get("f1_score", 0.0)),
-                "auc_roc": float(aggregated_metrics.get("auc_roc", 0.0)),
-                "train_time_sec": float(fit_metrics.get("train_time_sec", 0.0)),
-                "train_loss": float(fit_metrics.get("train_loss", 0.0)),
-                "val_loss": float(fit_metrics.get("val_loss", 0.0)),
-                "inference_time_sec": float(aggregated_metrics.get("inference_time_sec", 0.0)),
-                "communication_bytes": float(total_comm),
-                "model_size_bytes": float(aggregated_metrics.get("model_size_bytes", 0.0)),
-                "dynamic_quantized_model_size_bytes": float(
-                    aggregated_metrics.get("dynamic_quantized_model_size_bytes", 0.0)
-                ),
-                "dynamic_quantized_parameter_count": float(
-                    aggregated_metrics.get("dynamic_quantized_parameter_count", 0.0)
-                ),
-                "quantization_applied": float(
-                    aggregated_metrics.get("quantization_applied", 0.0)
-                ),
-                "tn": float(aggregated_metrics.get("tn", 0.0)),
-                "fp": float(aggregated_metrics.get("fp", 0.0)),
-                "fn": float(aggregated_metrics.get("fn", 0.0)),
-                "tp": float(aggregated_metrics.get("tp", 0.0)),
-            }
-
-            self.round_logs.append(row)
-            self.final_metrics = row
-
-            print(
-                f"Round {server_round:02d} | "
-                f"Acc={row['accuracy']:.4f} | "
-                f"Prec={row['precision']:.4f} | "
-                f"Rec={row['recall']:.4f} | "
-                f"F1={row['f1_score']:.4f} | "
-                f"AUC={row['auc_roc']:.4f} | "
-                f"TrainLoss={row['train_loss']:.4f} | "
-                f"ValLoss={row['val_loss']:.4f} | "
-                f"Comm={format_bytes(row['communication_bytes'])} | "
-                f"Model={format_bytes(row['model_size_bytes'])} | "
-                f"DynModel={format_bytes(row['dynamic_quantized_model_size_bytes'])} | "
-                f"DynParams={int(row['dynamic_quantized_parameter_count'])} | "
-                f"DynQ={'on' if row['quantization_applied'] >= 0.5 else 'fallback'}"
-            )
+            self.log_round_metrics(server_round, aggregated_metrics)
 
         return aggregated_loss, aggregated_metrics
+
+    def log_round_metrics(self, server_round: int, aggregated_metrics: Metrics) -> None:
+        fit_metrics = self.fit_metrics_cache.get(server_round, {})
+        total_comm = (
+            aggregated_metrics.get("communication_bytes", 0.0)
+            + fit_metrics.get("communication_bytes", 0.0)
+        )
+
+        row = {
+            "round": float(server_round),
+            "accuracy": float(aggregated_metrics.get("accuracy", 0.0)),
+            "precision": float(aggregated_metrics.get("precision", 0.0)),
+            "recall": float(aggregated_metrics.get("recall", 0.0)),
+            "f1_score": float(aggregated_metrics.get("f1_score", 0.0)),
+            "auc_roc": float(aggregated_metrics.get("auc_roc", 0.0)),
+            "train_time_sec": float(fit_metrics.get("train_time_sec", 0.0)),
+            "train_loss": float(fit_metrics.get("train_loss", 0.0)),
+            "val_loss": float(fit_metrics.get("val_loss", 0.0)),
+            "inference_time_sec": float(aggregated_metrics.get("inference_time_sec", 0.0)),
+            "communication_bytes": float(total_comm),
+            "model_size_bytes": float(aggregated_metrics.get("model_size_bytes", 0.0)),
+            "dynamic_quantized_model_size_bytes": float(
+                aggregated_metrics.get("dynamic_quantized_model_size_bytes", 0.0)
+            ),
+            "dynamic_quantized_parameter_count": float(
+                aggregated_metrics.get("dynamic_quantized_parameter_count", 0.0)
+            ),
+            "quantization_applied": float(aggregated_metrics.get("quantization_applied", 0.0)),
+            "tn": float(aggregated_metrics.get("tn", 0.0)),
+            "fp": float(aggregated_metrics.get("fp", 0.0)),
+            "fn": float(aggregated_metrics.get("fn", 0.0)),
+            "tp": float(aggregated_metrics.get("tp", 0.0)),
+        }
+
+        self.round_logs.append(row)
+        self.final_metrics = row
+
+        print(
+            f"Round {server_round:02d} | "
+            f"Acc={row['accuracy']:.4f} | "
+            f"Prec={row['precision']:.4f} | "
+            f"Rec={row['recall']:.4f} | "
+            f"F1={row['f1_score']:.4f} | "
+            f"AUC={row['auc_roc']:.4f} | "
+            f"TrainLoss={row['train_loss']:.4f} | "
+            f"ValLoss={row['val_loss']:.4f} | "
+            f"Comm={format_bytes(row['communication_bytes'])} | "
+            f"Model={format_bytes(row['model_size_bytes'])} | "
+            f"DynModel={format_bytes(row['dynamic_quantized_model_size_bytes'])} | "
+            f"DynParams={int(row['dynamic_quantized_parameter_count'])} | "
+            f"DynQ={'on' if row['quantization_applied'] >= 0.5 else 'fallback'}"
+        )
 
 
 # ============================================================
@@ -830,6 +836,71 @@ def client_fn(context: Context):
         model_stats=global_model_stats,
     )
     return client.to_client()
+
+
+def create_local_client(cid: int) -> FLClient:
+    X_train, X_val, X_test, y_train, y_val, y_test = global_clients[cid]
+    model = TabTransformer(input_dim=global_input_dim).to(DEVICE)
+
+    return FLClient(
+        model=model,
+        X_train=X_train,
+        X_val=X_val,
+        y_train=y_train,
+        y_val=y_val,
+        X_test=X_test,
+        y_test=y_test,
+        client_id=cid,
+        model_stats=global_model_stats,
+    )
+
+
+def aggregate_parameters(
+    client_parameters: List[Tuple[List[np.ndarray], int]]
+) -> List[np.ndarray]:
+    total_examples = sum(num_examples for _, num_examples in client_parameters)
+    return [
+        sum(
+            parameters[layer_idx] * (num_examples / total_examples)
+            for parameters, num_examples in client_parameters
+        )
+        for layer_idx in range(len(client_parameters[0][0]))
+    ]
+
+
+def run_local_fedavg(strategy: MetricsFedAvg) -> None:
+    print("Running local in-process FedAvg backend.\n")
+
+    clients = [create_local_client(cid) for cid in range(NUM_CLIENTS)]
+    global_parameters = clients[0].get_parameters({})
+
+    for server_round in range(1, NUM_ROUNDS + 1):
+        fit_results = [
+            client.fit(global_parameters, {})
+            for client in clients
+        ]
+        fit_metrics = fit_metrics_aggregation(
+            [(num_examples, metrics) for _, num_examples, metrics in fit_results]
+        )
+        strategy.fit_metrics_cache[server_round] = {
+            "communication_bytes": float(fit_metrics.get("communication_bytes", 0.0)),
+            "train_time_sec": float(fit_metrics.get("train_time_sec", 0.0)),
+            "train_loss": float(fit_metrics.get("train_loss", 0.0)),
+            "val_loss": float(fit_metrics.get("val_loss", 0.0)),
+        }
+
+        global_parameters = aggregate_parameters(
+            [(parameters, num_examples) for parameters, num_examples, _ in fit_results]
+        )
+
+        evaluate_results = [
+            client.evaluate(global_parameters, {})
+            for client in clients
+        ]
+        evaluate_metrics = evaluate_metrics_aggregation(
+            [(num_examples, metrics) for _, num_examples, metrics in evaluate_results]
+        )
+        strategy.log_round_metrics(server_round, evaluate_metrics)
 
 
 def plot_loss_curves(round_logs: List[Dict[str, float]]) -> None:
@@ -891,12 +962,15 @@ if __name__ == "__main__":
     )
     print("================================================\n")
 
-    fl.simulation.start_simulation(
-        client_fn=client_fn,
-        num_clients=NUM_CLIENTS,
-        config=fl.server.ServerConfig(num_rounds=NUM_ROUNDS),
-        strategy=strategy,
-    )
+    if importlib.util.find_spec("ray") is None:
+        run_local_fedavg(strategy)
+    else:
+        fl.simulation.start_simulation(
+            client_fn=client_fn,
+            num_clients=NUM_CLIENTS,
+            config=fl.server.ServerConfig(num_rounds=NUM_ROUNDS),
+            strategy=strategy,
+        )
 
     total_runtime = time.perf_counter() - total_start
     final = strategy.final_metrics

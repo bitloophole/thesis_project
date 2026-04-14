@@ -1,0 +1,7 @@
+{
+  "python.defaultInterpreterPath": "C:\\Users\\kk199\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+  "python.terminal.activateEnvironment": false,
+  "code-runner.executorMap": {
+    "python": "\"C:\\Users\\kk199\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\""
+  }
+}
